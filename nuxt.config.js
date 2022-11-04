@@ -1,55 +1,54 @@
 export default {
-  // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+    ssr: false,
 
-  // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+    target: 'static',
 
-  // Global page headers: https://go.nuxtjs.dev/config-head
-  head: {
-    title: 'dash',
-    htmlAttrs: {
-      lang: 'en'
+    head: {
+        title: 'dash',
+        htmlAttrs: {
+            lang: 'en'
+        },
+        meta: [
+            { charset: 'utf-8' },
+            { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+            { hid: 'description', name: 'description', content: '' },
+            { name: 'format-detection', content: 'telephone=no' }
+        ],
+        link: [
+            { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+            {}
+        ]
     },
-    meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
-      { name: 'format-detection', content: 'telephone=no' }
+
+    css: [
+        '@/static/common.css'
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
-  },
 
-  // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [
-  ],
+    plugins: [],
 
-  // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [
-  ],
+    components: [
+        '~/components',
+        '~/components/landing',
+        '~/components/dapp'
+    ],
 
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+    buildModules: [],
 
-  // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-  ],
+    modules: [
+        '@nuxtjs/axios',
+    ],
 
-  // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-  ],
+    axios: {
+        baseURL: 'https://deep-index.moralis.io/api/v2/', // moralis api base url
+    },
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
-  },
-
-  // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  }
+    build: {
+        extend(config, { isDev, isClient }) {
+            config.node = {
+                fs: 'empty',
+                net: 'empty',
+                express: 'empty'
+            }
+        }
+    },
 }

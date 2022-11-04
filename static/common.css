@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap');
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css');
+@font-face {
+    font-family: clash;
+    src: url('/fonts/clash.ttf');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    font-family: 'clash';
+    transition: .2s;
+    letter-spacing: 0.05em;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.nuxt-progress {
+    background: #fff;
+    height: 10px;
+}
+
+section {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+}
+
+.app-width {
+    width: 1300px;
+    max-width: 90%;
+}
+
+.i-app-width {
+    width: 1200px;
+    max-width: 90%;
+}
+
+.fi {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

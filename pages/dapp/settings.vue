@@ -1,6 +1,6 @@
 <template>
 <div class="dapp">
-    <Dapp />
+    <Settings />
 </div>
 </template>
 
