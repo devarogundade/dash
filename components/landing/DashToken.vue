@@ -10,7 +10,9 @@
                 <p>$DASH is the native cryptocurrency of the this platform. Loan Interests are paid in $DASH while the loan capital
                     amount remains unchange.
                 </p>
-                <div class="action">Buy Now</div>
+                <router-link to="/mint">
+                    <div class="action">Mint Free</div>
+                </router-link>
             </div>
         </div>
     </div>

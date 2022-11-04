@@ -5,7 +5,14 @@
             <div class="logo">
                 <img src="/images/logo.png" alt="">
             </div>
-            <div class="connect-wallet"> Connect Wallet </div>
+            <div class="connect-wallet" v-if="address == null" v-on:click="connectWallet()">Connect Wallet</div>
+            <div class="connect-wallet" v-else>
+                {{
+                  address.substring(0, 8) +
+                  "..." +
+                  address.substring(address.length - 8, address.length)
+                }}
+            </div>
 
             <div class="tabs">
                 <router-link to="/dapp">
@@ -46,6 +53,25 @@
 </div>
 </template>
 
+<script>
+export default {
+    data() {
+        return {
+            address: null
+        }
+    },
+    methods: {
+        connectWallet: async function () {
+            await this.$auth.connectWallet()
+            const accounts = this.$auth.accounts
+            if (accounts.length > 0) {
+                this.address = accounts[0]
+            }
+        }
+    }
+}
+</script>
+
 <style scoped>
 .header {
     width: 350px;
@@ -78,6 +104,8 @@
     background: #ff9d05;
     font-size: 16px;
     font-weight: 600;
+    cursor: pointer;
+    user-select: none;
     color: #1900b3;
 }
 

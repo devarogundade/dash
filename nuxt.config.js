@@ -24,12 +24,17 @@ export default {
         '@/static/common.css'
     ],
 
-    plugins: [],
+    plugins: [
+        '@/plugins/auth.js',
+        '@/plugins/firestore.js',
+        '@/plugins/contract.js'
+    ],
 
     components: [
         '~/components',
         '~/components/landing',
-        '~/components/dapp'
+        '~/components/dapp',
+        '~/components/pops'
     ],
 
     buildModules: [],

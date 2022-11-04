@@ -29,8 +29,6 @@
     </div>
     <div class="body">
         <div class="i-app-width">
-            <div class="learn"></div>
-
             <div class="toolbar">
                 <div class="tabs">
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
@@ -179,15 +177,8 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 60px;
+    margin-top: 20px;
     padding-bottom: 60px;
-}
-
-.learn {
-    height: 200px;
-    width: 100%;
-    background: #000;
-    border-radius: 30px;
 }
 
 .toolbar {
@@ -262,7 +253,7 @@ section {
 }
 
 .friend {
-    width: 200px;
+    width: 300px;
     padding: 30px;
     background: #fafafa;
     box-shadow: 0 6px 10px #ccc;

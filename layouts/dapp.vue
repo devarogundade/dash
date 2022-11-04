@@ -2,6 +2,9 @@
 <div class="dapp">
     <DappHeader class="xHead" />
     <Nuxt class="xNuxt" />
+
+    <Success />
+    <Failure />
 </div>
 </template>
 

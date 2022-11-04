@@ -7,8 +7,8 @@
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
                         New
                     </div>
-                    <div :class="tab == 2 ? 'item item-active' : 'item'" v-on:click="tab = 2">
-                        Existing
+                    <div :class="tab == 2 ? 'item item-active' : 'item'">
+                        Existing <span>Soon</span>
                     </div>
                 </div>
 
@@ -17,16 +17,7 @@
                 </div>
 
                 <div class="to input">
-                    <input type="text" placeholder="0.0">
-                    <div class="token">
-                        <img src="" alt="">
-                        <p>BNB</p>
-
-                    </div>
-                </div>
-
-                <div class="price">
-                    1 BNB = 1 BNBx ($1.43)
+                    <input type="text" disabled>
                 </div>
 
                 <div class="action">Add To Contact</div>
@@ -82,6 +73,16 @@ export default {
     cursor: pointer;
     user-select: none;
     border-radius: 10px;
+}
+
+.item span {
+    padding: 2px 6px;
+    background: #ff9d05;
+    color: #ffffff;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-top: -20px;
+    margin-left: 5px;
 }
 
 .item-active {

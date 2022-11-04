@@ -3,5 +3,8 @@
   <LandingHeader />
     <Nuxt />
     <LandingFooter />
+
+    <Success />
+    <Failure />
 </div>
 </template>
