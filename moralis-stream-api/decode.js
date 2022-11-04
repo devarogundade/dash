@@ -1,0 +1,33 @@
+const Web3 = require('web3')
+
+module.exports = {
+    // converts EVM data to typeof array
+    decode: function(format, value) {
+        const web3 = new Web3()
+        const data = web3.eth.abi.decodeParameters(format, value)
+        return data
+    },
+    formats: function(collection) {
+        // returns EVM event data formats
+        switch (collection) {
+            case 'users':
+                return ['address', 'string', 'string', 'bool']
+            default:
+                return null
+        }
+    },
+    toObject: function(collection, data) {
+        // each object must have a property of id
+        switch (collection) {
+            case 'users':
+                return {
+                    id: data[0].toUpperCase(), // avoid case sensitive
+                    name: data[1],
+                    photo: data[2],
+                    verified: data[3],
+                }
+            default:
+                return null
+        }
+    }
+}
