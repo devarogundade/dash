@@ -1,8 +1,10 @@
 <template>
 <div class="landing">
-    <LandingHeader />
     <LandingHero />
+    <BestOffers />
     <WhyDash />
+    <DashToken />
+    <Faq />
 </div>
 </template>
 

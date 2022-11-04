@@ -23,6 +23,11 @@
                         <i class="fi fi-sr-piggy-bank"></i> Liquidity
                     </div>
                 </router-link>
+                <router-link to="/dapp/contacts">
+                    <div :class="$route.name == 'dapp-contacts' ? 'item item-active' : 'item'">
+                        <i class="fi fi-sr-following"></i> Contacts
+                    </div>
+                </router-link>
             </div>
         </div>
         <div class="bottom">

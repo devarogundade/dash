@@ -5,8 +5,8 @@
             <div class="text">
                 <h3>P2P lending, LEND to EARN $Dash.</h3>
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nesciunt
-                    minus, sequi cum nam perferendis a amet quam quis.
+                    Securely manage how you lend money to or borrow money from your friends, families, and colleagues.
+                    Start lending to earn DASH tokens.
                 </p>
                 <div class="actions">
                     <router-link to="/dapp">
@@ -89,7 +89,7 @@ section {
 }
 
 .powered {
-    margin-top: 160px;
+    margin-top: 200px;
     display: flex;
     align-items: center;
     gap: 40px;

@@ -6,10 +6,10 @@
                 <img src="/images/logo.png" alt="">
             </div>
             <ul>
-                <li><a href="">Get Started</a></li>
-                <li><a href="">Developer</a></li>
-                <li><a href="">Dash Token</a></li>
-                <li><a href="">About</a></li>
+                <li><a href="/#get-started">Get Started</a></li>
+                <li><a href="/#why-dash">Why DASH</a></li>
+                <li><a href="/#dash-token">Dash Token</a></li>
+                <li><a href="/#faq">FAQs</a></li>
             </ul>
         </div>
     </div>
@@ -45,5 +45,11 @@ ul {
     display: flex;
     align-items: center;
     gap: 40px;
+}
+
+li a {
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
 }
 </style>

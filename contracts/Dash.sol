@@ -2,142 +2,216 @@
 pragma solidity >=0.7.0 <0.9.0;
 
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/iERC20.sol";
+import {DashToken} from "./DashToken.sol";
 
 contract Dash {
     address private deployer;
 
+    uint private userID;
+    uint private liquidityID;
+    uint private loanID;
+
+    uint defaultCreditScore = 40;
+
+    DashToken private dashToken;
+
     mapping(address => User) public users;
-    mapping(uint => Transaction) public transactions;
-    mapping(address => Balance[]) public balances;
+    mapping(address => Liquidity[]) public liquidities;
+    mapping(address => Loan[]) public loans;
 
     uint public platformFee = 1; // 1% fee
 
-    struct User {
-        string name;
-        string username;
+    constructor(address dashToken_) {
+        deployer = msg.sender;
+        dashToken = DashToken(dashToken_);
+    }
+
+    struct Liquidity {
+        uint id;
+        uint256 amount;
+        address tokenAddress;
+        uint interestRate;
+        uint256 minTakeOut;
+        uint256 maxTakeOut;
+        uint minDays;
+        uint maxDays;
+        uint minCreditScore;
         uint createdAt;
     }
 
-    struct Transaction {
+    struct Loan {
+        uint id;
+        uint256 amount;
+        address tokenAddress;
+        uint interestRate;
         address from;
-        address to;
-        address tokenAddress;
-        string message;
-        uint256 amount;
-        uint timestamp;
+        uint createdAt;
+        uint paidAt;
     }
 
-    struct Balance {
-        address tokenAddress;
-        uint256 amount;
+    struct User {
+        uint id;
+        uint creditScore;
+        bool activeLoan;
+        uint createdAt;
+        address[] networks;
     }
 
-    constructor() {
-        deployer = msg.sender;
-    }
-
-    function send(
-        address to,
-        address tokenAddress,
-        uint256 amount,
-        string memory message
+    function createUser(
+        string memory name,
+        string memory photo,
+        string memory email,
+        string memory username
     ) public {
-        uint timestamp = block.timestamp;
+        require(users[msg.sender].id == 0, "!already_created_an_account");
 
-        require(amount > 0, "!can_send_zero_token");
+        userID++;
+        users[msg.sender] = User(
+            userID,
+            defaultCreditScore,
+            false,
+            block.timestamp,
+            users[msg.sender].networks
+        );
 
-        int senderBalanceIndex = getUserBalanceIndex(msg.sender, tokenAddress);
-        int receiverBalanceIndex = getUserBalanceIndex(to, tokenAddress);
-
-        require(senderBalanceIndex != -1, "!you_do_own_these_tokens");
-
-        Balance memory senderBalance = balances[msg.sender][
-            uint256(senderBalanceIndex)
-        ];
-
-        require(senderBalance.amount >= amount, "insuffieceint_funds");
-
-        if (receiverBalanceIndex == -1) {
-            // create balance for receiver
-            balances[to].push(Balance(tokenAddress, 0));
-            // balance is at last index
-            receiverBalanceIndex = int(balances[to].length - 1);
-        }
-
-        Balance memory receiverBalance = balances[to][
-            uint256(receiverBalanceIndex)
-        ];
-
-        // charge sender
-        senderBalance.amount -= amount;
-
-        // deduct platform fee
-        uint paidAmount = amount * (platformFee / 100);
-
-        // credit receiver
-        receiverBalance.amount += paidAmount;
-
-        emit NewTransaction(
+        emit UserCreated(
+            name,
+            photo,
+            email,
+            username,
             msg.sender,
-            to,
-            tokenAddress,
-            message,
-            amount,
-            timestamp
+            defaultCreditScore,
+            false
         );
     }
 
-    function withdraw(uint256 amount, address tokenAddress) public {
-        int userBalanceIndex = getUserBalanceIndex(msg.sender, tokenAddress);
-        require(userBalanceIndex != -1, "!you_do_own_these_tokens");
+    function takeLoan(
+        uint id,
+        uint256 amount,
+        address owner,
+        uint duration
+    ) public {
+        require(amount > 0, "!can_take_zero_token");
+        int ownerLiquidityIndex = getUserLiquidityIndex(owner, id);
+        require(ownerLiquidityIndex != -1, "!liquidity_exists");
 
-        Balance memory userBalance = balances[msg.sender][
-            uint256(userBalanceIndex)
+        Liquidity memory liquidity = liquidities[owner][
+            uint(ownerLiquidityIndex)
         ];
-        require(userBalance.amount >= amount, "insuffieceint_funds");
 
-        IERC20 token = IERC20(tokenAddress);
+        int userNetworkIndex = getUserNetworkIndex(owner, msg.sender);
+        require(userNetworkIndex != -1, "!unathorized");
 
-        // send tokens to user wallet
-        token.transfer(msg.sender, amount);
+        require(!users[msg.sender].activeLoan, "!already_on_a_loan");
 
-        emit WithDraw(msg.sender, amount, tokenAddress);
+        require(liquidity.amount >= amount, "insuficcient_pool");
+        require(liquidity.maxTakeOut >= amount, "too_much");
+        require(liquidity.minTakeOut <= amount, "too_little");
+        require(liquidity.maxDays >= duration, "too_long");
+        require(liquidity.minDays <= duration, "too_short");
+
+        liquidity.amount -= amount;
+        users[msg.sender].activeLoan = true;
+
+        loanID++;
+        loans[msg.sender].push(
+            Loan(
+                loanID,
+                amount,
+                liquidity.tokenAddress,
+                liquidity.interestRate,
+                owner,
+                block.timestamp,
+                0
+            )
+        );
+
+        emit TookLoan(loanID, amount, msg.sender, owner);
     }
 
-    function deposit(uint256 amount, address tokenAddress) public {
-        int userBalanceIndex = getUserBalanceIndex(msg.sender, tokenAddress);
+    function payLoan(uint id, address owner) public {
+        int userLoanIndex = getUserLoanIndex(msg.sender, id);
+        require(userLoanIndex != -1, "!loan_exists");
 
-        if (userBalanceIndex == -1) {
-            // create balance for receiver
-            balances[msg.sender].push(Balance(tokenAddress, 0));
-            // balance is at last index
-            userBalanceIndex = int(balances[msg.sender].length - 1);
-        }
-
-        Balance memory userBalance = balances[msg.sender][
-            uint256(userBalanceIndex)
-        ];
-        IERC20 token = IERC20(tokenAddress);
+        Loan memory loan = loans[msg.sender][uint(userLoanIndex)];
+        require(loan.from == owner, "!unathorized");
 
         // stake tokens from user wallet to the contract
-        token.approve(address(this), amount);
-        token.transferFrom(msg.sender, address(this), amount);
+        IERC20 token = IERC20(loan.tokenAddress);
+        token.transferFrom(msg.sender, owner, loan.amount);
 
-        userBalance.amount += amount;
+        loan.paidAt = block.timestamp;
+        users[msg.sender].activeLoan = false;
 
-        emit Deposit(msg.sender, amount, tokenAddress);
+        emit PaidLoan(id, loan.amount, msg.sender, owner);
     }
 
-    function getUserBalanceIndex(address user, address tokenAddress)
+    function closeLiquidity(uint id) public {
+        int userLiquidityIndex = getUserLiquidityIndex(msg.sender, id);
+        require(userLiquidityIndex != -1, "!you_do_own_these_tokens");
+
+        Liquidity memory liquidity = liquidities[msg.sender][
+            uint256(userLiquidityIndex)
+        ];
+
+        require(liquidity.amount > 0, "insuffieceint_funds");
+
+        // send tokens to user wallet
+        IERC20 token = IERC20(liquidity.tokenAddress);
+        token.transfer(msg.sender, liquidity.amount);
+
+        delete liquidity;
+
+        emit ClosedLiquidity(
+            msg.sender,
+            liquidity.amount,
+            liquidity.tokenAddress
+        );
+    }
+
+    function provideLiquity(
+        uint256 amount,
+        address tokenAddress,
+        uint interestRate,
+        uint256 minTakeOut,
+        uint256 maxTakeOut,
+        uint minDays,
+        uint maxDays,
+        uint minCreditScore
+    ) public {
+        liquidityID++;
+        liquidities[msg.sender].push(
+            Liquidity(
+                liquidityID,
+                amount,
+                tokenAddress,
+                interestRate,
+                minTakeOut,
+                maxTakeOut,
+                minDays,
+                maxDays,
+                minCreditScore,
+                block.timestamp
+            )
+        );
+
+        // stake tokens from user wallet to the contract
+        IERC20 token = IERC20(tokenAddress);
+        token.transferFrom(msg.sender, address(this), amount);
+
+        emit ProvidedLiquity(msg.sender, amount, tokenAddress);
+    }
+
+    function getUserLoanIndex(address user, uint id)
         private
         view
         returns (int)
     {
-        Balance[] memory balanceList = balances[user];
+        Loan[] memory loanList = loans[user];
         int position = -1;
 
-        for (uint index = 0; index < balanceList.length; index++) {
-            if (balanceList[index].tokenAddress == tokenAddress) {
+        for (uint index = 0; index < loanList.length; index++) {
+            if (loanList[index].id == id) {
                 position = int(index);
                 break;
             }
@@ -146,14 +220,62 @@ contract Dash {
         return position;
     }
 
-    event NewTransaction(
-        address from,
-        address to,
-        address tokenAddress,
-        string message,
-        uint256 amount,
-        uint timestamp
+    function getUserLiquidityIndex(address user, uint id)
+        private
+        view
+        returns (int)
+    {
+        Liquidity[] memory liquidityList = liquidities[user];
+        int position = -1;
+
+        for (uint index = 0; index < liquidityList.length; index++) {
+            if (liquidityList[index].id == id) {
+                position = int(index);
+                break;
+            }
+        }
+
+        return position;
+    }
+
+    function getUserNetworkIndex(address user, address network)
+        private
+        view
+        returns (int)
+    {
+        address[] memory networks = users[user].networks;
+        int position = -1;
+
+        for (uint index = 0; index < networks.length; index++) {
+            if (networks[index] == network) {
+                position = int(index);
+                break;
+            }
+        }
+
+        return position;
+    }
+
+    function calculateSimpleInterest(
+        uint256 capital,
+        uint rate,
+        uint duration
+    ) private pure returns (uint256) {
+        // amount = capital(1 + (rate * duration))
+        return capital * (1 + (rate * duration));
+    }
+
+    event UserCreated(
+        string name,
+        string photo,
+        string email,
+        string username,
+        address userAddress,
+        uint creditScore,
+        bool activeLoan
     );
-    event WithDraw(address user, uint256 amount, address tokenAddress);
-    event Deposit(address user, uint256 amount, address tokenAddress);
+    event TookLoan(uint id, uint256 amount, address userAddress, address owner);
+    event PaidLoan(uint id, uint256 amount, address userAddress, address owner);
+    event ClosedLiquidity(address user, uint256 amount, address tokenAddress);
+    event ProvidedLiquity(address user, uint256 amount, address tokenAddress);
 }

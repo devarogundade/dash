@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="balance">
-                    <div class="add"> <i class="fi fi-br-plus"></i> New Loan</div>
+                    <router-link to="/dapp/offers"><div class="add"> <i class="fi fi-br-plus"></i> New Loan</div></router-link>
                 </div>
             </div>
 
@@ -257,7 +257,7 @@ section {
     gap: 10px;
 }
 
-.balance>div {
+.balance div {
     height: 40px;
     padding: 0 20px;
     border-radius: 10px;
@@ -272,7 +272,7 @@ section {
     background: #ccc;
 }
 
-.balance>div:first-child {
+.balance div:first-child {
     background: #1900b3;
     color: white;
 }

@@ -3,7 +3,7 @@
     <div class="header">
         <div class="i-app-width">
             <div class="text">
-                <h3>Provide Liquidity, EARN $DASH</h3>
+                <h3>Your Contact List</h3>
                 <h2>$105,786,890.44</h2>
                 <div class="other">
                     <p>Total Value Locked (TVL)</p>
@@ -16,14 +16,14 @@
                 <div class="search">
                     <div class="filter">
                         <i class="fi fi-br-search"></i>
-                        <input type="text" placeholder="Search by token or pool address" />
+                        <input type="text" placeholder="Search by name" />
                     </div>
 
                     <div class="go">Search</div>
                 </div>
             </div>
             <div class="image">
-                <img src="/images/astronaut_liquidity.png" alt="" />
+                <img src="/images/astronaut_friends.png" alt="" />
             </div>
         </div>
     </div>
@@ -34,64 +34,27 @@
             <div class="toolbar">
                 <div class="tabs">
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
-                        Active
+                        All Contacts
                     </div>
                     <div :class="tab == 2 ? 'item item-active' : 'item'" v-on:click="tab = 2">
-                        All Liquidity
+                        Owing
                     </div>
                 </div>
 
                 <div class="balance">
-                    <router-link to="/dapp/add-liquidity">
-                        <div class="add"> <i class="fi fi-br-plus"></i> Add Liquidity</div>
+                    <router-link to="/dapp/add-contact">
+                        <div class="add"> <i class="fi fi-br-plus"></i> Add New Contact</div>
                     </router-link>
-                    <div class="add remove"><i class="fi fi-sr-trash"></i> Remove Liquidity</div>
+                    <!-- <div class="add remove"><i class="fi fi-sr-trash"></i> Remove Liquidity</div> -->
                 </div>
             </div>
 
-            <div class="pools">
-                <div class="pool" v-for="index in 4" :key="index">
-                    <div class="top">
-                        <div class="images">
-                            <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="" />
-                        </div>
-                        <p>USDT</p>
+            <div class="friends">
+                <div class="friend" v-for="index in 10" :key="index">
+                    <div class="image">
+                        <img src="/images/astronaut_friends.png" alt="">
                     </div>
-
-                    <div class="apy">
-                        <h3>22.4%</h3>
-                        <p>APY</p>
-                    </div>
-
-                    <div class="stats">
-                        <div>
-                            <p>Reward Token</p>
-                            <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="" />
-                        </div>
-
-                        <div>
-                            <p>Reward Token</p>
-                            <p>$2,432.40</p>
-                        </div>
-
-                        <div>
-                            <p>My Share</p>
-                            <p>$0 (0%)</p>
-                        </div>
-
-                        <div>
-                            <p>Available Balance</p>
-                            <p>$0</p>
-                        </div>
-                        <div>
-                            <p>My Reward</p>
-                            <p>$0</p>
-                        </div>
-                    </div>
-
-                    <div class="action">
-                        <i class="fi fi-br-plus"></i> Pause
-                    </div>
+                    <div class="detail">John Doe</div>
                 </div>
             </div>
         </div>
@@ -121,8 +84,7 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-    /* background-image: linear-gradient(-20deg, #ddd6f3 0%, #faaca8 100%, #faaca8 100%); */
-    background: #CCEEFF;
+    background: #DC9AFE;
 }
 
 .header>.i-app-width {
@@ -292,15 +254,15 @@ section {
     color: #ffffff;
 }
 
-.pools {
+.friends {
     display: flex;
     flex-wrap: wrap;
     margin-top: 40px;
     gap: 40px;
 }
 
-.pool {
-    width: 360px;
+.friend {
+    width: 200px;
     padding: 30px;
     background: #fafafa;
     box-shadow: 0 6px 10px #ccc;
@@ -308,45 +270,26 @@ section {
     border-radius: 16px;
 }
 
-.pool .top {
+.friend .image {
+    width: 100%;
+    height: 100px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
 }
 
-.top img {
-    width: 30px;
+.friend .image img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-.top p {
+.friend .detail {
+    text-align: center;
+    margin-top: 10px;
     font-size: 16px;
     font-weight: 600;
-}
-
-.apy {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.apy h3 {
-    font-size: 24px;
-}
-
-.stats {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-
-.stats>div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.stats img {
-    height: 20px;
 }
 
 .action {
