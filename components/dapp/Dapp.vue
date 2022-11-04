@@ -21,7 +21,7 @@
                         <img src="/images/astronaut_learning.png" alt="" />
                     </div>
                 </router-link>
-                <router-link to="/dapp/borrow">
+                <router-link to="/dapp/loan">
                     <div class="app">
                         <h3>Get a Loan</h3>
                         <p>Borrow tokens from your contact.</p>

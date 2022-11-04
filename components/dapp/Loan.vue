@@ -86,9 +86,9 @@
                 </div>
             </div>
 
-            <div class="empty">
+            <div class="empty" v-if="loans.length == 0">
                 <img src="/images/astronaut_borrow.png" alt="">
-                <p>Empty!</p>
+                <p>No Loans!</p>
             </div>
         </div>
     </div>

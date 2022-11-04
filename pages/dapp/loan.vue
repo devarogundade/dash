@@ -1,6 +1,6 @@
 <template>
 <div class="dapp">
-    <Borrow />
+    <Loan />
 </div>
 </template>
 

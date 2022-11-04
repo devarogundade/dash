@@ -94,6 +94,11 @@
                     </div>
                 </div>
             </div>
+
+            <div class="empty" v-if="liquidities.length == 0">
+                <img src="/images/astronaut_borrow.png" alt="">
+                <p>No Liquidity!</p>
+            </div>
         </div>
     </div>
 </section>

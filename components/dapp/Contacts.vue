@@ -55,6 +55,11 @@
                     <div class="detail">{{ contact.name }}</div>
                 </div>
             </div>
+
+            <div class="empty" v-if="contacts.length == 0">
+                <img src="/images/astronaut_borrow.png" alt="">
+                <p>No Contacts!</p>
+            </div>
         </div>
     </div>
 </section>

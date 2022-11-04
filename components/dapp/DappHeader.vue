@@ -20,9 +20,9 @@
                         <i class="fi fi-sr-wallet"></i> Dashboard
                     </div>
                 </router-link>
-                <router-link to="/dapp/borrow">
-                    <div :class="$route.name == 'dapp-borrow' ? 'item item-active' : 'item'">
-                        <i class="fi fi-sr-usd-circle"></i> Borrow
+                <router-link to="/dapp/loan">
+                    <div :class="$route.name == 'dapp-loan' ? 'item item-active' : 'item'">
+                        <i class="fi fi-sr-usd-circle"></i> Loans
                     </div>
                 </router-link>
                 <router-link to="/dapp/liquidity">
