@@ -11,7 +11,7 @@ module.exports = {
         // returns EVM event data formats
         switch (collection) {
             case 'users':
-                return ['address', 'string', 'string', 'bool']
+                return ['string', 'string', 'string', 'string', 'address', 'uint', 'bool']
             default:
                 return null
         }
@@ -21,10 +21,13 @@ module.exports = {
         switch (collection) {
             case 'users':
                 return {
-                    id: data[0].toUpperCase(), // avoid case sensitive
-                    name: data[1],
-                    photo: data[2],
-                    verified: data[3],
+                    id: data[4].toUpperCase(), // avoid case sensitive
+                    name: data[0],
+                    photo: data[1],
+                    email: data[2],
+                    username: data[3],
+                    score: data[5],
+                    activeLoan: data[6]
                 }
             default:
                 return null

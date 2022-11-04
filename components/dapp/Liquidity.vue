@@ -50,7 +50,7 @@
             </div>
 
             <div class="pools">
-                <div class="pool" v-for="index in 4" :key="index">
+                <div class="pool" v-for="(liquidity, index) in liquidities" :key="index">
                     <div class="top">
                         <div class="images">
                             <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="" />
@@ -84,7 +84,7 @@
                             <p>$0</p>
                         </div>
                         <div>
-                            <p>My Reward</p>
+                            <p>Interest</p>
                             <p>$0</p>
                         </div>
                     </div>
@@ -104,8 +104,19 @@ export default {
     data() {
         return {
             tab: 1,
+            liquidities: []
         };
     },
+    async created() {
+        if (this.$auth.accounts.length > 0) {
+            this.liquidities = await this.$firestore.fetchAllWhere('liquidities', 'address', '==',
+                this.$auth.accounts[0].toUpperCase()
+            )
+        }
+    },
+    methods: {
+
+    }
 };
 </script>
 

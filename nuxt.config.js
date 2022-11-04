@@ -26,6 +26,7 @@ export default {
 
     plugins: [
         '@/plugins/auth.js',
+        '@/plugins/ipfs.js',
         '@/plugins/firestore.js',
         '@/plugins/contract.js'
     ],

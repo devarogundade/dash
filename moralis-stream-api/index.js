@@ -8,7 +8,7 @@ app.use(express.json())
 app.post('/webhook', (req, res) => {
     const webhook = req.body
     let collection = webhook.tag
-    let _merge = false
+    let _merge = true
 
     console.log(webhook)
 

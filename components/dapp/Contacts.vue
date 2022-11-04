@@ -48,11 +48,11 @@
             </div>
 
             <div class="friends">
-                <div class="friend" v-for="index in 10" :key="index">
+                <div class="friend" v-for="(contact, index) in contacts" :key="index">
                     <div class="image">
-                        <img src="/images/astronaut_friends.png" alt="">
+                        <img :src="contact.photo" alt="">
                     </div>
-                    <div class="detail">John Doe</div>
+                    <div class="detail">{{ contact.name }}</div>
                 </div>
             </div>
         </div>
@@ -65,8 +65,17 @@ export default {
     data() {
         return {
             tab: 1,
+            contacts: []
         };
     },
+    async created() {
+        if (this.$auth.accounts.length > 0) {
+            this.contacts = await this.$firestore.fetchAllWhere(
+                'users', 'networks', 'array-contains',
+                this.$auth.accounts[0].toUpperCase()
+            )
+        }
+    }
 };
 </script>
 

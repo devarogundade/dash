@@ -4,13 +4,13 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, getDocs, doc, setDoc, getDoc, query, where, onSnapshot } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyAN_Oc0Wz5TXJFdZK__bs5sVUAm6WBzJhY",
-    authDomain: "buidl-a1411.firebaseapp.com",
-    projectId: "buidl-a1411",
-    storageBucket: "buidl-a1411.appspot.com",
-    messagingSenderId: "1070242648819",
-    appId: "1:1070242648819:web:30af82bde5283232441d86",
-    measurementId: "G-B5R2HHTZVQ"
+    apiKey: "AIzaSyDkeL4TS_TVesr3rbtMHxo3ij_Ng9-lAxw",
+    authDomain: "dash-3f37c.firebaseapp.com",
+    projectId: "dash-3f37c",
+    storageBucket: "dash-3f37c.appspot.com",
+    messagingSenderId: "619398085989",
+    appId: "1:619398085989:web:0f220076cad7a4cb90358c",
+    measurementId: "G-70VPMTNN94"
 };
 
 const firebaseApp = initializeApp(firebaseConfig);

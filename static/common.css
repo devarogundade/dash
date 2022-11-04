@@ -52,3 +52,25 @@ a {
     align-items: center;
     justify-content: center;
 }
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 60px;
+    padding: 40px;
+    border: 1px solid #ccc;
+    border-radius: 30px;
+}
+
+.empty img {
+    height: 100px;
+}
+
+.empty p {
+    font-size: 30px;
+    font-weight: 600;
+}

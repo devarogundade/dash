@@ -2,7 +2,11 @@
 <section>
     <div class="header">
         <div class="image">
-            <img src="http://localhost:3000/images/students/5.jpg" alt="" />
+            <img :src="user.photo" id="photo" alt="" />
+        </div>
+        <div class="file-picker">
+            <input type="file" accept="image/*" v-on:change="choosePhoto($event)">
+            <i class="fi fi-br-edit-alt"></i>
         </div>
     </div>
     <div class="body">
@@ -10,23 +14,23 @@
             <div class="container">
                 <div class="form">
                     <div class="from input">
-                        <input type="text" placeholder="Full name">
+                        <input type="text" v-model="user.name" placeholder="Full name">
                     </div>
 
                     <div class="to input">
-                        <input type="text" placeholder="Email Address">
+                        <input type="text" v-model="user.email" placeholder="Email Address">
                     </div>
 
                     <div class="label">Age</div>
                     <div class="flex">
                         <div class="to input">
-                            <input type="text" placeholder="1999">
+                            <input type="text" v-model="user.age.year" placeholder="1999">
                             <div class="token">
                                 <p>Year</p>
                             </div>
                         </div>
                         <div class="to input">
-                            <input type="text" placeholder="01">
+                            <input type="text" v-model="user.age.month" placeholder="01">
                             <div class="token">
                                 <p>Month</p>
                             </div>
@@ -36,13 +40,13 @@
                     <div class="label">Contact & Address</div>
                     <div class="flex">
                         <div class="to input">
-                            <input type="text" placeholder="+123">
+                            <input type="text" v-model="user.phone" placeholder="+123">
                             <div class="token">
                                 <p>Phone</p>
                             </div>
                         </div>
                         <div class="to input">
-                            <input type="text" placeholder="01 Street">
+                            <input type="text" v-model="user.address" placeholder="01 Street">
                             <div class="token">
                                 <p>Address</p>
                             </div>
@@ -50,13 +54,11 @@
                     </div>
 
                     <div class="to input">
-                        <input type="text" placeholder="@username">
+                        <input type="text" v-model="user.username" placeholder="@username">
                     </div>
 
-                    <div class="action" v-on:click="$nuxt.$emit('success', {
-                      title: 'Profile Updated',
-                      message: 'You profile has been changed successfully!'
-                    })">Update Profile</div>
+                    <div class="action" v-if="!updating" v-on:click="updateProfile()">Update Profile</div>
+                    <div class="action" v-else>Updating..</div>
                 </div>
             </div>
         </div>
@@ -69,8 +71,71 @@ export default {
     data() {
         return {
             tab: 1,
+            user: {
+                name: '',
+                photo: '/images/placeholder.png',
+                email: '',
+                age: {
+                    year: '',
+                    month: ''
+                },
+                phone: '',
+                address: '',
+                username: ''
+            },
+            contract: null,
+            file: null,
+            updating: false
         };
     },
+    async created() {
+        if (this.$auth.accounts.length > 0) {
+            const user = await this.$firestore.fetch('users', this.$auth.accounts[0].toUpperCase())
+            if (user != null) {
+                this.user = user
+            }
+        }
+
+        this.$contract.init()
+        $nuxt.$on('contract', (contract) => {
+            this.contract = contract
+        })
+    },
+    methods: {
+        choosePhoto: function (event) {
+            const file = event.target.files[0]
+            const url = URL.createObjectURL(file)
+            document.getElementById('photo').src = url
+            this.file = file
+        },
+
+        updateProfile: async function () {
+            if (this.$auth.accounts.length == 0 || this.contract == null) return
+
+            this.updating = true
+
+            if (this.file != null) {
+                const base64 = await this.$ipfs.toBase64(this.file)
+                const url = await this.$ipfs.upload(`users`, base64)
+
+                if (url != null) {
+                    this.user.photo = url
+                }
+            }
+
+            try {
+                const trx = await this.contract.createUser()
+
+                $nuxt.$emit('trx', trx)
+                $nuxt.$emit('success', {
+                    title: 'Profile Updated',
+                    message: 'You have successfully updated your profile!'
+                })
+            } catch (error) {}
+
+            this.updating = false
+        }
+    }
 };
 </script>
 
@@ -105,6 +170,28 @@ section {
     height: 100%;
     width: 100%;
     object-fit: cover;
+}
+
+.file-picker {
+    width: 60px;
+    height: 60px;
+    background: #1900b3;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    top: 250px;
+    left: calc(50% + 50px);
+    color: #ff9d05;
+    position: absolute;
+    z-index: 1;
+    font-size: 24px;
+}
+
+.file-picker input {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
 }
 
 .header .text h3 {
@@ -193,6 +280,8 @@ section {
     font-size: 16px;
     font-weight: 600;
     color: #ff9d05;
+    cursor: pointer;
+    user-select: none;
 }
 
 .flex {

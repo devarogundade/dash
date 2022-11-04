@@ -36,12 +36,14 @@
                 </div>
 
                 <div class="balance">
-                    <router-link to="/dapp/offers"><div class="add"> <i class="fi fi-br-plus"></i> New Loan</div></router-link>
+                    <router-link to="/dapp/offers">
+                        <div class="add"> <i class="fi fi-br-plus"></i> New Loan</div>
+                    </router-link>
                 </div>
             </div>
 
             <div class="pools">
-                <div class="pool" v-for="index in 4" :key="index">
+                <div class="pool" v-for="(loan, index) in loans" :key="index">
                     <div class="top">
                         <div class="images">
                             <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="">
@@ -83,6 +85,11 @@
                     <div class="action">Repay Loan</div>
                 </div>
             </div>
+
+            <div class="empty">
+                <img src="/images/astronaut_borrow.png" alt="">
+                <p>Empty!</p>
+            </div>
         </div>
     </div>
 </section>
@@ -92,8 +99,19 @@
 export default {
     data() {
         return {
-            tab: 1
+            tab: 1,
+            loans: []
         }
+    },
+    async created() {
+        if (this.$auth.accounts.length > 0) {
+            this.loans = await this.$firestore.fetchAllWhere('loans', 'address', '==',
+                this.$auth.accounts[0].toUpperCase()
+            )
+        }
+    },
+    methods: {
+
     }
 }
 </script>
@@ -130,7 +148,6 @@ section {
 .header img {
     height: 240px;
 }
-
 
 .header .text {
     padding: 40px 0;
