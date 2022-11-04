@@ -13,33 +13,31 @@
                 </div>
 
                 <div class="from input">
-                    <input type="text" placeholder="Amount">
+                    <input type="text" v-model="liquidity.amount" placeholder="Amount" />
                     <div class="token">
-                        <img src="" alt="">
+                        <img src="" alt="" />
                         <p>BNB</p>
-
                     </div>
                 </div>
 
                 <div class="to input">
-                    <input type="text" placeholder="Interest rate (%)">
+                    <input type="text" v-model="liquidity.interest" placeholder="Interest rate (%)" />
                     <div class="token">
-                        <img src="" alt="">
+                        <img src="" alt="" />
                         <p>DASH</p>
-
                     </div>
                 </div>
 
                 <div class="label">Take out</div>
                 <div class="flex">
                     <div class="to input">
-                        <input type="text" placeholder="Min">
+                        <input type="text" v-model="liquidity.takeOut.min" placeholder="Min" />
                         <div class="token">
                             <p>BNB</p>
                         </div>
                     </div>
                     <div class="to input">
-                        <input type="text" placeholder="Max">
+                        <input type="text" v-model="liquidity.takeOut.max" placeholder="Max" />
                         <div class="token">
                             <p>BNB</p>
                         </div>
@@ -49,13 +47,13 @@
                 <div class="label">Duration</div>
                 <div class="flex">
                     <div class="to input">
-                        <input type="text" placeholder="Min">
+                        <input type="text" v-model="liquidity.days.min" placeholder="Min" />
                         <div class="token">
                             <p>Days</p>
                         </div>
                     </div>
                     <div class="to input">
-                        <input type="text" placeholder="Max">
+                        <input type="text" v-model="liquidity.days.max" placeholder="Max" />
                         <div class="token">
                             <p>Days</p>
                         </div>
@@ -63,17 +61,16 @@
                 </div>
 
                 <div class="to input">
-                    <input type="text" placeholder="Minimum credit score">
+                    <input type="text" v-model="liquidity.minimumScore" placeholder="Minimum credit score" />
                     <div class="token">
                         <p>800</p>
                     </div>
                 </div>
 
-                <div class="price">
-                    1 BNB = 1 BNBx ($1.43)
-                </div>
+                <div class="price">1 BNB = 1 BNBx ($1.43)</div>
 
-                <div class="action">Add To Liquidity</div>
+                <div class="action" v-if="!adding" v-on:click="provideLiquidity()">Add To Liquidity</div>
+                <div class="action" v-else>Adding..</div>
             </div>
         </div>
     </div>
@@ -84,10 +81,78 @@
 export default {
     data() {
         return {
-            tab: 1
-        }
-    }
-}
+            tab: 1,
+            liquidity: {
+                amount: '',
+                tokenAddress: '',
+                interest: '',
+                takeOut: {
+                    min: '',
+                    max: ''
+                },
+                days: {
+                    min: '',
+                    max: ''
+                },
+                minimumScore: ''
+            },
+            contract: null,
+            adding: false,
+        };
+    },
+    async created() {
+        this.$contract.init();
+        $nuxt.$on("contract", (contract) => {
+            this.contract = contract;
+        });
+    },
+    methods: {
+        addLiquidity: async function () {
+            if (this.$auth.accounts.length == 0 || this.contract == null) return
+
+            this.adding = true;
+
+            try {
+                const trx = await this.contract.provideLiquidity(
+                    this.liquidity.amount,
+                    this.liquidity.tokenAddress,
+                    this.liquidity.interest,
+                    this.liquidity.takeOut.min,
+                    this.liquidity.takeOut.max,
+                    this.liquidity.days.min,
+                    this.liquidity.days.max,
+                    this.liquidity.minimumScore, {
+                        from: this.$auth.accounts[0]
+                    }
+                );
+
+                $nuxt.$emit('trx', trx)
+                $nuxt.$emit('success', {
+                    title: 'Liquidity Added',
+                    message: 'You have successfully added a new liquidity!'
+                })
+
+                // reset inputs
+                this.liquidity = {
+                    amount: '',
+                    tokenAddress: '',
+                    interest: '',
+                    takeOut: {
+                        min: '',
+                        max: ''
+                    },
+                    days: {
+                        min: '',
+                        max: ''
+                    },
+                    minimumScore: ''
+                }
+            } catch (error) {}
+
+            this.adding = false
+        },
+    },
+};
 </script>
 
 <style scoped>
@@ -103,7 +168,7 @@ export default {
     width: 450px;
     border-radius: 30px;
     padding: 40px;
-    box-shadow: 0 6px 10px #CCC;
+    box-shadow: 0 6px 10px #ccc;
     height: fit-content;
 }
 
@@ -137,7 +202,7 @@ export default {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
-    box-shadow: 0 4px 8px #CCC;
+    box-shadow: 0 4px 8px #ccc;
     border-radius: 10px;
     padding: 10px;
     margin-bottom: 20px;
