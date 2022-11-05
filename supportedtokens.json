@@ -1,0 +1,13 @@
+[{
+    "name": "FUSD",
+    "image": "/images/token/fusd.png",
+    "address": ""
+}, {
+    "name": "USDT",
+    "image": "/images/token/usdt.png",
+    "address": ""
+}, {
+    "name": "USDC",
+    "image": "/images/token/usdc.png",
+    "address": ""
+}]
