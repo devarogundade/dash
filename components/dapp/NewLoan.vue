@@ -17,16 +17,13 @@
                     <div class="token">
                         <img src="" alt="">
                         <p>BNB</p>
-
                     </div>
                 </div>
 
                 <div class="to input">
-                    <input type="text" placeholder="0.0">
+                    <input type="text" placeholder="0">
                     <div class="token">
-                        <img src="" alt="">
-                        <p>BNB</p>
-
+                        <p>DAYS</p>
                     </div>
                 </div>
 
@@ -128,7 +125,7 @@ export default {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 120px;
+    padding: 0 16px;
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 6px;

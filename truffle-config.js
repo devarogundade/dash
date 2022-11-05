@@ -3,7 +3,6 @@ const dotenv = require("dotenv")
 dotenv.config()
 
 const mnemonic = process.env.MNEMONIC;
-const rpc_id = process.env.FANTOM_RPC_ID;
 
 module.exports = {
     networks: {

@@ -124,7 +124,14 @@ export default {
             }
 
             try {
-                const trx = await this.contract.createUser()
+                const trx = await this.contract.createUser(
+                    this.user.name,
+                    this.user.photo,
+                    this.user.email,
+                    this.user.username, {
+                        from: this.$auth.accounts[0]
+                    }
+                )
 
                 $nuxt.$emit('trx', trx)
                 $nuxt.$emit('success', {
