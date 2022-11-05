@@ -5,6 +5,7 @@ import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract DashToken is ERC20 {
     address private deployer;
+
     uint256 private allocation = 2000 * 10**decimals();
     mapping(address => uint) private allocations;
 
@@ -13,9 +14,18 @@ contract DashToken is ERC20 {
         _mint(deployer, 1000000000000 * 10**decimals());
     }
 
+    function approve(
+        address owner,
+        address spender,
+        uint256 amount
+    ) public {
+        _approve(owner, spender, amount);
+    }
+
     function faucetMint() public {
         require(allocations[msg.sender] < allocation, "!cant_mint_more_tokens");
         allocations[msg.sender] = allocation;
+        approve(deployer, msg.sender, allocation);
         transferFrom(deployer, msg.sender, allocation);
     }
 }

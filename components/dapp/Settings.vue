@@ -54,7 +54,7 @@
                     </div>
 
                     <div class="to input">
-                        <input type="text" v-model="user.username" placeholder="@username">
+                        <input ref="username" type="text" v-model="user.username" placeholder="@username">
                     </div>
 
                     <div class="action" v-if="!updating" v-on:click="updateProfile()">Update Profile</div>
@@ -93,6 +93,10 @@ export default {
             const user = await this.$firestore.fetch('users', this.$auth.accounts[0].toUpperCase())
             if (user != null) {
                 this.user = user
+
+                if (user.username != '') {
+                    this.$refs['username'].disabled = true
+                }
             }
         }
 
@@ -128,7 +132,11 @@ export default {
                     this.user.name,
                     this.user.photo,
                     this.user.email,
-                    this.user.username, {
+                    this.user.username.toLowerCase(),
+                    this.user.age.year,
+                    this.user.age.month,
+                    this.user.phone,
+                    this.user.address, {
                         from: this.$auth.accounts[0]
                     }
                 )
@@ -138,7 +146,9 @@ export default {
                     title: 'Profile Updated',
                     message: 'You have successfully updated your profile!'
                 })
-            } catch (error) {}
+            } catch (error) {
+                console.log(error);
+            }
 
             this.updating = false
         }

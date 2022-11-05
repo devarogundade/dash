@@ -13,14 +13,18 @@
                 </div>
 
                 <div class="from input">
-                    <input type="text" placeholder="@username">
+                    <input type="text" v-model="username" placeholder="@username">
+                    <div class="token" v-on:click="findUser()">
+                        <p>Search</p>
+                    </div>
                 </div>
 
                 <div class="to input">
-                    <input type="text" disabled>
+                    <input type="text" v-if="user" v-model="user.name" disabled>
+                    <input type="text" v-else disabled>
                 </div>
 
-                <div class="action">Add To Contact</div>
+                <div class="action" v-on:click="addToContact()">Add To Contact</div>
             </div>
         </div>
     </div>
@@ -31,7 +35,57 @@
 export default {
     data() {
         return {
-            tab: 1
+            tab: 1,
+            username: '',
+            user: null,
+            contract: null
+        }
+    },
+    created() {
+        this.$contract.init()
+        $nuxt.$on('contract', (contract) => {
+            this.contract = contract
+        })
+    },
+    methods: {
+        findUser: async function () {
+            if (this.username == '') return
+
+            const users = await this.$firestore.fetchAllWhere(
+                'users', 'username', '==', this.username.toLowerCase()
+            )
+
+            if (users.length == 0) {
+                this.user = null
+                return
+            }
+
+            this.user = users[0]
+        },
+
+        addToContact: async function () {
+            if (this.user == null) {
+                $nuxt.$emit('failure', {
+                    title: 'No user found',
+                    message: 'Search user by username'
+                })
+                return
+            }
+
+            if (this.contract == null || this.$auth.accounts.length == 0) return
+
+            try {
+                const trx = await this.contract.addNetwork(user.address, {
+                    from: this.$auth.accounts[0]
+                })
+
+                $nuxt.$emit('success', {
+                    title: 'User added to list',
+                    message: `${user.name} has been added to your contact`
+                })
+            } catch (error) {
+                console.log(error);
+            }
         }
     }
 }
@@ -114,10 +168,12 @@ export default {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 120px;
+    padding: 0 16px;
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    user-select: none;
+    cursor: pointer;
 }
 
 .to {
@@ -140,6 +196,8 @@ export default {
     border-radius: 10px;
     background: #1900b3;
     font-size: 16px;
+    cursor: pointer;
+    user-select: none;
     font-weight: 600;
     color: #ff9d05;
 }
