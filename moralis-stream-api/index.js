@@ -35,6 +35,26 @@ app.post('/webhook', (req, res) => {
 
         let shouldWrite = true
 
+        // override default flow
+        switch (collection) {
+            case 'updated-liquidities':
+                collection = 'liquidities'
+                break
+            case 'closed-liquidities':
+                fireStore.delete('liquidities', object.id)
+                shouldWrite = false
+                break
+            case 'credit-scores':
+                collection = 'users'
+                break
+            case 'networks':
+                fireStore.updateNetworks('users', object.by, object.id)
+                shouldWrite = false
+                break
+            default:
+                break
+        }
+
         if (shouldWrite) { // write data to firebase
             fireStore.write(collection, object.id, object, _merge)
         }

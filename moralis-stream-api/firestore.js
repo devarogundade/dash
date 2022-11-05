@@ -16,14 +16,22 @@ module.exports = {
             return false
         }
     },
-    updateArray: async function(collection, document, key, data) {
+    delete: async function(collection, document) {
+        try {
+            const reference = this.db.collection(collection).doc(document);
+            await reference.delete()
+            return true
+        } catch (error) {
+            console.log(error);
+            return false
+        }
+    },
+    updateNetworks: async function(collection, document, data) {
         try {
             const reference = this.db.collection(collection).doc(document)
-
-            let _data = {}
-            data[`${key}`] = FieldValue.arrayUnion(data)
-
-            await reference.update(_data);
+            await reference.update({
+                networks: FieldValue.arrayUnion(data)
+            });
             return true
         } catch (error) {
             console.log(error);

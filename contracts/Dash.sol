@@ -45,6 +45,7 @@ contract Dash {
         uint256 amount;
         address tokenAddress;
         uint interestRate;
+        uint duration;
         address from;
         uint createdAt;
         uint paidAt;
@@ -141,20 +142,30 @@ contract Dash {
         users[msg.sender].activeLoan = true;
 
         loanID++;
-        loans[msg.sender].push(
-            Loan(
-                loanID,
-                liquidity.id,
-                amount,
-                liquidity.tokenAddress,
-                liquidity.interestRate,
-                owner,
-                block.timestamp,
-                0
-            )
+
+        Loan memory loan = Loan(
+            loanID,
+            liquidity.id,
+            amount,
+            liquidity.tokenAddress,
+            liquidity.interestRate,
+            duration,
+            owner,
+            block.timestamp,
+            0
         );
 
-        emit TookLoan(loanID, amount, msg.sender, owner);
+        loans[msg.sender].push(loan);
+
+        emit LoanCreated(
+            loan.id,
+            loan.liquidity,
+            loan.amount,
+            loan.duration,
+            loan.interestRate,
+            loan.createdAt,
+            loan.paidAt
+        );
     }
 
     function payLoan(uint id, address owner) public {
@@ -217,7 +228,32 @@ contract Dash {
         // user is not on a loan
         users[msg.sender].activeLoan = false;
 
-        emit PaidLoan(id, loan.amount, msg.sender, owner);
+        // credit score mechanism
+        if (durationInDays > loan.duration) {
+            if (users[msg.sender].creditScore >= 5) {
+                users[msg.sender].creditScore -= 5;
+            } else {
+                users[msg.sender].creditScore = 0;
+            }
+        } else {
+            if (users[msg.sender].creditScore <= 95) {
+                users[msg.sender].creditScore += 5;
+            } else {
+                users[msg.sender].creditScore = 100;
+            }
+        }
+
+        emit LoanCreated(
+            loan.id,
+            loan.liquidity,
+            loan.amount,
+            loan.duration,
+            loan.interestRate,
+            loan.createdAt,
+            loan.paidAt
+        );
+
+        emit CreditScoreChanged(msg.sender, users[msg.sender].creditScore);
     }
 
     function closeLiquidity(uint id) public {
@@ -361,11 +397,17 @@ contract Dash {
         string phone,
         string homeAddress
     );
+    event CreditScoreChanged(address user, uint score);
     event NetworkAdded(address user, address by, bool isAdded);
-    event TookLoan(uint id, uint256 amount, address userAddress, address owner);
-    event PaidLoan(uint id, uint256 amount, address userAddress, address owner);
-    event ClosedLiquidity(uint id);
-    event UpdatedLiquidity(uint id, uint256 amount);
+    event LoanCreated(
+        uint loanID,
+        uint liquidityID,
+        uint256 amount,
+        uint duration,
+        uint interestRate,
+        uint createdAt,
+        uint paidAt
+    );
     event ProvidedLiquity(
         uint liquidityID,
         uint256 amount,
@@ -379,4 +421,6 @@ contract Dash {
         uint createdAt,
         address userAddress
     );
+    event ClosedLiquidity(uint id);
+    event UpdatedLiquidity(uint id, uint256 amount);
 }
