@@ -63,7 +63,7 @@ contract Dash {
         string memory email,
         string memory username
     ) public {
-        require(users[msg.sender].id == 0, "!already_created_an_account");
+        // require(users[msg.sender].id == 0, "!already_created_an_account");
 
         userID++;
         users[msg.sender] = User(
