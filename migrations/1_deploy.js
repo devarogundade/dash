@@ -14,7 +14,7 @@ module.exports = async function(deployer) {
     await deployer.deploy(Dash, DashToken.address)
 
     // deploy stable coins
-    await deployer.deploy(FUSD)
-    await deployer.deploy(USDT)
-    await deployer.deploy(USDC)
+    await deployer.deploy(FUSD, "Fantom USD", "tFUSD")
+    await deployer.deploy(USDT, "USDC", "tUSDC")
+    await deployer.deploy(USDC, "USDT", "tUSDT")
 };
