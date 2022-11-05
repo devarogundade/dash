@@ -21,17 +21,17 @@
                     </div>
                 </router-link>
                 <router-link to="/dapp/loan">
-                    <div :class="$route.name == 'dapp-loan' ? 'item item-active' : 'item'">
+                    <div :class="($route.name == 'dapp-loan' || $route.name == 'dapp-offers' || $route.name == 'dapp-new-loan-liquidity') ? 'item item-active' : 'item'">
                         <i class="fi fi-sr-usd-circle"></i> Loans
                     </div>
                 </router-link>
                 <router-link to="/dapp/liquidity">
-                    <div :class="$route.name == 'dapp-liquidity' ? 'item item-active' : 'item'">
+                    <div :class="($route.name == 'dapp-liquidity' || $route.name == 'dapp-add-liquidity') ? 'item item-active' : 'item'">
                         <i class="fi fi-sr-piggy-bank"></i> Liquidity
                     </div>
                 </router-link>
                 <router-link to="/dapp/contacts">
-                    <div :class="$route.name == 'dapp-contacts' ? 'item item-active' : 'item'">
+                    <div :class="($route.name == 'dapp-contacts' || $route.name == 'dapp-add-contacts') ? 'item item-active' : 'item'">
                         <i class="fi fi-sr-following"></i> Contacts
                     </div>
                 </router-link>

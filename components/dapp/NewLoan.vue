@@ -1,37 +1,59 @@
 <template>
 <section>
     <div class="i-app-width">
-        <div class="container">
+        <div class="container" v-if="liquidity">
             <div class="form">
                 <div class="tabs">
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
-                        Interest
+                        Loan
                     </div>
-                    <div :class="tab == 2 ? 'item item-active' : 'item'">
-                        NFT <span>Soon</span>
+                    <div :class="tab == 2 ? 'item item-active' : 'item'" v-on:click="tab = 2">
+                        Provider
+                    </div>
+                </div>
+
+                <div class="detail">
+                    <div class="label">
+                        <p>Available:</p>
+                        <p>{{ $utils.fromWei(liquidity.amount) }} FUSD</p>
+                    </div>
+                    <div class="label">
+                        <p>Take Out:</p>
+                        <p>{{ $utils.fromWei(liquidity.minTakeOut) }} ~ {{ $utils.fromWei(liquidity.maxTakeOut) }} FUSD</p>
+                    </div>
+                    <div class="label">
+                        <p>Minimum Credit Score:</p>
+                        <p>{{ liquidity.minScore }}</p>
+                    </div>
+                    <div class="label">
+                        <p>Duration:</p>
+                        <p>{{ liquidity.minDays }} ~ {{ liquidity.maxDays }} days</p>
+                    </div>
+                    <div class="label">
+                        <p>Interest per 24h:</p>
+                        <p>{{ $utils.fromWei(liquidity.interestRate) }} DASH</p>
                     </div>
                 </div>
 
                 <div class="from input">
-                    <input type="text" placeholder="0.0">
+                    <input type="text" v-model="loan.amount" placeholder="Amount" />
                     <div class="token">
-                        <img src="" alt="">
-                        <p>BNB</p>
+                        <img :src="coin.image" alt="" />
+                        <p>{{ coin.symbol }}</p>
                     </div>
                 </div>
 
                 <div class="to input">
-                    <input type="text" placeholder="0">
+                    <input type="text" v-model="loan.duration" placeholder="Duration" />
                     <div class="token">
-                        <p>DAYS</p>
+                        <p>Days</p>
                     </div>
                 </div>
 
-                <div class="price">
-                    1 BNB = 1 BNBx ($1.43)
-                </div>
+                <div class="price">1 FUSD = $1.00</div>
 
-                <div class="action">Borrow</div>
+                <div class="action" v-if="!taking" v-on:click="takeLoan()">Take Loan</div>
+                <div class="action" v-else>Taking..</div>
             </div>
         </div>
     </div>
@@ -39,13 +61,79 @@
 </template>
 
 <script>
+import stableCoins from "../../stablecoins.json";
 export default {
     data() {
         return {
-            tab: 1
-        }
-    }
-}
+            tab: 1,
+            liquidity: null,
+            liquidityId: this.$route.params.liquidity,
+            loan: {
+                amount: '',
+                duration: ''
+            },
+            contract: null,
+            taking: false,
+            coin: stableCoins[0],
+            address: null
+        };
+    },
+    async created() {
+        this.address = await this.$auth.connectToMetaMask()
+        this.getLiquidity()
+
+        this.$contract.init();
+        $nuxt.$on('contract', (contract) => {
+            this.contract = contract;
+        });
+        $nuxt.$on('coin', (coin) => {
+            this.coin = coin
+        })
+    },
+    methods: {
+        getLiquidity: async function () {
+            this.liquidity = await this.$firestore.fetch('liquidities', this.liquidityId)
+            if (this.liquidity == null) {
+                $nuxt.$emit('failure', {
+                    title: 'Liquidity does not exits',
+                    message: 'This liquidity might have been closed!'
+                })
+            }
+        },
+        takeLoan: async function () {
+            if (this.contract == null) return
+
+            this.taking = true;
+
+            try {
+                const trx = await this.contract.takeLoan(
+                    this.liquidityId,
+                    this.$utils.toWei(this.loan.amount),
+                    this.liquidity.address.toLowerCase(),
+                    this.loan.duration, {
+                        from: this.address
+                    }
+                );
+
+                $nuxt.$emit('trx', trx)
+                $nuxt.$emit('success', {
+                    title: 'Loan has been taken',
+                    message: 'You have successfully took a new loan!'
+                })
+
+                // reset inputs
+                this.loan = {
+                    amount: '',
+                    duration: ''
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+            this.taking = false
+        },
+    },
+};
 </script>
 
 <style scoped>
@@ -54,14 +142,14 @@ export default {
     height: 100%;
     display: flex;
     justify-content: center;
-    padding: 150px 0;
+    padding: 50px 0;
 }
 
 .form {
     width: 450px;
     border-radius: 30px;
     padding: 40px;
-    box-shadow: 0 6px 10px #CCC;
+    box-shadow: 0 6px 10px #ccc;
     height: fit-content;
 }
 
@@ -86,16 +174,6 @@ export default {
     border-radius: 10px;
 }
 
-.item span {
-  padding: 2px 6px;
-  background: #ff9d05;
-  color: #ffffff;
-  font-size: 12px;
-  border-radius: 4px;
-  margin-top: -20px;
-  margin-left: 5px;
-}
-
 .item-active {
     background: #000;
     color: #ffffff;
@@ -105,9 +183,10 @@ export default {
     display: flex;
     align-items: center;
     border: 1px solid #ccc;
-    box-shadow: 0 4px 8px #CCC;
+    box-shadow: 0 4px 8px #ccc;
     border-radius: 10px;
     padding: 10px;
+    margin-bottom: 20px;
 }
 
 .input input {
@@ -129,10 +208,21 @@ export default {
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
 }
 
-.to {
-    margin-top: 20px;
+.token img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.label {
+    font-size: 16px;
+    margin-bottom: 4px;
+    font-weight: 600;
 }
 
 .price {
@@ -152,6 +242,28 @@ export default {
     background: #1900b3;
     font-size: 16px;
     font-weight: 600;
+    cursor: pointer;
+    user-select: none;
     color: #ff9d05;
+}
+
+.detail {
+    margin-bottom: 20px;
+    border: 1px #ccc solid;
+    border-radius: 10px;
+}
+
+.detail .label {
+    border-bottom: 1px #ccc solid;
+    padding: 10px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.detail .label:last-child {
+    border: none;
 }
 </style>

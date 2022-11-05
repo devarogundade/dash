@@ -3,13 +3,13 @@
     <div class="header">
         <div class="i-app-width">
             <div class="text">
-                <h3>Active Lending Offers</h3>
-                <h2>$105,786,890.44</h2>
+                <h3>Provide Liquidity, EARN $DASH</h3>
+                <h2>Earnings: 1,074 DASH per 24h</h2>
                 <div class="other">
-                    <p>Total Value Locked (TVL)</p>
-                    <router-link to="">
+                    <p>Active Liquidities: {{ liquidities.length }}</p>
+                    <router-link to="/">
                         <p>
-                            Tutorial <i class="fi fi-br-arrow-up-right-from-square"></i>
+                            Leave App <i class="fi fi-br-arrow-up-right-from-square"></i>
                         </p>
                     </router-link>
                 </div>
@@ -23,55 +23,106 @@
                 </div>
             </div>
             <div class="image">
-                <img src="/images/rocket_astronaut.png" alt="" />
+                <img src="/images/astronaut_liquidity.png" alt="" />
             </div>
         </div>
     </div>
     <div class="body">
         <div class="i-app-width">
-            <div class="toolbar">
-                <div class="filter"></div>
+            <div class="pools">
+                <div class="pool" v-for="(liquidity, index) in liquidities" :key="index">
+                    <div class="top">
+                        <div class="images">
+                            <img :src="findCoin(liquidity.tokenAddress).image" alt="" />
+                        </div>
+                        <p>{{ findCoin(liquidity.tokenAddress).name }}</p>
+                    </div>
+
+                    <div class="apy">
+                        <h3>{{ $utils.fromWei(liquidity.interestRate) }} DASH</h3>
+                        <p>per 24h</p>
+                    </div>
+
+                    <div class="stats">
+                        <div>
+                            <p>Reward Token</p>
+                            <img src="/images/dash-token.png" alt="" />
+                        </div>
+
+                        <div>
+                            <p>Interest / 24h</p>
+                            <p>{{ $utils.fromWei(liquidity.interestRate) }} DASH</p>
+                        </div>
+
+                        <div>
+                            <p>Available Balance</p>
+                            <p>{{ $utils.fromWei(liquidity.amount) }} {{ findCoin(liquidity.tokenAddress).symbol }}</p>
+                        </div>
+
+                        <div>
+                            <p>Take Out</p>
+                            <p>{{ $utils.fromWei(liquidity.minTakeOut) }} ~ {{ $utils.fromWei(liquidity.maxTakeOut)}} {{ findCoin(liquidity.tokenAddress).symbol }}</p>
+                        </div>
+
+                        <div>
+                            <p>Min Credit Score</p>
+                            <p>{{ liquidity.minScore }}</p>
+                        </div>
+                    </div>
+
+                    <router-link :to="`/dapp/new-loan/${liquidity.id}`">
+                        <div class="action">
+                            <i class="fi fi-br-dollar"></i> Take loan
+                        </div>
+                    </router-link>
+                </div>
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <td>Name</td>
-                        <td>Price</td>
-                        <td>Interest per 24h</td>
-                        <td>Volume</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <br>
-                    <router-link v-for="index in 15" :key="index" to="/dapp/new-loan">
-                        <tr>
-                            <td>
-                                <div class="images">
-                                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1.png" alt="">
-                                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png" alt="">
-                                </div>
-                                <p>BNB <b>BNB</b></p>
-                            </td>
-                            <td>$352.4</td>
-                            <td>+3.3%</td>
-                            <td>$1.3M</td>
-                        </tr>
-                    </router-link>
-                </tbody>
-            </table>
+            <div class="empty" v-if="liquidities.length == 0">
+                <img src="/images/astronaut_borrow.png" alt="">
+                <p>No Liquidity!</p>
+            </div>
         </div>
     </div>
 </section>
 </template>
 
 <script>
+import stableCoins from "../../stablecoins.json";
 export default {
     data() {
         return {
             tab: 1,
+            address: null,
+            liquidities: [],
+            coins: stableCoins,
+            contract: null
         };
     },
+    async created() {
+        this.address = await this.$auth.connectToMetaMask()
+        if (this.address != null) {
+            this.getLiquidities()
+        }
+
+        this.$contract.init()
+        $nuxt.$on('contract', (contract) => {
+            this.contract = contract
+        })
+    },
+    methods: {
+        getLiquidities: async function () {
+            this.liquidities = await this.$firestore.fetchAllContactsWithLiquidities(
+                this.address.toUpperCase()
+            )
+        },
+
+        findCoin: function (address) {
+            const coins = this.coins.filter(coin => coin.address.toUpperCase() == address.toUpperCase())
+            if (coins.length == 0) return
+            return coins[0]
+        }
+    }
 };
 </script>
 
@@ -80,7 +131,6 @@ section {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: hidden;
 }
 
 .header {
@@ -88,6 +138,7 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
+    /* background-image: linear-gradient(-20deg, #ddd6f3 0%, #faaca8 100%, #faaca8 100%); */
     background: #CCEEFF;
 }
 
@@ -183,74 +234,85 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 60px;
     padding-bottom: 60px;
 }
 
-table {
-    width: 100%;
-    margin-top: 20px;
+.pools {
+    display: flex;
+    flex-wrap: wrap;
     margin-top: 40px;
-    border-radius: 30px;
-    border: none;
+    gap: 40px;
 }
 
-tbody img {
+.pool {
+    width: 360px;
+    padding: 30px;
+    background: #fafafa;
+    box-shadow: 0 6px 10px #ccc;
+    border: 1px;
+    border-radius: 16px;
+}
+
+.pool .top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.top img {
     width: 30px;
-    height: 30px;
-    border-radius: 50%;
 }
 
-td {
-    min-width: 300px;
-}
-
-thead {
-    position: sticky;
-    background: #ffffff;
-    top: 0;
-}
-
-thead td {
-    font-size: 20px;
-    padding: 10px 0;
+.top p {
+    font-size: 16px;
     font-weight: 600;
 }
 
-tbody {
-    padding-top: 30px;
+.apy {
+    text-align: center;
+    margin-top: 20px;
 }
 
-tbody tr {
-    border-radius: 6px;
+.apy h3 {
+    font-size: 24px;
 }
 
-tbody tr:hover {
-    background: #FFFFFF;
+.stats {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
 }
 
-tbody td {
-    /* color: #FFFFFF; */
+.stats>div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-tbody td:first-child {
+.stats img {
+    height: 20px;
+}
+
+.action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 10px;
+    background: #1900b3;
+    color: #ffffff;
+    font-weight: 600;
     gap: 10px;
-    display: flex;
-    height: 65px;
-    align-items: center;
-    font-weight: 500;
+    font-size: 16px;
+    position: relative;
+    margin-top: 30px;
 }
 
-td:last-child {
-    text-align: right;
-}
-
-.images {
-    display: flex;
-    align-items: center;
-}
-
-.images img:last-child {
-    margin-left: -10px;
+.action i {
+    position: absolute;
+    left: 20px;
 }
 </style>

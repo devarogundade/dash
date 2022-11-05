@@ -157,6 +157,10 @@ contract Dash {
 
         loans[msg.sender].push(loan);
 
+        // send tokens to user wallet
+        IStableCoin token = IStableCoin(loan.tokenAddress);
+        token.transfer(msg.sender, amount);
+
         emit LoanCreated(
             loan.id,
             loan.liquidity,
@@ -164,8 +168,11 @@ contract Dash {
             loan.duration,
             loan.interestRate,
             loan.createdAt,
-            loan.paidAt
+            loan.paidAt,
+            msg.sender
         );
+
+        emit UpdatedLiquidity(liquidity.id, loan.amount);
     }
 
     function payLoan(uint id, address owner) public {
@@ -248,7 +255,8 @@ contract Dash {
             loan.duration,
             loan.interestRate,
             loan.createdAt,
-            loan.paidAt
+            loan.paidAt,
+            msg.sender
         );
 
         emit CreditScoreChanged(msg.sender, users[msg.sender].creditScore);
@@ -404,7 +412,8 @@ contract Dash {
         uint duration,
         uint interestRate,
         uint createdAt,
-        uint paidAt
+        uint paidAt,
+        address userAddress
     );
     event ProvidedLiquity(
         uint liquidityID,

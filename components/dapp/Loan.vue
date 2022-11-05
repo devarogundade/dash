@@ -100,18 +100,25 @@ export default {
     data() {
         return {
             tab: 1,
-            loans: []
+            loans: [],
+            address: null
         }
     },
     async created() {
-        if (this.$auth.accounts.length > 0) {
-            this.loans = await this.$firestore.fetchAllWhere('loans', 'address', '==',
-                this.$auth.accounts[0].toUpperCase()
-            )
+        this.address = await this.$auth.connectToMetaMask()
+        if (this.address != null) {
+            this.getLoans()
         }
     },
     methods: {
-
+        getLoans: async function () {
+            this.loans = await this.$firestore.fetchAllWhere(
+                'loans',
+                'address',
+                '==',
+                this.address.toUpperCase()
+            )
+        }
     }
 }
 </script>
