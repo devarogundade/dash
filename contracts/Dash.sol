@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.7.0 <0.9.0;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/iERC20.sol";
+import {IStableCoin} from "./stablecoins/IStableCoin.sol";
 import {DashToken} from "./DashToken.sol";
 
 contract Dash {
@@ -207,18 +207,16 @@ contract Dash {
             liquidity.amount += amount;
 
             // pay loan to smart contract
-            IERC20 token = IERC20(loan.tokenAddress);
-
-            // token.approve(msg.sender, address(this), loan.amount);
+            IStableCoin token = IStableCoin(loan.tokenAddress);
+            token.approve(msg.sender, address(this), loan.amount);
             token.transferFrom(msg.sender, address(this), loan.amount);
 
             // let dependecies knows pool has _changed_
             emit UpdatedLiquidity(liquidity.id, liquidity.amount);
         } else {
             // else send the funds to the liquidity creator wallet
-            IERC20 token = IERC20(loan.tokenAddress);
-
-            // token.approve(msg.sender, owner, loan.amount);
+            IStableCoin token = IStableCoin(loan.tokenAddress);
+            token.approve(msg.sender, owner, loan.amount);
             token.transferFrom(msg.sender, owner, loan.amount);
         }
 
@@ -267,7 +265,7 @@ contract Dash {
         require(liquidity.amount > 0, "insuffieceint_funds");
 
         // send tokens to user wallet
-        IERC20 token = IERC20(liquidity.tokenAddress);
+        IStableCoin token = IStableCoin(liquidity.tokenAddress);
         token.transfer(msg.sender, liquidity.amount);
 
         delete liquidity;
@@ -275,7 +273,7 @@ contract Dash {
         emit ClosedLiquidity(liquidity.id);
     }
 
-    function provideLiquity(
+    function provideLiquidity(
         uint256 amount,
         address tokenAddress,
         uint interestRate,
@@ -302,8 +300,8 @@ contract Dash {
         );
 
         // stake tokens from user wallet to the contract
-        IERC20 token = IERC20(tokenAddress);
-        // token.approve(msg.sender, owner, loan.amount);
+        IStableCoin token = IStableCoin(tokenAddress);
+        token.approve(msg.sender, address(this), amount);
         token.transferFrom(msg.sender, address(this), amount);
 
         emit ProvidedLiquity(

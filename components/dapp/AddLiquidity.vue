@@ -14,16 +14,16 @@
 
                 <div class="from input">
                     <input type="text" v-model="liquidity.amount" placeholder="Amount" />
-                    <div class="token">
-                        <img src="" alt="" />
-                        <p>BNB</p>
+                    <div class="token" v-on:click="$nuxt.$emit('pick-coin')">
+                        <img :src="coin.image" alt="" />
+                        <p>{{ coin.symbol }}</p>
                     </div>
                 </div>
 
                 <div class="to input">
-                    <input type="text" v-model="liquidity.interest" placeholder="Interest rate (%)" />
+                    <input type="text" v-model="liquidity.interest" placeholder="Interest rate / 24h" />
                     <div class="token">
-                        <img src="" alt="" />
+                        <img src="/images/dash-token.png" alt="" />
                         <p>DASH</p>
                     </div>
                 </div>
@@ -33,13 +33,13 @@
                     <div class="to input">
                         <input type="text" v-model="liquidity.takeOut.min" placeholder="Min" />
                         <div class="token">
-                            <p>BNB</p>
+                            <p>{{ coin.symbol }}</p>
                         </div>
                     </div>
                     <div class="to input">
                         <input type="text" v-model="liquidity.takeOut.max" placeholder="Max" />
                         <div class="token">
-                            <p>BNB</p>
+                            <p>{{ coin.symbol }}</p>
                         </div>
                     </div>
                 </div>
@@ -63,13 +63,13 @@
                 <div class="to input">
                     <input type="text" v-model="liquidity.minimumScore" placeholder="Minimum credit score" />
                     <div class="token">
-                        <p>800</p>
+                        <p>100</p>
                     </div>
                 </div>
 
                 <div class="price">1 BNB = 1 BNBx ($1.43)</div>
 
-                <div class="action" v-if="!adding" v-on:click="provideLiquidity()">Add To Liquidity</div>
+                <div class="action" v-if="!adding" v-on:click="addLiquidity()">Add To Liquidity</div>
                 <div class="action" v-else>Adding..</div>
             </div>
         </div>
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+import stableCoins from "../../stablecoins.json";
 export default {
     data() {
         return {
@@ -98,13 +99,17 @@ export default {
             },
             contract: null,
             adding: false,
+            coin: stableCoins[0]
         };
     },
     async created() {
         this.$contract.init();
-        $nuxt.$on("contract", (contract) => {
+        $nuxt.$on('contract', (contract) => {
             this.contract = contract;
         });
+        $nuxt.$on('coin', (coin) => {
+            this.coin = coin
+        })
     },
     methods: {
         addLiquidity: async function () {
@@ -115,7 +120,7 @@ export default {
             try {
                 const trx = await this.contract.provideLiquidity(
                     this.liquidity.amount,
-                    this.liquidity.tokenAddress,
+                    this.coin.address,
                     this.liquidity.interest,
                     this.liquidity.takeOut.min,
                     this.liquidity.takeOut.max,
@@ -147,7 +152,9 @@ export default {
                     },
                     minimumScore: ''
                 }
-            } catch (error) {}
+            } catch (error) {
+                console.log(error);
+            }
 
             this.adding = false
         },
@@ -161,7 +168,7 @@ export default {
     height: 100%;
     display: flex;
     justify-content: center;
-    padding: 150px 0;
+    padding: 50px 0;
 }
 
 .form {
@@ -227,6 +234,15 @@ export default {
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.token img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .label {

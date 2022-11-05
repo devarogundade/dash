@@ -6,9 +6,9 @@
             <router-link to="/dapp/settings">
                 <div class="profile">
                     <div class="image">
-                        <img src="http://localhost:3000/images/students/2.jpg" alt="">
+                        <img src="/images/placeholder.png" alt="">
                     </div>
-                    <p>Elon Musk</p>
+                    <p>My Profile</p>
                 </div>
             </router-link>
         </div>
