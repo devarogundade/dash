@@ -61,7 +61,11 @@ contract Dash {
         string memory name,
         string memory photo,
         string memory email,
-        string memory username
+        string memory username,
+        string memory year,
+        string memory month,
+        string memory phone,
+        string memory homeAddress
     ) public {
         // require(users[msg.sender].id == 0, "!already_created_an_account");
 
@@ -81,7 +85,11 @@ contract Dash {
             username,
             msg.sender,
             defaultCreditScore,
-            false
+            false,
+            year,
+            month,
+            phone,
+            homeAddress
         );
     }
 
@@ -272,7 +280,11 @@ contract Dash {
         string username,
         address userAddress,
         uint creditScore,
-        bool activeLoan
+        bool activeLoan,
+        string year,
+        string month,
+        string phone,
+        string homeAddress
     );
     event TookLoan(uint id, uint256 amount, address userAddress, address owner);
     event PaidLoan(uint id, uint256 amount, address userAddress, address owner);

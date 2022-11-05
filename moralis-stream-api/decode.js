@@ -11,7 +11,7 @@ module.exports = {
         // returns EVM event data formats
         switch (collection) {
             case 'users':
-                return ['string', 'string', 'string', 'string', 'address', 'uint', 'bool']
+                return ['string', 'string', 'string', 'string', 'address', 'uint256', 'bool', 'string', 'string', 'string', 'string']
             default:
                 return null
         }
@@ -25,6 +25,12 @@ module.exports = {
                     name: data[0],
                     photo: data[1],
                     email: data[2],
+                    age: {
+                        year: data[7],
+                        month: data[8]
+                    },
+                    phone: data[9],
+                    address: data[10],
                     username: data[3],
                     score: data[5],
                     activeLoan: data[6]
