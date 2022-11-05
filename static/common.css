@@ -22,8 +22,8 @@ html {
 }
 
 .nuxt-progress {
-    background: #fff;
-    height: 10px;
+    background: #000;
+    height: 4px;
 }
 
 section {

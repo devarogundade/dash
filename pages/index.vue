@@ -5,6 +5,7 @@
     <WhyDash />
     <DashToken />
     <Faq />
+    <Roadmap />
 </div>
 </template>
 
