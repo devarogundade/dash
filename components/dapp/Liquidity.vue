@@ -4,12 +4,12 @@
         <div class="i-app-width">
             <div class="text">
                 <h3>Provide Liquidity, EARN $DASH</h3>
-                <h2>$105,786,890.44</h2>
+                <h2>Earnings: 1,074 DASH per 24h</h2>
                 <div class="other">
-                    <p>Total Value Locked (TVL)</p>
-                    <router-link to="">
+                    <p>Active Liquidities: {{ liquidities.length }}</p>
+                    <router-link to="/">
                         <p>
-                            Tutorial <i class="fi fi-br-arrow-up-right-from-square"></i>
+                            Leave App <i class="fi fi-br-arrow-up-right-from-square"></i>
                         </p>
                     </router-link>
                 </div>
@@ -37,7 +37,7 @@
                         Active
                     </div>
                     <div :class="tab == 2 ? 'item item-active' : 'item'" v-on:click="tab = 2">
-                        All Liquidity
+                        Dust
                     </div>
                 </div>
 
@@ -53,44 +53,45 @@
                 <div class="pool" v-for="(liquidity, index) in liquidities" :key="index">
                     <div class="top">
                         <div class="images">
-                            <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="" />
+                            <img :src="findCoin(liquidity.tokenAddress).image" alt="" />
                         </div>
-                        <p>USDT</p>
+                        <p>{{ findCoin(liquidity.tokenAddress).name }}</p>
                     </div>
 
                     <div class="apy">
-                        <h3>22.4%</h3>
-                        <p>APY</p>
+                        <h3>{{ $utils.fromWei(liquidity.interestRate) }} DASH</h3>
+                        <p>per 24h</p>
                     </div>
 
                     <div class="stats">
                         <div>
                             <p>Reward Token</p>
-                            <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="" />
+                            <img src="/images/dash-token.png" alt="" />
                         </div>
 
                         <div>
-                            <p>Reward Token</p>
-                            <p>$2,432.40</p>
-                        </div>
-
-                        <div>
-                            <p>My Share</p>
-                            <p>$0 (0%)</p>
+                            <p>Interest / 24h</p>
+                            <p>{{ $utils.fromWei(liquidity.interestRate) }} DASH</p>
                         </div>
 
                         <div>
                             <p>Available Balance</p>
-                            <p>$0</p>
+                            <p>{{ $utils.fromWei(liquidity.amount) }} {{ findCoin(liquidity.tokenAddress).symbol }}</p>
                         </div>
+
                         <div>
-                            <p>Interest</p>
-                            <p>$0</p>
+                            <p>Take Out</p>
+                            <p>{{ $utils.fromWei(liquidity.minTakeOut) }} ~ {{ $utils.fromWei(liquidity.maxTakeOut)}} {{ findCoin(liquidity.tokenAddress).symbol }}</p>
+                        </div>
+
+                        <div>
+                            <p>Min Credit Score</p>
+                            <p>{{ liquidity.minScore }}</p>
                         </div>
                     </div>
 
-                    <div class="action">
-                        <i class="fi fi-br-plus"></i> Pause
+                    <div class="action" v-on:click="closeLiquidity(liquidity.id)">
+                        <i class="fi fi-br-pause"></i> {{ closing == liquidity.id ? 'Closing..' : 'Close' }}
                     </div>
                 </div>
             </div>
@@ -105,22 +106,60 @@
 </template>
 
 <script>
+import stableCoins from "../../stablecoins.json";
 export default {
     data() {
         return {
             tab: 1,
-            liquidities: []
+            address: null,
+            liquidities: [],
+            coins: stableCoins,
+            contract: null,
+            closing: -1
         };
     },
     async created() {
-        if (this.$auth.accounts.length > 0) {
-            this.liquidities = await this.$firestore.fetchAllWhere('liquidities', 'address', '==',
-                this.$auth.accounts[0].toUpperCase()
-            )
+        this.address = await this.$auth.connectToMetaMask()
+        if (this.address != null) {
+            this.getLiquidities()
         }
+
+        this.$contract.init()
+        $nuxt.$on('contract', (contract) => {
+            this.contract = contract
+        })
     },
     methods: {
+        getLiquidities: async function () {
+            this.liquidities = await this.$firestore.fetchAllWhere(
+                'liquidities',
+                'address',
+                '==',
+                this.address.toUpperCase()
+            )
+        },
 
+        findCoin: function (address) {
+            const coins = this.coins.filter(coin => coin.address.toUpperCase() == address.toUpperCase())
+            if (coins.length == 0) return
+            return coins[0]
+        },
+
+        closeLiquidity: async function (id) {
+            if (this.contract == null) return
+
+            this.closing = id
+
+            try {
+                await this.contract.closeLiquidity(id, {
+                    from: this.address
+                })
+
+            } catch (error) {}
+
+            this.getLiquidities()
+            this.closing = -1
+        }
     }
 };
 </script>

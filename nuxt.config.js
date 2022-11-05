@@ -3,6 +3,12 @@ export default {
 
     target: 'static',
 
+    env: {
+        MNEMONIC: process.env.MNEMONIC,
+        MORALIS_KEY: process.env.MORALIS_KEY,
+        TOKEN_CONTRACT_ADDRESS: process.env.TOKEN_CONTRACT_ADDRESS
+    },
+
     head: {
         title: 'dash',
         htmlAttrs: {
@@ -27,8 +33,10 @@ export default {
     plugins: [
         '@/plugins/auth.js',
         '@/plugins/ipfs.js',
+        '@/plugins/utils.js',
         '@/plugins/firestore.js',
-        '@/plugins/contract.js'
+        '@/plugins/contract.js',
+        '@/plugins/stablecoins.js'
     ],
 
     components: [

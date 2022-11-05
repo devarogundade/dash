@@ -4,11 +4,18 @@
         <div class="nav">
             <h3>Hi, Welcome back!</h3>
             <router-link to="/dapp/settings">
-                <div class="profile">
+                <div class="profile" v-if="!user">
                     <div class="image">
                         <img src="/images/placeholder.png" alt="">
                     </div>
                     <p>My Profile</p>
+                </div>
+
+                <div class="profile" v-else>
+                    <div class="image">
+                        <img :src="user.photo" alt="">
+                    </div>
+                    <p>{{ user.name }}</p>
                 </div>
             </router-link>
         </div>
@@ -56,6 +63,33 @@
     </div>
 </section>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            user: null,
+            balances: [],
+            address: null
+        }
+    },
+    async created() {
+        this.address = await this.$auth.connectToMetaMask()
+        if (this.address != null) {
+            this.getUser()
+            this.getBalances()
+        }
+    },
+    methods: {
+        getUser: async function () {
+            this.user = await this.$firestore.fetch('users', this.$auth.accounts[0].toUpperCase())
+        },
+        getBalances: async function () {
+
+        }
+    }
+}
+</script>
 
 <style scoped>
 section {

@@ -4,7 +4,7 @@
         <div class="i-app-width">
             <div class="text">
                 <h3>Your Contact List</h3>
-                <h2>$105,786,890.44</h2>
+                <h2>1,074 DASH</h2>
                 <div class="other">
                     <p>Total Value Locked (TVL)</p>
                     <router-link to="">
@@ -48,12 +48,14 @@
             </div>
 
             <div class="friends">
-                <div class="friend" v-for="(contact, index) in contacts" :key="index">
-                    <div class="image">
-                        <img :src="contact.photo" alt="">
+                <router-link v-for="(contact, index) in contacts" :to="`/dapp/users/${contact.username}`" :key="index">
+                    <div class="friend">
+                        <div class="image">
+                            <img :src="contact.photo" alt="">
+                        </div>
+                        <div class="detail">{{ contact.name }}</div>
                     </div>
-                    <div class="detail">{{ contact.name }}</div>
-                </div>
+                </router-link>
             </div>
 
             <div class="empty" v-if="contacts.length == 0">
@@ -70,14 +72,15 @@ export default {
     data() {
         return {
             tab: 1,
-            contacts: []
+            contacts: [],
+            address: null
         };
     },
     async created() {
-        if (this.$auth.accounts.length > 0) {
-            this.contacts = await this.$firestore.fetchAllWhere(
-                'users', 'networks', 'array-contains',
-                this.$auth.accounts[0].toUpperCase()
+        this.address = await this.$auth.connectToMetaMask()
+        if (this.address != null) {
+            this.contacts = await this.$firestore.fetchAllContacts(
+                this.address.toUpperCase()
             )
         }
     }

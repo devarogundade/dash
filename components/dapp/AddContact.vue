@@ -38,10 +38,12 @@ export default {
             tab: 1,
             username: '',
             user: null,
-            contract: null
+            contract: null,
+            address: null
         }
     },
-    created() {
+    async created() {
+        this.address = await this.$auth.connectToMetaMask()
         this.$contract.init()
         $nuxt.$on('contract', (contract) => {
             this.contract = contract
@@ -72,16 +74,16 @@ export default {
                 return
             }
 
-            if (this.contract == null || this.$auth.accounts.length == 0) return
+            if (this.contract == null || this.address == null) return
 
             try {
-                const trx = await this.contract.addNetwork(user.address, {
-                    from: this.$auth.accounts[0]
+                const trx = await this.contract.addNetwork(this.user.id.toLowerCase(), {
+                    from: this.address
                 })
 
                 $nuxt.$emit('success', {
                     title: 'User added to list',
-                    message: `${user.name} has been added to your contact`
+                    message: `${this.user.name} has been added to your contact`
                 })
             } catch (error) {
                 console.log(error);

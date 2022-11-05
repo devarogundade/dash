@@ -2,11 +2,13 @@
 <section>
     <div class="app-width">
         <div class="header">
-            <div class="logo">
-                <img src="/images/logo.png" alt="">
-            </div>
+            <router-link to="/">
+                <div class="logo">
+                    <img src="/images/logo.png" alt="">
+                </div>
+            </router-link>
             <ul>
-                <li><a href="/#get-started">Get Started</a></li>
+                <li><a href="/faucet">Faucet</a></li>
                 <li><a href="/#why-dash">Why DASH</a></li>
                 <li><a href="/#dash-token">Dash Token</a></li>
                 <li><a href="/#faq">FAQs</a></li>
@@ -23,6 +25,7 @@ section {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 10;
 }
 
 .logo img {

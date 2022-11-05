@@ -6,5 +6,6 @@
 
     <Success />
     <Failure />
+    <PickCoin />
 </div>
 </template>

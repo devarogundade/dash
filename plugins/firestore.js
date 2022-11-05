@@ -29,16 +29,16 @@ export default ({}, inject) => {
 
             return result
         },
-        fetchAllWithCreator: async function(_collection) {
+        fetchAllContacts: async function(address) {
             const result = []
-            const snapshot = await getDocs(collection(this.db, _collection))
+            const user = await this.fetch('users', address)
+            if (user == null) return result
 
-            snapshot.forEach(document => {
-                result.push(document.data())
-            });
+            const networks = user.networks
 
-            for (let index = 0; index < result.length; index++) {
-                result[index].creator = await this.fetch('users', result[index].address)
+            for (let index = 0; index < networks.length; index++) {
+                const user = await this.fetch('users', networks[index])
+                result.push(user)
             }
 
             return result
@@ -64,15 +64,6 @@ export default ({}, inject) => {
             } else {
                 return null
             }
-        },
-        fetchAllSubscribedCourses: async function(_address) {
-            const subscriptions = await this.fetchAllWhere('subscriptions', 'address', '==', _address)
-
-            for (let index = 0; index < subscriptions.length; index++) {
-                subscriptions[index].course = await this.fetch('courses', subscriptions[index].courseId)
-            }
-
-            return subscriptions
         },
         write: async function(_collection, _document, _object) {
             const reference = doc(this.db, _collection, _document)

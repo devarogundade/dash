@@ -119,11 +119,11 @@ export default {
 
             try {
                 const trx = await this.contract.provideLiquidity(
-                    this.liquidity.amount,
+                    this.$utils.toWei(this.liquidity.amount),
                     this.coin.address,
-                    this.liquidity.interest,
-                    this.liquidity.takeOut.min,
-                    this.liquidity.takeOut.max,
+                    this.$utils.toWei(this.liquidity.interest),
+                    this.$utils.toWei(this.liquidity.takeOut.min),
+                    this.$utils.toWei(this.liquidity.takeOut.max),
                     this.liquidity.days.min,
                     this.liquidity.days.max,
                     this.liquidity.minimumScore, {
