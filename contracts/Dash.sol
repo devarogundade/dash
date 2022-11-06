@@ -145,29 +145,40 @@ contract Dash {
         uint duration
     ) public {
         require(amount > 0, "!can_take_zero_token");
+
         int liquidityIndex = getUserLiquidityIndex(owner, id);
         require(liquidityIndex != -1, "!liquidity_exists");
 
         Liquidity memory liquidity = liquidities[owner][uint(liquidityIndex)];
-
         int userNetworkIndex = getUserNetworkIndex(owner, msg.sender);
+
+        // verifies the liquidity
         require(userNetworkIndex != -1, "!unathorized");
 
+        // verifies user is not a loan before
         require(!users[msg.sender].activeLoan, "already_on_a_loan");
 
+        // validate inputs with liquidity properties
         require(liquidity.amount >= amount, "insuficcient_pool");
         require(liquidity.maxTakeOut >= amount, "too_much");
         require(liquidity.minTakeOut <= amount, "too_little");
         require(liquidity.maxDays >= duration, "too_long");
         require(liquidity.minDays <= duration, "too_short");
+        require(
+            liquidity.minCreditScore <= users[msg.sender].creditScore,
+            "too_low_credit_score"
+        );
 
+        // decrease the liquidity pool size
         liquidities[owner][uint(liquidityIndex)].amount -= amount;
 
         // user is now on a loan
         users[msg.sender].activeLoan = true;
 
+        // create a new loan id
         loanID++;
 
+        // create a new loan
         Loan memory loan = Loan(
             loanID,
             liquidity.id,
@@ -180,12 +191,15 @@ contract Dash {
             0
         );
 
+        // register the new loan
         loans[msg.sender].push(loan);
 
+        // give out the loan
         // send tokens to user wallet
         IStableCoin token = IStableCoin(loan.tokenAddress);
         token.transfer(msg.sender, amount);
 
+        // aware dependencies through event
         emit LoanCreated(
             loan.id,
             loan.liquidity,
@@ -197,10 +211,11 @@ contract Dash {
             msg.sender
         );
 
+        // aware dependencies through event
         emit UpdatedLiquidity(liquidity.id, liquidity.amount);
     }
 
-    function payLoan(uint id, address) public {
+    function payLoan(uint id) public {
         int userLoanIndex = getUserLoanIndex(msg.sender, id);
         require(userLoanIndex != -1, "!loan_exists");
 
@@ -211,44 +226,49 @@ contract Dash {
         uint daysElapsed = (((block.timestamp * 1000) -
             (loan.createdAt * 1000)) / 1 days);
 
+        // calculate interest
         uint256 interest = calculateSimpleInterest(
             loan.interestRate,
             daysElapsed
         );
 
-        // pay to smart contract
+        // pay interest to smart contract in DASH tokens
         dashToken.approve(msg.sender, address(this), interest);
         dashToken.transferFrom(msg.sender, address(this), interest);
 
-        // pay interest to liquidity provider
         // charge platform fee
-        uint amount = (interest * (platformFee / 100));
-        dashToken.transfer(msg.sender, amount);
+        uint fee = (interest * (platformFee / 100));
 
-        // update profit
-        contractRevenue += amount;
+        // pay interest to liquidity provider in DASH tokens
+        dashToken.transfer(loan.provider, (interest - fee));
 
-        // if liquidity still exist, add the funds back to the liquidty
-        int liquidityIndex = getUserLiquidityIndex(loan.provider, loan.liquidity);
+        // update platform profit
+        contractRevenue += fee;
+
+        // if liquidity still exists, add the funds back to the liquidty
+        int liquidityIndex = getUserLiquidityIndex(
+            loan.provider,
+            loan.liquidity
+        );
 
         if (liquidityIndex != -1) {
             // liquidity exists
-            Liquidity memory liquidity = liquidities[loan.provider][
-                uint(liquidityIndex)
-            ];
-
-            // increase liquidity pool back
-            liquidities[loan.provider][uint(liquidityIndex)].amount += amount;
-
-            // pay loan to smart contract
+            // pay loan to back smart contract
             IStableCoin token = IStableCoin(loan.tokenAddress);
             token.approve(msg.sender, address(this), loan.amount);
             token.transferFrom(msg.sender, address(this), loan.amount);
 
+            // increase liquidity pool back
+            liquidities[loan.provider][uint(liquidityIndex)].amount += loan
+                .amount;
+
             // let dependecies knows pool has _changed_
-            emit UpdatedLiquidity(liquidity.id, liquidity.amount);
+            emit UpdatedLiquidity(
+                liquidities[loan.provider][uint(liquidityIndex)].id,
+                liquidities[loan.provider][uint(liquidityIndex)].amount
+            );
         } else {
-            // else send the funds to the liquidity creator wallet
+            // else send the funds directly to the liquidity creator wallet
             IStableCoin token = IStableCoin(loan.tokenAddress);
             token.approve(msg.sender, loan.provider, loan.amount);
             token.transferFrom(msg.sender, loan.provider, loan.amount);
@@ -257,7 +277,7 @@ contract Dash {
         // mark loan as paid
         loan.paidAt = block.timestamp;
 
-        // user is not on a loan
+        // user is not on a loan anymore
         users[msg.sender].activeLoan = false;
 
         // credit score mechanism
@@ -275,6 +295,7 @@ contract Dash {
             }
         }
 
+        // aware dependencies through event
         emit LoanCreated(
             loan.id,
             loan.liquidity,
@@ -286,6 +307,7 @@ contract Dash {
             msg.sender
         );
 
+        // aware dependencies through event
         emit CreditScoreChanged(msg.sender, users[msg.sender].creditScore);
     }
 
@@ -303,9 +325,11 @@ contract Dash {
         IStableCoin token = IStableCoin(liquidity.tokenAddress);
         token.transfer(msg.sender, liquidity.amount);
 
-        delete liquidity;
-
+        // aware dependencies through event
         emit ClosedLiquidity(liquidity.id);
+
+        // remove liquidity
+        delete liquidities[msg.sender][uint256(liquidityIndex)];
     }
 
     function provideLiquidity(
@@ -318,7 +342,16 @@ contract Dash {
         uint maxDays,
         uint minCreditScore
     ) public {
+        // validates params
+        require(minTakeOut < maxTakeOut, "invalid_take_out_values");
+        require(minDays < maxDays, "invalid_days_values");
+        require(minCreditScore <= 100, "invalid_credit_score_value");
+        require(amount > 0, "invalid_amount_value");
+
+        // create a new liquidity id
         liquidityID++;
+
+        // creates and registers the liquidity
         liquidities[msg.sender].push(
             Liquidity(
                 liquidityID,
@@ -339,6 +372,7 @@ contract Dash {
         token.approve(msg.sender, address(this), amount);
         token.transferFrom(msg.sender, address(this), amount);
 
+        // aware dependencies through event
         emit ProvidedLiquity(
             liquidityID,
             amount,
@@ -408,6 +442,8 @@ contract Dash {
         return position;
     }
 
+    // ====== interest calculator ====== //
+
     function calculateSimpleInterest(uint rate, uint duration)
         private
         pure
@@ -416,6 +452,8 @@ contract Dash {
         // amount = capital(1 + (rate * duration))
         return (rate * duration);
     }
+
+    // ======== events ========= //
 
     event UserCreated(
         string name,
