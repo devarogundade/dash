@@ -7,5 +7,6 @@
     <Success />
     <Failure />
     <PickCoin />
+    <FaucetCoin />
 </div>
 </template>

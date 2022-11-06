@@ -1,0 +1,29 @@
+[{
+        "name": "Fantom USD",
+        "symbol": "tFUSD",
+        "image": "https://s3.coinmarketcap.com/static/img/portraits/62d51d9af192d82df8ff3a83.png",
+        "address": "0x5CE17a1f12D3530354C7401bF24f8231CFa0af6e",
+        "allocation": 5000
+    },
+    {
+        "name": "USDT",
+        "symbol": "tUSDT",
+        "image": "https://s2.coinmarketcap.com/static/img/coins/200x200/825.png",
+        "address": "0x13e528f223e032e1dE07Ab3446e1A61Eb7d9D6aD",
+        "allocation": 5000
+    },
+    {
+        "name": "USDC",
+        "symbol": "tUSDC",
+        "image": "https://s3-symbol-logo.tradingview.com/market-cap-usdc--600.png",
+        "address": "0x631e700bb92F94492aF7Cd17A46C8B231c50E20f",
+        "allocation": 5000
+    },
+    {
+        "name": "Dash Token",
+        "symbol": "DASH",
+        "image": "/images/dash-token.png",
+        "address": "0x6369CfD96261C09CbD5A05208ecDA9eefa6D9878",
+        "allocation": 2000
+    }
+]

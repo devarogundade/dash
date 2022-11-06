@@ -5,13 +5,13 @@
             <div class="form">
                 <div class="from input">
                     <input type="text" v-model="address" placeholder="Address" />
-                    <div class="token" v-on:click="$nuxt.$emit('pick-coin')">
+                    <div class="token" v-on:click="$nuxt.$emit('pick-faucet')">
                         <img :src="coin.image" alt="" />
                         <p>{{ coin.symbol }}</p>
                     </div>
                 </div>
 
-                <div class="price">Max Allocation: 5000 {{ coin.symbol }}</div>
+                <div class="price">Max Allocation: {{ coin.allocation }} {{ coin.symbol }}</div>
 
                 <div class="action" v-if="!minting" v-on:click="faucetMint()">Mint</div>
                 <div class="action" v-else>Minting..</div>
@@ -30,13 +30,14 @@ export default {
             fusdContract: null,
             usdtContract: null,
             usdcContract: null,
+            dashContract: null,
             minting: false,
             coin: stableCoins[0]
         };
     },
     async created() {
         this.$contract.init()
-        this.$stablecoins.init()
+        this.$faucet.init()
 
         const address = await this.$auth.connectToMetaMask()
         if (address != null) {
@@ -46,7 +47,7 @@ export default {
         $nuxt.$on('contract', (contract) => {
             this.contract = contract;
         });
-        $nuxt.$on('coin', (coin) => {
+        $nuxt.$on('faucet', (coin) => {
             this.coin = coin
         })
 
@@ -58,6 +59,9 @@ export default {
         })
         $nuxt.$on('usdt-contract', (contract) => {
             this.usdtContract = contract
+        })
+        $nuxt.$on('dash-token-contract', (contract) => {
+            this.dashContract = contract
         })
     },
     methods: {
@@ -90,9 +94,15 @@ export default {
                     })
                 }
 
+                if (this.coin.symbol == 'DASH') {
+                    await this.dashContract.faucetMint({
+                        from: this.address
+                    })
+                }
+
                 $nuxt.$emit('success', {
                     title: 'Mint Successful',
-                    message: `You have successfully mint 5000 ${this.coin.symbol}!`
+                    message: `You have successfully mint ${this.coin.allocation} ${this.coin.symbol}!`
                 })
             } catch (error) {
                 console.log(error);

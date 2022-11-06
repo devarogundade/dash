@@ -13,7 +13,7 @@ contract Dash {
     uint private liquidityID;
     uint private loanID;
 
-    uint defaultCreditScore = 40;
+    uint defaultCreditScore = 65;
 
     DashToken private dashToken;
 
@@ -69,7 +69,7 @@ contract Dash {
         string memory phone,
         string memory homeAddress
     ) public {
-        // require(users[msg.sender].id == 0, "!already_created_an_account");
+        require(users[msg.sender].id == 0, "!already_created_an_account");
 
         userID++;
         users[msg.sender] = User(
@@ -88,6 +88,33 @@ contract Dash {
             msg.sender,
             defaultCreditScore,
             false,
+            year,
+            month,
+            phone,
+            homeAddress
+        );
+    }
+
+    function updateUser(
+        string memory name,
+        string memory photo,
+        string memory email,
+        string memory username,
+        string memory year,
+        string memory month,
+        string memory phone,
+        string memory homeAddress
+    ) public {
+        require(users[msg.sender].id != 0, "no_account");
+
+        emit UserCreated(
+            name,
+            photo,
+            email,
+            username,
+            msg.sender,
+            users[msg.sender].creditScore,
+            users[msg.sender].activeLoan,
             year,
             month,
             phone,
@@ -118,17 +145,15 @@ contract Dash {
         uint duration
     ) public {
         require(amount > 0, "!can_take_zero_token");
-        int ownerLiquidityIndex = getUserLiquidityIndex(owner, id);
-        require(ownerLiquidityIndex != -1, "!liquidity_exists");
+        int liquidityIndex = getUserLiquidityIndex(owner, id);
+        require(liquidityIndex != -1, "!liquidity_exists");
 
-        Liquidity memory liquidity = liquidities[owner][
-            uint(ownerLiquidityIndex)
-        ];
+        Liquidity memory liquidity = liquidities[owner][uint(liquidityIndex)];
 
         int userNetworkIndex = getUserNetworkIndex(owner, msg.sender);
         require(userNetworkIndex != -1, "!unathorized");
 
-        require(!users[msg.sender].activeLoan, "!already_on_a_loan");
+        require(!users[msg.sender].activeLoan, "already_on_a_loan");
 
         require(liquidity.amount >= amount, "insuficcient_pool");
         require(liquidity.maxTakeOut >= amount, "too_much");
@@ -136,7 +161,7 @@ contract Dash {
         require(liquidity.maxDays >= duration, "too_long");
         require(liquidity.minDays <= duration, "too_short");
 
-        liquidity.amount = (liquidity.amount - amount);
+        liquidities[owner][uint(liquidityIndex)].amount -= amount;
 
         // user is now on a loan
         users[msg.sender].activeLoan = true;
@@ -211,7 +236,7 @@ contract Dash {
             ];
 
             // increase liquidity pool back
-            liquidity.amount = (liquidity.amount + amount);
+            liquidities[owner][uint(liquidityIndex)].amount += amount;
 
             // pay loan to smart contract
             IStableCoin token = IStableCoin(loan.tokenAddress);
@@ -236,13 +261,13 @@ contract Dash {
         // credit score mechanism
         if (durationInDays > loan.duration) {
             if (users[msg.sender].creditScore >= 5) {
-                users[msg.sender].creditScore = (users[msg.sender].creditScore - 5);
+                users[msg.sender].creditScore -= 5;
             } else {
                 users[msg.sender].creditScore = 0;
             }
         } else {
             if (users[msg.sender].creditScore <= 95) {
-                users[msg.sender].creditScore = (users[msg.sender].creditScore + 5);
+                users[msg.sender].creditScore += 5;
             } else {
                 users[msg.sender].creditScore = 100;
             }
@@ -263,11 +288,11 @@ contract Dash {
     }
 
     function closeLiquidity(uint id) public {
-        int userLiquidityIndex = getUserLiquidityIndex(msg.sender, id);
-        require(userLiquidityIndex != -1, "!you_do_own_these_tokens");
+        int liquidityIndex = getUserLiquidityIndex(msg.sender, id);
+        require(liquidityIndex != -1, "!you_do_own_these_tokens");
 
         Liquidity memory liquidity = liquidities[msg.sender][
-            uint256(userLiquidityIndex)
+            uint256(liquidityIndex)
         ];
 
         require(liquidity.amount > 0, "insufficient_funds");

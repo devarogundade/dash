@@ -2,15 +2,15 @@
     "name": "Fantom USD",
     "symbol": "tFUSD",
     "image": "https://s3.coinmarketcap.com/static/img/portraits/62d51d9af192d82df8ff3a83.png",
-    "address": "0xAfb7ce5B4c1A034E23CcbAB378280259f332dF78"
+    "address": "0x5CE17a1f12D3530354C7401bF24f8231CFa0af6e"
 }, {
     "name": "USDT",
     "symbol": "tUSDT",
     "image": "https://s2.coinmarketcap.com/static/img/coins/200x200/825.png",
-    "address": "0xFB1cd566f97332A599Fb1165e5754ee24f85Fd44"
+    "address": "0x13e528f223e032e1dE07Ab3446e1A61Eb7d9D6aD"
 }, {
     "name": "USDC",
     "symbol": "tUSDC",
     "image": "https://s3-symbol-logo.tradingview.com/market-cap-usdc--600.png",
-    "address": "0x521b5dcDAd4B5512E9EC05B18f96473b3c76D4E9"
+    "address": "0x631e700bb92F94492aF7Cd17A46C8B231c50E20f"
 }]

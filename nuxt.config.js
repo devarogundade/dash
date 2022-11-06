@@ -39,7 +39,7 @@ export default {
         '@/plugins/covalent.js',
         '@/plugins/firestore.js',
         '@/plugins/contract.js',
-        '@/plugins/stablecoins.js'
+        '@/plugins/faucet.js'
     ],
 
     components: [
