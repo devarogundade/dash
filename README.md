@@ -47,7 +47,18 @@ DASH can function as any other tokens, like trading in exchanges.
 ## Hackathon Tracks
 - Fantom
 
+## Hackathon Bounties 
+- Covalent
+
 ## Sneak Peaks
+
+## Tech Stacks
+- Moralis stream
+- Google Cloud Firebase
+- Fantom (testnet)
+- Nuxt (frontend)
+- Express (backend)
+- Truffle
 
 ## Roadmap
    https://dash-p2p.netlify.app/#roadmap
