@@ -8,7 +8,6 @@ app.use(express.json())
 app.post('/webhook', (req, res) => {
     const webhook = req.body
     let collection = webhook.tag
-    let _merge = true
 
     console.log(webhook)
 
@@ -41,8 +40,7 @@ app.post('/webhook', (req, res) => {
                 collection = 'liquidities'
                 break
             case 'closed-liquidities':
-                fireStore.delete('liquidities', object.id)
-                shouldWrite = false
+                collection = 'liquidities'
                 break
             case 'credit-scores':
                 collection = 'users'
@@ -56,7 +54,7 @@ app.post('/webhook', (req, res) => {
         }
 
         if (shouldWrite) { // write data to firebase
-            fireStore.write(collection, object.id, object, _merge)
+            fireStore.write(collection, object.id, object, true)
         }
     }
 

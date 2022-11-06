@@ -72,7 +72,8 @@ module.exports = {
                     maxDays: data[7],
                     minScore: data[8],
                     createdAt: data[9],
-                    address: data[10].toUpperCase()
+                    address: data[10].toUpperCase(),
+                    closed: false
                 }
             case 'loans':
                 return {
@@ -92,7 +93,8 @@ module.exports = {
                 }
             case 'closed-liquidities':
                 return {
-                    id: data[0]
+                    id: data[0],
+                    closed: true
                 }
             case 'networks':
                 return {

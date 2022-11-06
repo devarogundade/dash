@@ -16,16 +16,6 @@ module.exports = {
             return false
         }
     },
-    delete: async function(collection, document) {
-        try {
-            const reference = this.db.collection(collection).doc(document);
-            await reference.delete()
-            return true
-        } catch (error) {
-            console.log(error);
-            return false
-        }
-    },
     updateNetworks: async function(collection, document, data) {
         try {
             const reference = this.db.collection(collection).doc(document)
