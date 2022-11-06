@@ -25,10 +25,10 @@ already on a loan to take another loan from you.
 
   So if you want to safely lending out funds to people, dash is the right choice for you.
 
-#- Immutable 
+- # Immutable 
   On liquidities and loans transactions are recorded on the blockchain, with give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
 
-#- No more stress
+- # No more stress
   Now all your have to do is added your friends, family or colleagues to your contact list and relax. Your contact get the loan they needed on time without disturbing you.
 
 ## Dash Token (DASH)
