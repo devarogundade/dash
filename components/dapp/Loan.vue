@@ -46,43 +46,52 @@
                 <div class="pool" v-for="(loan, index) in loans" :key="index">
                     <div class="top">
                         <div class="images">
-                            <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="">
+                            <img :src="findCoin(loan.liquidity.tokenAddress).image" alt="" />
                         </div>
-                        <p>USDT</p>
+                        <p>{{ findCoin(loan.liquidity.tokenAddress).name }}</p>
                     </div>
 
                     <div class="apy">
-                        <h3>22.4%</h3>
-                        <p>APY</p>
+                        <h3>{{ $utils.fromWei(loan.interestRate) }} DASH</h3>
+                        <p>per 24h</p>
                     </div>
 
                     <div class="stats">
                         <div>
-                            <p>Reward Token</p>
-                            <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/825.png" alt="">
+                            <p>Interest Token</p>
+                            <img src="/images/dash-token.png" alt="" />
                         </div>
 
                         <div>
-                            <p>Reward Token</p>
-                            <p>$2,432.40</p>
+                            <p>Amount</p>
+                            <p>{{ $utils.fromWei(loan.amount) }} {{ findCoin(loan.liquidity.tokenAddress).symbol }}</p>
                         </div>
 
                         <div>
-                            <p>My Share</p>
-                            <p>$0 (0%)</p>
+                            <p>Interest / 24h</p>
+                            <p>{{ $utils.fromWei(loan.interestRate) }}</p>
                         </div>
 
                         <div>
-                            <p>Available Balance</p>
-                            <p>$0</p>
+                            <p>Took on</p>
+                            <p>{{ $utils.formatToDate(loan.createdAt * 1000) }}</p>
                         </div>
+
                         <div>
-                            <p>My Reward</p>
-                            <p>$0</p>
+                            <p>Due date</p>
+                            <p>{{ $utils.formatToDate((loan.createdAt * 1000) + (loan.duration * 24 * 3600 * 1000)) }}</p>
+                        </div>
+
+                        <div>
+                            <p>Paid</p>
+                            <p v-if="loan.paidAt > 0">{{ $utils.formatToDate(loan.paidAt * 1000) }}</p>
+                            <p v-else>No</p>
                         </div>
                     </div>
 
-                    <div class="action">Repay Loan</div>
+                    <div class="action" v-on:click="repayLoan(loan)">
+                        <i class="fi fi-br-dollar"></i> {{ paying == loan.id ? 'Paying..' : 'Repay' }}
+                    </div>
                 </div>
             </div>
 
@@ -96,12 +105,16 @@
 </template>
 
 <script>
+import stableCoins from "../../stablecoins.json";
 export default {
     data() {
         return {
             tab: 1,
             loans: [],
-            address: null
+            address: null,
+            coins: stableCoins,
+            contract: null,
+            paying: -1
         }
     },
     async created() {
@@ -109,15 +122,46 @@ export default {
         if (this.address != null) {
             this.getLoans()
         }
+
+        this.$contract.init()
+        $nuxt.$on('contract', (contract) => {
+            this.contract = contract
+        })
     },
     methods: {
         getLoans: async function () {
-            this.loans = await this.$firestore.fetchAllWhere(
-                'loans',
-                'address',
-                '==',
+            this.loans = await this.$firestore.fetchAllLoans(
                 this.address.toUpperCase()
             )
+        },
+
+        findCoin: function (address) {
+            const coins = this.coins.filter(coin => coin.address.toUpperCase() == address.toUpperCase())
+            if (coins.length == 0) return
+            return coins[0]
+        },
+
+        repayLoan: async function (loan) {
+            if (this.contract == null) return
+
+            this.paying = loan.id
+
+            try {
+                await this.contract.payLoan(loan.id,
+                    loan.liquidity.address.toLowerCase(), {
+                        from: this.address
+                    })
+
+                $nuxt.$emit('success', {
+                    title: 'Loan has been repayed',
+                    message: 'Congratulations you have repayed your loan'
+                })
+            } catch (error) {
+                console.log(error);
+            }
+
+            this.getLoans()
+            this.paying = -1
         }
     }
 }
@@ -358,6 +402,10 @@ section {
     height: 20px;
 }
 
+.stats p:last-child {
+    font-weight: 600;
+}
+
 .action {
     display: flex;
     align-items: center;
@@ -367,9 +415,16 @@ section {
     user-select: none;
     border-radius: 10px;
     background: #1900b3;
-    color: #FFFFFF;
+    color: #ffffff;
     font-weight: 600;
-
+    gap: 10px;
+    font-size: 16px;
+    position: relative;
     margin-top: 30px;
+}
+
+.action i {
+    position: absolute;
+    left: 20px;
 }
 </style>

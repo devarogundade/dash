@@ -46,7 +46,7 @@ contract Dash {
         address tokenAddress;
         uint interestRate;
         uint duration;
-        address from;
+        address provider;
         uint createdAt;
         uint paidAt;
     }
@@ -200,18 +200,20 @@ contract Dash {
         emit UpdatedLiquidity(liquidity.id, liquidity.amount);
     }
 
-    function payLoan(uint id, address owner) public {
+    function payLoan(uint id, address) public {
         int userLoanIndex = getUserLoanIndex(msg.sender, id);
         require(userLoanIndex != -1, "!loan_exists");
 
         Loan memory loan = loans[msg.sender][uint(userLoanIndex)];
-        require(loan.from == owner, "!unathorized");
+        require(loan.paidAt == 0, "loan_already_paid");
 
         // pay interest
-        uint durationInDays = ((block.timestamp - loan.createdAt) / 1 days);
+        uint daysElapsed = (((block.timestamp * 1000) -
+            (loan.createdAt * 1000)) / 1 days);
+
         uint256 interest = calculateSimpleInterest(
             loan.interestRate,
-            durationInDays
+            daysElapsed
         );
 
         // pay to smart contract
@@ -224,19 +226,19 @@ contract Dash {
         dashToken.transfer(msg.sender, amount);
 
         // update profit
-        contractRevenue = (contractRevenue + (interest - amount));
+        contractRevenue += amount;
 
         // if liquidity still exist, add the funds back to the liquidty
-        int liquidityIndex = getUserLiquidityIndex(owner, loan.liquidity);
+        int liquidityIndex = getUserLiquidityIndex(loan.provider, loan.liquidity);
 
         if (liquidityIndex != -1) {
             // liquidity exists
-            Liquidity memory liquidity = liquidities[owner][
+            Liquidity memory liquidity = liquidities[loan.provider][
                 uint(liquidityIndex)
             ];
 
             // increase liquidity pool back
-            liquidities[owner][uint(liquidityIndex)].amount += amount;
+            liquidities[loan.provider][uint(liquidityIndex)].amount += amount;
 
             // pay loan to smart contract
             IStableCoin token = IStableCoin(loan.tokenAddress);
@@ -248,8 +250,8 @@ contract Dash {
         } else {
             // else send the funds to the liquidity creator wallet
             IStableCoin token = IStableCoin(loan.tokenAddress);
-            token.approve(msg.sender, owner, loan.amount);
-            token.transferFrom(msg.sender, owner, loan.amount);
+            token.approve(msg.sender, loan.provider, loan.amount);
+            token.transferFrom(msg.sender, loan.provider, loan.amount);
         }
 
         // mark loan as paid
@@ -259,7 +261,7 @@ contract Dash {
         users[msg.sender].activeLoan = false;
 
         // credit score mechanism
-        if (durationInDays > loan.duration) {
+        if (daysElapsed > loan.duration) {
             if (users[msg.sender].creditScore >= 5) {
                 users[msg.sender].creditScore -= 5;
             } else {

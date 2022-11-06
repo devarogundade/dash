@@ -70,6 +70,25 @@ export default ({}, inject) => {
 
             return result
         },
+        fetchAllLoans: async function(address) {
+            const result = []
+
+            const loans = await this.fetchAllWhere(
+                'loans',
+                'address',
+                '==',
+                address.toUpperCase()
+            )
+
+            for (let index = 0; index < loans.length; index++) {
+                const loan = loans[index]
+                const liquidity = await this.fetch('liquidities', loan.liquidityId)
+                loan.liquidity = liquidity
+                result.push(loan)
+            }
+
+            return result
+        },
         fetchAllWhere: async function(_collection, key, sign, value) {
             const result = []
 

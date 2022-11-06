@@ -176,7 +176,7 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-    /* background-image: linear-gradient(-20deg, #ddd6f3 0%, #faaca8 100%, #faaca8 100%); */
+
     background: #CCEEFF;
 }
 
@@ -392,6 +392,10 @@ section {
     display: flex;
     flex-direction: column;
     gap: 22px;
+}
+
+.stats p:last-child {
+  font-weight: 600;
 }
 
 .stats>div {
