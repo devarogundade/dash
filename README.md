@@ -54,12 +54,13 @@ DASH can function as any other tokens, like trading in exchanges.
 ![Screenshot 2022-11-06 120939](https://user-images.githubusercontent.com/81397790/200167266-59c60d93-7638-444f-a133-1dfce2d4e32b.png)
 
 ## Tech Stacks
-- Moralis stream
-- Google Cloud Firebase
-- Fantom (testnet)
+- Moralis stream [#](https://github.com/devarogundade/dash/blob/master/moralis-stream-api)
+- Google Cloud Firebase [#](https://github.com/devarogundade/dash/blob/master/plugins/firestore.js) [#](https://github.com/devarogundade/dash/blob/master/moralis-stream-api)
+- Fantom (testnet) [https://github.com/devarogundade/dash/blob/master/truffle.config.js]
 - Nuxt (frontend)
-- Express (backend)
+- Express (backend) 
 - Truffle
+- Covalent APIs [#](https://github.com/devarogundade/dash/blob/master/plugins/covalent.js)
 
 ## Roadmap
    https://dash-p2p.netlify.app/#roadmap
