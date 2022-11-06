@@ -53,6 +53,7 @@ DASH can function as any other tokens, like trading in exchanges.
 ## Sneak Peaks
 ![Screenshot 2022-11-06 120939](https://user-images.githubusercontent.com/81397790/200167266-59c60d93-7638-444f-a133-1dfce2d4e32b.png)
 ![Screenshot 2022-11-06 121554](https://user-images.githubusercontent.com/81397790/200167502-a4352be1-4b52-40eb-b19f-af06d0cf208b.png)
+![Screenshot 2022-11-06 122102](https://user-images.githubusercontent.com/81397790/200167699-10c1f18b-3eb8-41c7-9a7b-dbbf24a237ac.png)
 
 ## Tech Stacks
 - Moralis stream [#](https://github.com/devarogundade/dash/blob/master/moralis-stream-api)
