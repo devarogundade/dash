@@ -2,7 +2,9 @@
 ## _A Moralis X Google Cloud Hackathon Project_
 
 Dash is a closed network peer to peer lending DAPP, which means you have the full control of who can lend or borrow money(cryptocurrencies) from you.
+
 You can build your contact/network list on your dash account just like a messaging application. Whoever is in your contact list can borrow some tokens from the liquidities you have provided in your account.
+
 Dash works with any ERC20 tokens but for testing purposes it supports 3 stable coins launch on fantom testnet network.
 
 ## How does it work?
