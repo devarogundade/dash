@@ -122,6 +122,8 @@ export default {
                 const base64 = await this.$ipfs.toBase64(this.file)
                 const url = await this.$ipfs.upload(`users`, base64)
 
+                console.log(url);
+
                 if (url != null) {
                     this.user.photo = url
                 }

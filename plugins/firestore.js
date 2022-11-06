@@ -45,20 +45,25 @@ export default ({}, inject) => {
         },
         fetchAllContactsWithLiquidities: async function(address) {
             const result = []
-            const user = await this.fetch('users', address)
-            if (user == null) return result
 
-            const networks = user.networks
+            const contacts = await this.fetchAllWhere(
+                'users',
+                'networks',
+                'array-contains',
+                address.toUpperCase()
+            )
 
-            for (let index = 0; index < networks.length; index++) {
+            for (let index = 0; index < contacts.length; index++) {
                 const liquidities = await this.fetchAllWhere(
                     'liquidities',
                     'address',
                     '==',
-                    networks[index].toUpperCase()
+                    contacts[index].id.toUpperCase()
                 )
 
                 liquidities.forEach(liquidity => {
+                    const _liquidity = liquidity
+                    _liquidity.user = contacts[index]
                     result.push(liquidity)
                 })
             }

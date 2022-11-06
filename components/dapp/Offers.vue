@@ -68,6 +68,11 @@
                             <p>Min Credit Score</p>
                             <p>{{ liquidity.minScore }}</p>
                         </div>
+
+                        <div>
+                            <p>Provider</p>
+                            <p>{{ liquidity.user.name }}</p>
+                        </div>
                     </div>
 
                     <router-link :to="`/dapp/new-loan/${liquidity.id}`">
@@ -292,6 +297,10 @@ section {
 
 .stats img {
     height: 20px;
+}
+
+.stats p:last-child {
+    font-weight: 600;
 }
 
 .action {
