@@ -3,23 +3,24 @@
     <div class="header">
         <div class="i-app-width">
             <div class="text">
-                <h3>Provide Liquidity, EARN $DASH</h3>
+                <h3>Liquidities from your contacts</h3>
                 <h2>Earnings: 1,074 DASH per 24h</h2>
                 <div class="other">
-                    <p>Active Liquidities: {{ liquidities.length }}</p>
-                    <router-link to="/">
-                        <p>
-                            Leave App <i class="fi fi-br-arrow-up-right-from-square"></i>
-                        </p>
+                    <p>Available Liquidities: {{ liquidities.length }}</p>
+                    <router-link to="/dapp/loan">
+                        <p> Go to loans <i class="fi fi-br-arrow-up-right-from-square"></i> </p>
                     </router-link>
                 </div>
                 <div class="search">
                     <div class="filter">
                         <i class="fi fi-br-search"></i>
-                        <input type="text" placeholder="Search by token or pool address" />
+                        <input type="text" placeholder="Search liquidities by token name" />
                     </div>
 
-                    <div class="go">Search</div>
+                    <div class="go" v-on:click="$nuxt.$emit('success', {
+                      title: 'Thank you!',
+                      message: 'But this feature is under development.'
+                    })">Search</div>
                 </div>
             </div>
             <div class="image">

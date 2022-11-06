@@ -23,7 +23,7 @@ html {
 }
 
 .nuxt-progress {
-    background: #000;
+    background-image: linear-gradient(to right, #ff9d05, #1900b3);
     height: 4px;
 }
 
@@ -74,4 +74,40 @@ a {
 .empty p {
     font-size: 30px;
     font-weight: 600;
+}
+
+.learn {
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    padding: 0 30px;
+    width: 100%;
+    background-image: url('/images/learn.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 20px;
+}
+
+.learn p {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.learn div {
+    padding: 16px 24px;
+    border-radius: 30px;
+    width: 200px;
+    font-size: 20px;
+    background: #ff9d05;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1900b3;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    align-items: center;
+    user-select: none;
 }

@@ -4,7 +4,7 @@
         <div class="i-app-width">
             <div class="text">
                 <h3>Provide Liquidity, EARN $DASH</h3>
-                <h2>Earnings: 1,074 DASH per 24h</h2>
+                <h2>Earnings: {{ $utils.fromWei(earnings) }} DASH per 24h</h2>
                 <div class="other">
                     <p>Active Liquidities: {{ liquidities.length }}</p>
                     <router-link to="/">
@@ -16,10 +16,13 @@
                 <div class="search">
                     <div class="filter">
                         <i class="fi fi-br-search"></i>
-                        <input type="text" placeholder="Search by token or pool address" />
+                        <input type="text" placeholder="Search liquidities by token name" />
                     </div>
 
-                    <div class="go">Search</div>
+                    <div class="go" v-on:click="$nuxt.$emit('success', {
+                      title: 'Thank you!',
+                      message: 'But this feature is under development.'
+                    })">Search</div>
                 </div>
             </div>
             <div class="image">
@@ -29,7 +32,12 @@
     </div>
     <div class="body">
         <div class="i-app-width">
-            <div class="learn"></div>
+            <div class="learn">
+                <p>I don't understand!</p>
+                <router-link to="/how-to-use">
+                    <div>Learn <i class="fi fi-br-arrow-right"></i></div>
+                </router-link>
+            </div>
 
             <div class="toolbar">
                 <div class="tabs">
@@ -115,7 +123,8 @@ export default {
             liquidities: [],
             coins: stableCoins,
             contract: null,
-            closing: -1
+            closing: -1,
+            earnings: '0'
         };
     },
     async created() {
@@ -137,6 +146,10 @@ export default {
                 '==',
                 this.address.toUpperCase()
             )
+
+            this.liquidities.forEach(liquidity => {
+                this.earnings += liquidity.interestRate
+            })
         },
 
         findCoin: function (address) {
@@ -176,7 +189,6 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-
     background: #CCEEFF;
 }
 
@@ -276,13 +288,6 @@ section {
     padding-bottom: 60px;
 }
 
-.learn {
-    height: 200px;
-    width: 100%;
-    background: #000;
-    border-radius: 30px;
-}
-
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -343,8 +348,7 @@ section {
 }
 
 .item-active {
-    background: #000;
-    color: #ffffff;
+    background: #CCC;
 }
 
 .pools {
@@ -395,7 +399,7 @@ section {
 }
 
 .stats p:last-child {
-  font-weight: 600;
+    font-weight: 600;
 }
 
 .stats>div {

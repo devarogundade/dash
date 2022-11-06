@@ -60,10 +60,11 @@
                     </div>
                 </div>
 
+                <div class="label">Default credit score is 65</div>
                 <div class="to input">
                     <input type="text" v-model="liquidity.minimumScore" placeholder="Minimum credit score" />
-                    <div class="token">
-                        <p>100</p>
+                    <div class="token" v-on:click="liquidity.minimumScore = 100">
+                        <p>Max</p>
                     </div>
                 </div>
 

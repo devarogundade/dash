@@ -3,23 +3,24 @@
     <div class="header">
         <div class="i-app-width">
             <div class="text">
-                <h3>Your Contact List</h3>
+                <h3>Manage your contact list</h3>
                 <h2>1,074 DASH</h2>
                 <div class="other">
-                    <p>Total Value Locked (TVL)</p>
-                    <router-link to="">
-                        <p>
-                            Tutorial <i class="fi fi-br-arrow-up-right-from-square"></i>
-                        </p>
+                    <p>Total contacts: {{ contacts.length }}</p>
+                    <router-link to="/app">
+                        <p> Leave App <i class="fi fi-br-arrow-up-right-from-square"></i> </p>
                     </router-link>
                 </div>
                 <div class="search">
                     <div class="filter">
                         <i class="fi fi-br-search"></i>
-                        <input type="text" placeholder="Search by name" />
+                        <input type="text" placeholder="Search contacts by name" />
                     </div>
 
-                    <div class="go">Search</div>
+                    <div class="go" v-on:click="$nuxt.$emit('success', {
+                      title: 'Thank you!',
+                      message: 'But this feature is under development.'
+                    })">Search</div>
                 </div>
             </div>
             <div class="image">
@@ -29,7 +30,15 @@
     </div>
     <div class="body">
         <div class="i-app-width">
+            <div class="learn">
+                <p>I don't understand!</p>
+                <router-link to="/how-to-use">
+                    <div>Learn <i class="fi fi-br-arrow-right"></i></div>
+                </router-link>
+            </div>
+
             <div class="toolbar">
+
                 <div class="tabs">
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
                         All Contacts
@@ -194,7 +203,7 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 60px;
     padding-bottom: 60px;
 }
 
@@ -258,8 +267,7 @@ section {
 }
 
 .item-active {
-    background: #000;
-    color: #ffffff;
+    background: #CCC;
 }
 
 .friends {

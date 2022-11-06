@@ -104,11 +104,17 @@
             </div>
         </div>
         <div class="history">
-            <h3>Notifications</h3>
+            <h3>Reminders</h3>
             <div class="toolbar">
                 <div class="filter">
                     <i class="fi fi-br-search"></i>
-                    <input type="text" placeholder="Search notifications" />
+                    <input type="text" placeholder="Search reminder with text" />
+                </div>
+            </div>
+
+            <div class="reminders">
+                <div class="reminder">
+                  
                 </div>
             </div>
         </div>
@@ -234,6 +240,7 @@ section {
     outline: none;
     font-size: 16px;
     font-weight: 500;
+    width: 100%;
 }
 
 .nav {

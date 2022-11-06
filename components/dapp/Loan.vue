@@ -3,21 +3,24 @@
     <div class="header">
         <div class="i-app-width">
             <div class="text">
-                <h3>HODL $DASH, Borrow Stable Coins</h3>
-                <h2>$105,786,890.44</h2>
+                <h3>Borrow Stable Coins from your contacts</h3>
+                <h2>$0.00 Unpaid</h2>
                 <div class="other">
-                    <p>Total Value Locked (TVL)</p>
-                    <router-link to="">
-                        <p>Tutorial <i class="fi fi-br-arrow-up-right-from-square"></i></p>
+                    <p>Total loans: {{ loans.length }}</p>
+                    <router-link to="/app">
+                        <p>Leave App <i class="fi fi-br-arrow-up-right-from-square"></i></p>
                     </router-link>
                 </div>
                 <div class="search">
                     <div class="filter">
                         <i class="fi fi-br-search"></i>
-                        <input type="text" placeholder="Search by token or pool address">
+                        <input type="text" placeholder="Search loans by token name">
                     </div>
 
-                    <div class="go">Search</div>
+                    <div class="go" v-on:click="$nuxt.$emit('success', {
+                      title: 'Thank you!',
+                      message: 'But this feature is under development.'
+                    })">Search</div>
                 </div>
             </div>
             <div class="image">
@@ -27,7 +30,12 @@
     </div>
     <div class="body">
         <div class="i-app-width">
-            <div class="learn"></div>
+            <div class="learn">
+                <p>I don't understand!</p>
+                <router-link to="/how-to-use">
+                    <div>Learn <i class="fi fi-br-arrow-right"></i></div>
+                </router-link>
+            </div>
 
             <div class="toolbar">
                 <div class="tabs">
@@ -179,7 +187,6 @@ section {
     width: 100%;
     display: flex;
     justify-content: center;
-    /* background-image: linear-gradient(120deg, #d4fc79 0%, #96e6a1 100%); */
     background: #CF9EF5;
 }
 
@@ -282,7 +289,7 @@ section {
 .tabs {
     display: flex;
     align-items: center;
-    background: #e2e2e2;
+    background: #EEE;
     border-radius: 10px;
     width: fit-content;
 }
@@ -301,15 +308,7 @@ section {
 }
 
 .item-active {
-    background: #000;
-    color: #FFFFFF;
-}
-
-.learn {
-    height: 200px;
-    width: 100%;
-    background: #000;
-    border-radius: 30px;
+    background: #CCC;
 }
 
 .toolbar {

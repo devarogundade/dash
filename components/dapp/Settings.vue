@@ -13,6 +13,12 @@
         <div class="i-app-width">
             <div class="container">
                 <div class="form">
+                    <div class="score" v-if="user.score">
+                        <div class="bar" :style="`width: ${user.score}%`">
+                            Your credit score is {{ user.score }} out of 100
+                        </div>
+                    </div>
+
                     <div class="from input">
                         <input type="text" v-model="user.name" placeholder="Full name">
                     </div>
@@ -242,6 +248,23 @@ section {
 .form {
     width: 450px;
     height: fit-content;
+}
+
+.score {
+    width: 100%;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    border: 1px #CCC solid;
+    overflow: hidden;
+}
+
+.score .bar {
+    height: 100%;
+    background: #2ab300;
+    padding: 6px 20px;
+    font-size: 12px;
+    border-radius: 20px;
+    font-weight: 600;
 }
 
 .input {
