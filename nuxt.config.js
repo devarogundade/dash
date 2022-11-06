@@ -12,7 +12,7 @@ export default {
     },
 
     head: {
-        title: 'dash',
+        title: 'Dash - Peer to Peer Lending',
         htmlAttrs: {
             lang: 'en'
         },

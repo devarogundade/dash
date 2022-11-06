@@ -136,7 +136,7 @@ contract Dash {
         require(liquidity.maxDays >= duration, "too_long");
         require(liquidity.minDays <= duration, "too_short");
 
-        liquidity.amount -= amount;
+        liquidity.amount = (liquidity.amount - amount);
 
         // user is now on a loan
         users[msg.sender].activeLoan = true;
@@ -172,7 +172,7 @@ contract Dash {
             msg.sender
         );
 
-        emit UpdatedLiquidity(liquidity.id, loan.amount);
+        emit UpdatedLiquidity(liquidity.id, liquidity.amount);
     }
 
     function payLoan(uint id, address owner) public {
@@ -199,7 +199,7 @@ contract Dash {
         dashToken.transfer(msg.sender, amount);
 
         // update profit
-        contractRevenue += (interest - amount);
+        contractRevenue = (contractRevenue + (interest - amount));
 
         // if liquidity still exist, add the funds back to the liquidty
         int liquidityIndex = getUserLiquidityIndex(owner, loan.liquidity);
@@ -211,7 +211,7 @@ contract Dash {
             ];
 
             // increase liquidity pool back
-            liquidity.amount += amount;
+            liquidity.amount = (liquidity.amount + amount);
 
             // pay loan to smart contract
             IStableCoin token = IStableCoin(loan.tokenAddress);
@@ -236,13 +236,13 @@ contract Dash {
         // credit score mechanism
         if (durationInDays > loan.duration) {
             if (users[msg.sender].creditScore >= 5) {
-                users[msg.sender].creditScore -= 5;
+                users[msg.sender].creditScore = (users[msg.sender].creditScore - 5);
             } else {
                 users[msg.sender].creditScore = 0;
             }
         } else {
             if (users[msg.sender].creditScore <= 95) {
-                users[msg.sender].creditScore += 5;
+                users[msg.sender].creditScore = (users[msg.sender].creditScore + 5);
             } else {
                 users[msg.sender].creditScore = 100;
             }
@@ -270,7 +270,7 @@ contract Dash {
             uint256(userLiquidityIndex)
         ];
 
-        require(liquidity.amount > 0, "insuffieceint_funds");
+        require(liquidity.amount > 0, "insufficient_funds");
 
         // send tokens to user wallet
         IStableCoin token = IStableCoin(liquidity.tokenAddress);

@@ -7,8 +7,8 @@
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
                         Add
                     </div>
-                    <div :class="tab == 2 ? 'item item-active' : 'item'" v-on:click="tab = 2">
-                        Remove
+                    <div :class="tab == 2 ? 'item item-active' : 'item'">
+                        Import <span>Soon</span>
                     </div>
                 </div>
 
@@ -67,7 +67,7 @@
                     </div>
                 </div>
 
-                <div class="price">1 BNB = 1 BNBx ($1.43)</div>
+                <div class="price">1 {{ coin.symbol }} = $1.00</div>
 
                 <div class="action" v-if="!adding" v-on:click="addLiquidity()">Add To Liquidity</div>
                 <div class="action" v-else>Adding..</div>
@@ -198,6 +198,16 @@ export default {
     cursor: pointer;
     user-select: none;
     border-radius: 10px;
+}
+
+.item span {
+    padding: 2px 6px;
+    background: #ff9d05;
+    color: #ffffff;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-top: -20px;
+    margin-left: 5px;
 }
 
 .item-active {

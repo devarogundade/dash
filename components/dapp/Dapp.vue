@@ -154,7 +154,7 @@ export default {
                 dash: {
                     balance: 0,
                     name: "Dash Token",
-                    symbol: "tDASH",
+                    symbol: "DASH",
                     image: "/images/dash-token.png",
                     address: process.env.TOKEN_CONTRACT_ADDRESS,
                 },

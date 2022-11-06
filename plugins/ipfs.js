@@ -6,7 +6,7 @@ export default ({ $axios }, inject) => {
             try {
                 const options = {
                     method: 'POST',
-                    url: '/ipfs/uploadFolder',
+                    url: 'https://deep-index.moralis.io/api/v2/ipfs/uploadFolder',
                     headers: {
                         'accept': 'application/json',
                         'content-type': 'application/json',
