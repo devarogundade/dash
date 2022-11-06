@@ -1,5 +1,5 @@
 <template>
-<section>
+<section id="faq">
     <div class="app-width">
         <h3 class="heading">Frequently Asked Questions</h3>
         <div class="faq">

@@ -1,7 +1,7 @@
 <template>
 <div class="landing">
     <LandingHero />
-    <BestOffers />
+    <SupportedTokens />
     <WhyDash />
     <DashToken />
     <Faq />

@@ -1,29 +1,29 @@
 <template>
-<div class="container-x">
+<div class="container-x" id="roadmap">
     <div class="goals">
         <div class="timeline">
             <div class="container left">
                 <div class="content">
-                    <h2>2017</h2>
-                    <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                    <h2>Hackathon</h2>
+                    <p>Minimum Viable Product (MVP) development, participate in the Moralis x Google hackathon.</p>
                 </div>
             </div>
             <div class="container right">
                 <div class="content">
-                    <h2>2016</h2>
-                    <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                    <h2>Team Formation</h2>
+                    <p>Project marketers, advisors, and engineers team formation, and project restructuring.</p>
                 </div>
             </div>
             <div class="container left">
                 <div class="content">
-                    <h2>2015</h2>
-                    <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                    <h2>Testnet release and Community</h2>
+                    <p>Testnet release, product testing, build community (discord, youtube, twitter and telegram).</p>
                 </div>
             </div>
             <div class="container right">
                 <div class="content">
-                    <h2>2012</h2>
-                    <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                    <h2>$DASH Presale and Mainnet Launch</h2>
+                    <p>Initial Coin Offering and V1 project launching.</p>
                 </div>
             </div>
         </div>
@@ -36,37 +36,13 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    padding-top: 100px;
+    padding-top: 50px;
+    padding-bottom: 200px;
 }
 
 .goals {
     width: 1000px;
     max-width: 100%;
-}
-
-.fab-btn {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    position: fixed;
-    right: 5%;
-    bottom: 5%;
-}
-
-.fab {
-    margin-top: 40px;
-    z-index: 20px;
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    color: #0177fb;
-    background: #FFFFFF;
-    font-size: 35px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px #ffffffb0;
 }
 
 .timeline {
@@ -78,7 +54,7 @@
     content: '';
     position: absolute;
     width: 6px;
-    background-color: white;
+    background-color: #ff9d05;
     top: 0;
     bottom: 0;
     left: 50%;
@@ -99,7 +75,7 @@
     height: 25px;
     right: -17px;
     background-color: white;
-    border: 4px solid #FF6370;
+    border: 4px solid #ff9d05;
     top: 15px;
     border-radius: 50%;
     z-index: 1;
@@ -123,7 +99,7 @@
     right: 30px;
     border: medium solid white;
     border-width: 10px 0 10px 10px;
-    border-color: transparent transparent transparent white;
+    border-color: transparent transparent transparent #EEE;
 }
 
 .right::before {
@@ -136,7 +112,7 @@
     left: 30px;
     border: medium solid white;
     border-width: 10px 10px 10px 0;
-    border-color: transparent white transparent transparent;
+    border-color: transparent #EEE transparent transparent;
 }
 
 .right::after {
@@ -145,13 +121,13 @@
 
 .content {
     padding: 20px 30px;
-    background-color: white;
+    background-color: #EEE;
     position: relative;
     border-radius: 6px;
 }
 
 .content p {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
 @media screen and (max-width: 600px) {

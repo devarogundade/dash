@@ -4,7 +4,7 @@
         <img :src="coin.image" alt="" />
         <div class="text">
             <h3>{{ coin.name }}</h3>
-            <p>{{ coin.address.substring(0, 25) }}...</p>
+           <p>{{ coin.address.substring(0, 10) }}...{{coin.address.substring(coin.address.length -10, coin.address.length) }}</p>
         </div>
     </div>
 </div>

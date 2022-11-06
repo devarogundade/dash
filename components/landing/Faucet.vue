@@ -116,7 +116,7 @@ export default {
 
 <style scoped>
 section {
-    min-height: 80vh;
+    min-height: 90vh;
 }
 
 .container {
@@ -124,7 +124,7 @@ section {
     height: 100%;
     display: flex;
     justify-content: center;
-    padding: 150px 0;
+    padding: 200px 0;
 }
 
 .form {

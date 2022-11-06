@@ -1,5 +1,5 @@
 <template>
-<section>
+<section id="dash-token">
     <div class="app-width">
         <div class="grid">
             <div class="image">
