@@ -16,14 +16,16 @@ Dash works with any ERC20 tokens but for testing purposes it supports 3 stable c
 - Yaaay! You go lend to a contact and earned from it, cool now what?
 
 ## Why Dash?
-- Automatic loan reminder
+-# Automatic loan reminder
   You don't have to manually reminder your contacts to repay their loan or when to repay their loans, its features comes with dash right out of the box.
-- Safe lending
+-# Safe lending
   Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not
 already on a loan to take another loan from you.
   So if you want to safely lending out funds to people, dash is the right choice for you.
-- Immutable 
+-# Immutable 
   On liquidities and loans transactions are recorded on the blockchain, with give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
+-# No more stress
+  Now all your have to do is added your friends, family or colleagues to your contact list and relax. Your contact get the loan they needed on time without disturbing you.
 
 ## Dash Token (DASH)
   Dash is the native cryptocurrency of the dash platform, it's is used to pay loan interest. 
