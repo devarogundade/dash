@@ -8,10 +8,10 @@ You can build your contact/network list on your dash account just like a messagi
 Dash works with any ERC20 tokens but for testing purposes it supports 3 stable coins launch on fantom testnet network.
 
 ## How does it work?
-- Go to https://dash-P2p.netlify.app to access the Dapp.
+- Go to https://dash-p2p.netlify.app to access the Dapp.
 - Connect your wallet to authenticate your account.
 - Go to contacts, add a new contact by search them with their username.
-- Go to https://dash-P2p.netlify.app/faucet to mint some test tokens.
+- Go to https://dash-p2p.netlify.app/faucet to mint some test tokens.
 - Lauch dapp, and go to liquidity tab, and a new liquidity with some of the test tokens from the faucet.
 - Now your contacts list can now see your liquidities, and take some of it as a loan.
 - Your contact list will repay back the exact loan tokens and interests in dash tokens, interests are calculated in dash per 24h.
@@ -22,8 +22,7 @@ Dash works with any ERC20 tokens but for testing purposes it supports 3 stable c
   You don't have to manually reminder your contacts to repay their loan or when to repay their loans, its features comes with dash right out of the box.
 
 - # Safe lending
-  Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not
-already on a loan to take another loan from you.
+  Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not already on a loan to take another loan from you.
 
   So if you want to safely lending out funds to people, dash is the right choice for you.
 
@@ -53,6 +52,7 @@ DASH can function as any other tokens, like trading in exchanges.
 ## Sneak Peaks
 ![Screenshot 2022-11-06 120939](https://user-images.githubusercontent.com/81397790/200167266-59c60d93-7638-444f-a133-1dfce2d4e32b.png)
 ![Screenshot 2022-11-06 121554](https://user-images.githubusercontent.com/81397790/200167502-a4352be1-4b52-40eb-b19f-af06d0cf208b.png)
+![Screenshot 2022-11-06 123050](https://user-images.githubusercontent.com/81397790/200168087-24640f99-076c-449d-bf52-5816b50c00fc.png)
 ![Screenshot 2022-11-06 122102](https://user-images.githubusercontent.com/81397790/200167699-10c1f18b-3eb8-41c7-9a7b-dbbf24a237ac.png)
 
 ## Tech Stacks
