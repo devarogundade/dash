@@ -35,7 +35,14 @@ export default {
         };
     },
     async created() {
-        this.$contract.init();
+        this.$contract.init()
+        this.$stablecoins.init()
+
+        const address = await this.$auth.connectToMetaMask()
+        if (address != null) {
+            this.address = address
+        }
+
         $nuxt.$on('contract', (contract) => {
             this.contract = contract;
         });
@@ -43,14 +50,8 @@ export default {
             this.coin = coin
         })
 
-        if (this.$auth.accounts.length > 0) {
-            this.address = this.$auth.accounts[0]
-        }
-
-        this.$stablecoins.init()
         $nuxt.$on('fusd-contract', (contract) => {
             this.fusdContract = contract
-            console.log(contract);
         })
         $nuxt.$on('usdc-contract', (contract) => {
             this.usdcContract = contract
@@ -72,17 +73,18 @@ export default {
             this.minting = true;
 
             try {
-                if (this.coin.symbol == 'FUSD') {
+                if (this.coin.symbol == 'tFUSD') {
                     await this.fusdContract.faucetMint({
                         from: this.address
                     })
                 }
-                if (this.coin.symbol == 'USDC') {
+                if (this.coin.symbol == 'tUSDC') {
                     await this.usdcContract.faucetMint({
                         from: this.address
                     })
                 }
-                if (this.coin.symbol == 'USDT') {
+
+                if (this.coin.symbol == 'tUSDT') {
                     await this.usdtContract.faucetMint({
                         from: this.address
                     })

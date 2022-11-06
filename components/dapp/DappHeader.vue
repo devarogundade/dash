@@ -60,13 +60,12 @@ export default {
             address: null
         }
     },
+    mounted() {
+        this.connectWallet()
+    },
     methods: {
         connectWallet: async function () {
-            await this.$auth.connectWallet()
-            const accounts = this.$auth.accounts
-            if (accounts.length > 0) {
-                this.address = accounts[0]
-            }
+            this.address = await this.$auth.connectToMetaMask()
         }
     }
 }

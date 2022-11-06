@@ -6,7 +6,9 @@ export default {
     env: {
         MNEMONIC: process.env.MNEMONIC,
         MORALIS_KEY: process.env.MORALIS_KEY,
-        TOKEN_CONTRACT_ADDRESS: process.env.TOKEN_CONTRACT_ADDRESS
+        COVALENT_API_KEY: process.env.COVALENT_API_KEY,
+        TOKEN_CONTRACT_ADDRESS: process.env.TOKEN_CONTRACT_ADDRESS,
+        FTM_CONTRACT_ADDRESS: process.env.FTM_CONTRACT_ADDRESS
     },
 
     head: {
@@ -34,6 +36,7 @@ export default {
         '@/plugins/auth.js',
         '@/plugins/ipfs.js',
         '@/plugins/utils.js',
+        '@/plugins/covalent.js',
         '@/plugins/firestore.js',
         '@/plugins/contract.js',
         '@/plugins/stablecoins.js'
@@ -53,7 +56,7 @@ export default {
     ],
 
     axios: {
-        baseURL: 'https://deep-index.moralis.io/api/v2/', // moralis api base url
+        baseURL: 'https://api.covalenthq.com/v1/', // covalent api base url
     },
 
     build: {

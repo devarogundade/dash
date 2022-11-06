@@ -17,9 +17,10 @@
                 <div class="powered">
                     <p>Powered by</p>
                     <div class="images">
-                        <img src="https://d33wubrfki0l68.cloudfront.net/35c173c14c345ad7b9b6248273d21a838242a96f/b8f87/assets/img/home/hero/partner/4.svg" alt="" />
-                        <img src="https://d33wubrfki0l68.cloudfront.net/75adf2ddce49ab8b1faed9450542ade6e928fab6/f645a/assets/img/home/hero/partner/2.svg" alt="" />
-                        <img src="https://d33wubrfki0l68.cloudfront.net/8aa0a439051c1231587c4ec93def5b316edbb142/4ccec/assets/img/home/hero/partner/1.svg" alt="" />
+                        <img src="/images/fantom.png" alt="" />
+                        <img src="/images/moralis.png" alt="" />
+                        <img src="/images/covalent.png" alt="" />
+                        <img src="/images/google.png" alt="" />
                     </div>
                 </div>
             </div>
@@ -103,11 +104,11 @@ section {
 .images {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
 }
 
 .images img {
-    height: 36px;
+    height: 30px;
 }
 
 .image {
