@@ -25,7 +25,8 @@
                     <input type="text" v-else disabled>
                 </div>
 
-                <div class="action" v-on:click="addToContact()">Add To Contact</div>
+                <div class="action" v-if="!adding" v-on:click="addToContact()">Add To Contact</div>
+                <div class="action" v-else>Adding..</div>
             </div>
         </div>
     </div>
@@ -41,7 +42,8 @@ export default {
             errorUsername: null,
             user: null,
             contract: null,
-            address: null
+            address: null,
+            adding: false
         }
     },
     async created() {
@@ -97,6 +99,8 @@ export default {
 
             if (this.contract == null || this.address == null) return
 
+            this.adding = true
+
             try {
                 const trx = await this.contract.addNetwork(this.user.id.toLowerCase(), {
                     from: this.address
@@ -109,6 +113,8 @@ export default {
             } catch (error) {
                 console.log(error);
             }
+
+            this.adding = false
         },
 
         getInputClassForUsername: function () {

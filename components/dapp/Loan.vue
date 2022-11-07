@@ -225,10 +225,9 @@ export default {
             this.paying = loan.id
 
             try {
-                await this.contract.payLoan(loan.id,
-                    loan.liquidity.address.toLowerCase(), {
-                        from: this.address
-                    })
+                await this.contract.payLoan(loan.id, {
+                    from: this.address
+                })
 
                 $nuxt.$emit('success', {
                     title: 'Loan has been repayed',

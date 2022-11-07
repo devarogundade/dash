@@ -120,9 +120,10 @@ export default {
     },
     methods: {
         getLiquidities: async function () {
-            this.liquidities = await this.$firestore.fetchAllContactsWithLiquidities(
+            const liquidities = await this.$firestore.fetchAllContactsWithLiquidities(
                 this.address.toUpperCase()
             )
+            this.liquidities = liquidities.filter(liquidity => !liquidity.closed)
             this.fetching = false
         },
 

@@ -148,7 +148,7 @@ export default {
                 return
             }
 
-            if (this.liquidity.takeOut.min > this.liquidity.takeOut.max) {
+            if (Number(this.liquidity.takeOut.min) > Number(this.liquidity.takeOut.max)) {
                 $nuxt.$emit('failure', {
                     title: 'Minimum take out cannot be greater than maximum duration',
                     message: 'Field is required'
@@ -156,7 +156,7 @@ export default {
                 return
             }
 
-            if (this.liquidity.takeOut.max > this.liquidity.amount) {
+            if (Number(this.liquidity.takeOut.max) > Number(this.liquidity.amount)) {
                 $nuxt.$emit('failure', {
                     title: 'Maximum take out cannot be greater than liquidity amount',
                     message: 'Field is required'
@@ -180,7 +180,7 @@ export default {
                 return
             }
 
-            if (this.liquidity.days.min > this.liquidity.days.max) {
+            if (Number(this.liquidity.days.min) > Number(this.liquidity.days.max)) {
                 $nuxt.$emit('failure', {
                     title: 'Minimum duration cannot be greater than maximum duration',
                     message: 'Field is required'

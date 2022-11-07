@@ -102,8 +102,12 @@
                         </div>
                     </div>
 
-                    <div class="action" v-on:click="closeLiquidity(liquidity.id)">
+                    <div class="action" v-if="!liquidity.closed" v-on:click="closeLiquidity(liquidity.id)">
                         <i class="fi fi-br-pause"></i> {{ closing == liquidity.id ? 'Closing..' : 'Close' }}
+                    </div>
+
+                    <div class="action closed" v-else>
+                        <i class="fi fi-br-ban"></i> Closed
                     </div>
                 </div>
             </div>
@@ -149,8 +153,12 @@
                         </div>
                     </div>
 
-                    <div class="action" v-on:click="closeLiquidity(liquidity.id)">
+                    <div class="action" v-if="!liquidity.closed" v-on:click="closeLiquidity(liquidity.id)">
                         <i class="fi fi-br-pause"></i> {{ closing == liquidity.id ? 'Closing..' : 'Close' }}
+                    </div>
+
+                    <div class="action closed" v-else>
+                        <i class="fi fi-br-ban"></i> Closed
                     </div>
                 </div>
             </div>
@@ -534,6 +542,11 @@ section {
     font-size: 16px;
     position: relative;
     margin-top: 30px;
+}
+
+.closed {
+    background: #ccc;
+    color: #000;
 }
 
 .action i {
