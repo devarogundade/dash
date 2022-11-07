@@ -5,7 +5,7 @@ Dash is a closed network peer-to-peer lending DAPP, which means you have full co
 
 You can build your contact/network list on your dash account just like a messaging application. Whoever is on your contact list can borrow some tokens from the liquidities you have provided in your account.
 
-Dash will support all major stablecoins on fantom but for testing purposes, it supports 3 stablecoins launches on the fantom testnet network.
+Dash will support all major stablecoins on fantom but for testing purposes, it supports 3 stablecoins(Fantom USD, USDT, and USDC) we have created on the fantom testnet network.
 
 ## Guides to use?
 - Go to https://dash-p2p.netlify.app to access the Dapp.
