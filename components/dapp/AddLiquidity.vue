@@ -13,7 +13,7 @@
                 </div>
 
                 <div class="from input">
-                    <input type="text" v-model="liquidity.amount" placeholder="Amount" />
+                    <input type="number" v-model="liquidity.amount" placeholder="Amount" />
                     <div class="token" v-on:click="$nuxt.$emit('pick-coin')">
                         <img :src="coin.image" alt="" />
                         <p>{{ coin.symbol }}</p>
@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="to input">
-                    <input type="text" v-model="liquidity.interest" placeholder="Interest rate / 24h" />
+                    <input type="number" min="0" v-model="liquidity.interest" placeholder="Interest rate / 24h" />
                     <div class="token">
                         <img src="/images/dash-token.png" alt="" />
                         <p>DASH</p>
@@ -31,13 +31,13 @@
                 <div class="label">Take out</div>
                 <div class="flex">
                     <div class="to input">
-                        <input type="text" v-model="liquidity.takeOut.min" placeholder="Min" />
+                        <input type="number" min="0" v-model="liquidity.takeOut.min" placeholder="Min" />
                         <div class="token">
                             <p>{{ coin.symbol }}</p>
                         </div>
                     </div>
                     <div class="to input">
-                        <input type="text" v-model="liquidity.takeOut.max" placeholder="Max" />
+                        <input type="number" min="0" v-model="liquidity.takeOut.max" placeholder="Max" />
                         <div class="token">
                             <p>{{ coin.symbol }}</p>
                         </div>
@@ -47,13 +47,13 @@
                 <div class="label">Duration</div>
                 <div class="flex">
                     <div class="to input">
-                        <input type="text" v-model="liquidity.days.min" placeholder="Min" />
+                        <input type="number" min="0" v-model="liquidity.days.min" placeholder="Min" />
                         <div class="token">
                             <p>Days</p>
                         </div>
                     </div>
                     <div class="to input">
-                        <input type="text" v-model="liquidity.days.max" placeholder="Max" />
+                        <input type="number" min="0" v-model="liquidity.days.max" placeholder="Max" />
                         <div class="token">
                             <p>Days</p>
                         </div>
@@ -62,7 +62,7 @@
 
                 <div class="label">Default credit score is 65</div>
                 <div class="to input">
-                    <input type="text" v-model="liquidity.minimumScore" placeholder="Minimum credit score" />
+                    <input type="number" max="100" min="0" v-model="liquidity.minimumScore" placeholder="Minimum credit score" />
                     <div class="token" v-on:click="liquidity.minimumScore = 100">
                         <p>Max</p>
                     </div>
@@ -115,6 +115,86 @@ export default {
     methods: {
         addLiquidity: async function () {
             if (this.$auth.accounts.length == 0 || this.contract == null) return
+
+            if (this.liquidity.amount == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter liquidity amount',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.interest == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter liquidity interest',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.takeOut.min == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter liquidity minimum take out',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.takeOut.max == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter liquidity maximum take out',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.takeOut.min > this.liquidity.takeOut.max) {
+                $nuxt.$emit('failure', {
+                    title: 'Minimum take out cannot be greater than maximum duration',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.takeOut.max > this.liquidity.amount) {
+                $nuxt.$emit('failure', {
+                    title: 'Maximum take out cannot be greater than liquidity amount',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.days.min == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter liquidity minimum duration',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.days.max == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter liquidity maximum duration in days',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.days.min > this.liquidity.days.max) {
+                $nuxt.$emit('failure', {
+                    title: 'Minimum duration cannot be greater than maximum duration',
+                    message: 'Field is required'
+                })
+                return
+            }
+
+            if (this.liquidity.minimumScore == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter minimum credit score',
+                    message: 'Field is required'
+                })
+                return
+            }
 
             this.adding = true;
 
@@ -280,6 +360,8 @@ export default {
     font-size: 16px;
     font-weight: 600;
     color: #ff9d05;
+    user-select: none;
+    cursor: pointer;
 }
 
 .flex {

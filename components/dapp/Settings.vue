@@ -59,8 +59,9 @@
                         </div>
                     </div>
 
+                    <label class="error-text" v-if="errorUsername">{{ errorUsername }}</label>
                     <div class="to input">
-                        <input ref="username" type="text" v-model="user.username" placeholder="@username">
+                        <input ref="username" :class="getInputClassForUsername()" type="text" v-model="user.username" placeholder="@username">
                     </div>
 
                     <div class="action" v-if="!updating" v-on:click="updateProfile()">Update Profile</div>
@@ -89,9 +90,11 @@ export default {
                 address: '',
                 username: ''
             },
+            errorUsername: null,
             contract: null,
             file: null,
-            updating: false
+            updating: false,
+            existingUser: false
         };
     },
     async created() {
@@ -102,6 +105,7 @@ export default {
 
                 if (user.username != '') {
                     this.$refs['username'].disabled = true
+                    this.existingUser = true
                 }
             }
         }
@@ -120,6 +124,70 @@ export default {
         },
 
         updateProfile: async function () {
+            if (this.user.username == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your name',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.user.email == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your email',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.user.age.year == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your age year',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.user.age.month == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your age month',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.user.phone == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your phone',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.user.address == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your age address',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.user.username == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter your username',
+                    message: 'Field cannot be empty'
+                })
+                return
+            }
+
+            if (this.errorUsername != null) {
+                $nuxt.$emit('failure', {
+                    title: 'Invalid username',
+                    message: 'User name must start with @'
+                })
+                return
+            }
+
             if (this.$auth.accounts.length == 0 || this.contract == null) return
 
             this.updating = true
@@ -128,26 +196,40 @@ export default {
                 const base64 = await this.$ipfs.toBase64(this.file)
                 const url = await this.$ipfs.upload(`users`, base64)
 
-                console.log(url);
-
                 if (url != null) {
                     this.user.photo = url
                 }
             }
 
             try {
-                const trx = await this.contract.createUser(
-                    this.user.name,
-                    this.user.photo,
-                    this.user.email,
-                    this.user.username.toLowerCase(),
-                    this.user.age.year,
-                    this.user.age.month,
-                    this.user.phone,
-                    this.user.address, {
-                        from: this.$auth.accounts[0]
-                    }
-                )
+                let trx = null
+                if (this.existingUser) {
+                    trx = await this.contract.updateUser(
+                        this.user.name,
+                        this.user.photo,
+                        this.user.email,
+                        this.user.username.toLowerCase(),
+                        this.user.age.year,
+                        this.user.age.month,
+                        this.user.phone,
+                        this.user.address, {
+                            from: this.$auth.accounts[0]
+                        }
+                    )
+                } else {
+                    trx = await this.contract.createUser(
+                        this.user.name,
+                        this.user.photo,
+                        this.user.email,
+                        this.user.username.toLowerCase(),
+                        this.user.age.year,
+                        this.user.age.month,
+                        this.user.phone,
+                        this.user.address, {
+                            from: this.$auth.accounts[0]
+                        }
+                    )
+                }
 
                 $nuxt.$emit('trx', trx)
                 $nuxt.$emit('success', {
@@ -159,6 +241,24 @@ export default {
             }
 
             this.updating = false
+        },
+
+        getInputClassForUsername: function () {
+            if (this.user.username == '') {
+                this.errorUsername = null
+                return ''
+            }
+            if (!this.user.username.startsWith('@')) {
+                this.errorUsername = 'Username must start with @'
+                return 'error filled'
+            }
+            if (this.user.username.length < 4) {
+                this.errorUsername = 'Username is too short'
+                return 'error filled'
+            } else {
+                this.errorUsername = null
+                return 'filled'
+            }
         }
     }
 };

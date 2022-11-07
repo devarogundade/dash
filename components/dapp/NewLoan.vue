@@ -36,7 +36,7 @@
                 </div>
 
                 <div class="from input">
-                    <input type="text" v-model="loan.amount" placeholder="Amount" />
+                    <input type="number" v-model="loan.amount" placeholder="Amount" />
                     <div class="token">
                         <img :src="coin.image" alt="" />
                         <p>{{ coin.symbol }}</p>
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="to input">
-                    <input type="text" v-model="loan.duration" placeholder="Duration" />
+                    <input type="number" v-model="loan.duration" placeholder="Duration" />
                     <div class="token">
                         <p>Days</p>
                     </div>
@@ -75,12 +75,14 @@ export default {
             contract: null,
             taking: false,
             coin: stableCoins[0],
-            address: null
+            address: null,
+            user: null
         };
     },
     async created() {
         this.address = await this.$auth.connectToMetaMask()
         this.getLiquidity()
+        this.getUser()
 
         this.$contract.init();
         $nuxt.$on('contract', (contract) => {
@@ -91,6 +93,10 @@ export default {
         })
     },
     methods: {
+        getUser: async function () {
+            this.user = await this.$firestore.fetch('users', this.$auth.accounts[0].toUpperCase())
+        },
+
         getLiquidity: async function () {
             this.liquidity = await this.$firestore.fetch('liquidities', this.liquidityId)
             if (this.liquidity == null) {
@@ -100,8 +106,30 @@ export default {
                 })
             }
         },
+
         takeLoan: async function () {
             if (this.contract == null) return
+            if (this.loan.amount == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter loan amount',
+                    message: 'Field is required'
+                })
+                return
+            }
+            if (this.loan.duration == '') {
+                $nuxt.$emit('failure', {
+                    title: 'Enter loan duration',
+                    message: 'Field is required'
+                })
+                return
+            }
+            if (this.user && this.user.activeLoan) {
+                $nuxt.$emit('failure', {
+                    title: 'You ca\'t take more loans',
+                    message: 'You have an outstanding loan'
+                })
+                return
+            }
 
             this.taking = true;
 

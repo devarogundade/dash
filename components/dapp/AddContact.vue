@@ -12,8 +12,9 @@
                     </div>
                 </div>
 
+                <label class="error-text" v-if="errorUsername">{{ errorUsername }}</label>
                 <div class="from input">
-                    <input type="text" v-model="username" placeholder="@username">
+                    <input type="text" :class="getInputClassForUsername()" v-model="username" placeholder="@username">
                     <div class="token" v-on:click="findUser()">
                         <p>Search</p>
                     </div>
@@ -37,6 +38,7 @@ export default {
         return {
             tab: 1,
             username: '',
+            errorUsername: null,
             user: null,
             contract: null,
             address: null
@@ -106,6 +108,24 @@ export default {
                 })
             } catch (error) {
                 console.log(error);
+            }
+        },
+
+        getInputClassForUsername: function () {
+            if (this.username == '') {
+                this.errorUsername = null
+                return ''
+            }
+            if (!this.username.startsWith('@')) {
+                this.errorUsername = 'Username must start with @'
+                return 'error filled'
+            }
+            if (this.username.length < 4) {
+                this.errorUsername = 'Username is too short'
+                return 'error filled'
+            } else {
+                this.errorUsername = null
+                return 'filled'
             }
         }
     }
@@ -205,6 +225,17 @@ export default {
     margin: 30px 0;
     text-align: center;
     font-size: 18px;
+}
+
+.error {
+    border: 2px solid #C74F4F;
+}
+
+.error-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 17px;
+    color: #C74F4F;
 }
 
 .action {

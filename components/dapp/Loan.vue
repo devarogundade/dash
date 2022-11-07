@@ -97,8 +97,12 @@
                         </div>
                     </div>
 
-                    <div class="action" v-on:click="repayLoan(loan)">
+                    <div class="action" v-if="loan.paidAt == 0" v-on:click="repayLoan(loan)">
                         <i class="fi fi-br-dollar"></i> {{ paying == loan.id ? 'Paying..' : 'Repay' }}
+                    </div>
+
+                    <div class="action paid" v-else>
+                        <i class="fi fi-br-check"></i> Payed
                     </div>
                 </div>
             </div>
@@ -149,8 +153,8 @@
                         </div>
                     </div>
 
-                    <div class="action">
-                        <i class="fi fi-br-dollar"></i> Payed
+                    <div class="action paid">
+                        <i class="fi fi-br-check"></i> Payed
                     </div>
                 </div>
             </div>
@@ -355,6 +359,11 @@ section {
     background: #EEE;
     border-radius: 10px;
     width: fit-content;
+}
+
+.paid {
+    background: #CCC !important;
+    color: #000 !important;
 }
 
 .tabs .item {
