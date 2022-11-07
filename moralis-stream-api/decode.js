@@ -48,18 +48,6 @@ module.exports = {
                     activeLoan: data[6],
                     networks: []
                 }
-            case 'update-users':
-                return {
-                    id: data[4].toUpperCase(), // avoid case sensitive
-                    name: data[0],
-                    photo: data[1],
-                    email: data[2],
-                    age: {
-                        year: data[7],
-                        month: data[8]
-                    },
-                    phone: data[9]
-                }
             case 'liquidities':
                 return {
                     id: data[0],
@@ -73,7 +61,7 @@ module.exports = {
                     minScore: data[8],
                     createdAt: data[9],
                     address: data[10].toUpperCase(),
-                    closed: false
+                    closed: false // opened
                 }
             case 'loans':
                 return {

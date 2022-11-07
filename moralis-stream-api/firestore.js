@@ -16,12 +16,18 @@ module.exports = {
             return false
         }
     },
-    updateNetworks: async function(collection, document, data) {
+    updateNetworks: async function(collection, document, data, isAdded) {
         try {
             const reference = this.db.collection(collection).doc(document)
-            await reference.update({
-                networks: FieldValue.arrayUnion(data)
-            });
+            if (isAdded) {
+                await reference.update({
+                    networks: FieldValue.arrayUnion(data)
+                });
+            } else {
+                await reference.update({
+                    networks: FieldValue.arrayRemove(data)
+                });
+            }
             return true
         } catch (error) {
             console.log(error);

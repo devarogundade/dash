@@ -46,7 +46,7 @@ app.post('/webhook', (req, res) => {
                 collection = 'users'
                 break
             case 'networks':
-                fireStore.updateNetworks('users', object.by, object.id)
+                fireStore.updateNetworks('users', object.by, object.id, object.isAdded)
                 shouldWrite = false
                 break
             default:
