@@ -7,6 +7,10 @@ You can build your contact/network list on your dash account just like a messagi
 
 Dash will support all major stablecoins on fantom but for testing purposes, it supports 3 stablecoins(Fantom USD, USDT, and USDC) we have created on the fantom testnet network.
 
+## How does it works?
+Dash allows you to create pools of liquidy with different criteria, people from your dash contact list that met this criteria can take a loan from the pool and fund back to the liquidity pool or your wallet with the exact amount of stablecoins they borrow and some DASH tokens as interest at the 
+time of repaying the loan.
+
 ## Guides to use?
 - Go to https://dash-p2p.netlify.app to access the Dapp.
 - Connect your wallet to authenticate your account.
@@ -31,6 +35,8 @@ Dash will support all major stablecoins on fantom but for testing purposes, it s
 
 - # No more stress
   Now all your have to do is added your friends, family or colleagues to your contact list and relax. Your contact get the loan they needed on time without disturbing you.
+
+## FAQs
 
 ## Dash Token (DASH)
   Dash is the native cryptocurrency of the dash platform, it's is used to pay loan interest. 
