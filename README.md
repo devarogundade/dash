@@ -22,7 +22,7 @@ Dash works with any ERC20 tokens but for testing purposes it supports 3 stable c
   You don't have to manually reminder your contacts to repay their loan or when to repay their loans, this features comes with dash right out of the box.
 
 - # Safe lending
-  Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not already on a loan to take another loan from you.
+  Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a minimum credit score on your liquidities, and allowing only a contact that is not already on a loan to take another loan from you.
 
   So if you want to safely lending out funds to people, dash is the right choice for you.
 
