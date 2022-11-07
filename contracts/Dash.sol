@@ -3,6 +3,7 @@ pragma solidity >=0.7.0 <0.9.0;
 
 import {IStableCoin} from "./stablecoins/IStableCoin.sol";
 import {DashToken} from "./DashToken.sol";
+import {Models} from "./Models.sol";
 
 contract Dash {
     address private deployer;
@@ -17,46 +18,13 @@ contract Dash {
 
     DashToken private dashToken;
 
-    mapping(address => User) public users;
-    mapping(address => Liquidity[]) public liquidities;
-    mapping(address => Loan[]) public loans;
+    mapping(address => Models.User) public users;
+    mapping(address => Models.Liquidity[]) public liquidities;
+    mapping(address => Models.Loan[]) public loans;
 
     constructor(address dashToken_) {
         deployer = msg.sender;
         dashToken = DashToken(dashToken_);
-    }
-
-    struct Liquidity {
-        uint id;
-        uint256 amount;
-        address tokenAddress;
-        uint interestRate;
-        uint256 minTakeOut;
-        uint256 maxTakeOut;
-        uint minDays;
-        uint maxDays;
-        uint minCreditScore;
-        uint createdAt;
-    }
-
-    struct Loan {
-        uint id;
-        uint liquidity;
-        uint256 amount;
-        address tokenAddress;
-        uint interestRate;
-        uint duration;
-        address provider;
-        uint createdAt;
-        uint paidAt;
-    }
-
-    struct User {
-        uint id;
-        uint creditScore;
-        bool activeLoan;
-        uint createdAt;
-        address[] networks;
     }
 
     function createUser(
@@ -72,7 +40,7 @@ contract Dash {
         require(users[msg.sender].id == 0, "!already_created_an_account");
 
         userID++;
-        users[msg.sender] = User(
+        users[msg.sender] = Models.User(
             userID,
             defaultCreditScore,
             false,
@@ -151,7 +119,7 @@ contract Dash {
         int liquidityIndex = getUserLiquidityIndex(provider, id);
         require(liquidityIndex != -1, "!liquidity_exists");
 
-        Liquidity memory liquidity = liquidities[provider][
+        Models.Liquidity memory liquidity = liquidities[provider][
             uint(liquidityIndex)
         ];
         int userNetworkIndex = getUserNetworkIndex(provider, msg.sender);
@@ -183,7 +151,7 @@ contract Dash {
         loanID++;
 
         // create a new loan
-        Loan memory loan = Loan(
+        Models.Loan memory loan = Models.Loan(
             loanID,
             liquidity.id,
             amount,
@@ -226,7 +194,7 @@ contract Dash {
         int userLoanIndex = getUserLoanIndex(msg.sender, id);
         require(userLoanIndex != -1, "!loan_exists");
 
-        Loan memory loan = loans[msg.sender][uint(userLoanIndex)];
+        Models.Loan memory loan = loans[msg.sender][uint(userLoanIndex)];
         require(loan.paidAt == 0, "loan_already_paid");
 
         // pay interest
@@ -366,7 +334,7 @@ contract Dash {
 
         // creates and registers the liquidity
         liquidities[msg.sender].push(
-            Liquidity(
+            Models.Liquidity(
                 liquidityID,
                 amount,
                 tokenAddress,
@@ -406,7 +374,7 @@ contract Dash {
         view
         returns (int)
     {
-        Loan[] memory loanList = loans[user];
+        Models.Loan[] memory loanList = loans[user];
         int position = -1;
 
         for (uint index = 0; index < loanList.length; index++) {
@@ -424,7 +392,7 @@ contract Dash {
         view
         returns (int)
     {
-        Liquidity[] memory liquidityList = liquidities[user];
+        Models.Liquidity[] memory liquidityList = liquidities[user];
         int position = -1;
 
         for (uint index = 0; index < liquidityList.length; index++) {
