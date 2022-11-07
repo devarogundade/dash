@@ -37,6 +37,7 @@ export default ({}, inject) => {
                 this.provider = ethereum
 
                 this.setUpAccountListeners(ethereum)
+                await this.switchToFantomTestnet()
 
                 this.accounts = await ethereum.enable();
                 return this.accounts[0]
@@ -63,7 +64,7 @@ export default ({}, inject) => {
             try {
                 await window.ethereum.request({
                     method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: '0x61' }],
+                    params: [{ chainId: '0xfa2' }],
                 });
             } catch (error) {
                 if (error.code === 4902) {
@@ -71,11 +72,11 @@ export default ({}, inject) => {
                         await window.ethereum.request({
                             method: 'wallet_addEthereumChain',
                             params: [{
-                                chainId: '0x61',
+                                chainId: '0xfa2',
                                 chainName: 'Fantom - Testnet',
                                 nativeCurrency: {
                                     name: 'Fantom',
-                                    symbol: 'FTM', // 2-6 characters long
+                                    symbol: 'FTM',
                                     decimals: 18
                                 },
                                 blockExplorerUrls: ['https://testnet.ftmscan.com'],
