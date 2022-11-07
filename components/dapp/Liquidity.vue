@@ -42,7 +42,7 @@
             <div class="toolbar">
                 <div class="tabs">
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
-                        Active
+                        All liquidities
                     </div>
                     <div :class="tab == 2 ? 'item item-active' : 'item'" v-on:click="tab = 2">
                         Dust
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="pools">
+            <div class="pools" v-if="tab == 1">
                 <div class="pool" v-for="(liquidity, index) in liquidities" :key="index">
                     <div class="top">
                         <div class="images">
@@ -104,9 +104,61 @@
                 </div>
             </div>
 
-            <div class="empty" v-if="liquidities.length == 0">
+            <div class="pools" v-if="tab == 2">
+                <div class="pool" v-for="(liquidity, index) in dusts()" :key="index">
+                    <div class="top">
+                        <div class="images">
+                            <img :src="findCoin(liquidity.tokenAddress).image" alt="" />
+                        </div>
+                        <p>{{ findCoin(liquidity.tokenAddress).name }}</p>
+                    </div>
+
+                    <div class="apy">
+                        <h3>{{ $utils.fromWei(liquidity.interestRate) }} DASH</h3>
+                        <p>per 24h</p>
+                    </div>
+
+                    <div class="stats">
+                        <div>
+                            <p>Reward Token</p>
+                            <img src="/images/dash-token.png" alt="" />
+                        </div>
+
+                        <div>
+                            <p>Interest / 24h</p>
+                            <p>{{ $utils.fromWei(liquidity.interestRate) }} DASH</p>
+                        </div>
+
+                        <div>
+                            <p>Available Balance</p>
+                            <p>{{ $utils.fromWei(liquidity.amount) }} {{ findCoin(liquidity.tokenAddress).symbol }}</p>
+                        </div>
+
+                        <div>
+                            <p>Take Out</p>
+                            <p>{{ $utils.fromWei(liquidity.minTakeOut) }} ~ {{ $utils.fromWei(liquidity.maxTakeOut)}} {{ findCoin(liquidity.tokenAddress).symbol }}</p>
+                        </div>
+
+                        <div>
+                            <p>Min Credit Score</p>
+                            <p>{{ liquidity.minScore }}</p>
+                        </div>
+                    </div>
+
+                    <div class="action" v-on:click="closeLiquidity(liquidity.id)">
+                        <i class="fi fi-br-pause"></i> {{ closing == liquidity.id ? 'Closing..' : 'Close' }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty" v-if="liquidities.length == 0 && tab == 1">
                 <img src="/images/astronaut_borrow.png" alt="">
                 <p>No Liquidity!</p>
+            </div>
+
+            <div class="empty" v-if="dusts().length == 0 && tab == 2">
+                <img src="/images/astronaut_borrow.png" alt="">
+                <p>No Dust!</p>
             </div>
         </div>
     </div>
@@ -150,6 +202,12 @@ export default {
             this.liquidities.forEach(liquidity => {
                 this.earnings += liquidity.interestRate
             })
+        },
+
+        dusts: function () {
+            return this.liquidities.filter(liquidity =>
+                liquidity.amount < liquidity.minTakeOut
+            )
         },
 
         findCoin: function (address) {

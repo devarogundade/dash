@@ -114,7 +114,7 @@
 
             <div class="reminders">
                 <div class="reminder">
-                  
+
                 </div>
             </div>
         </div>
@@ -130,7 +130,7 @@ export default {
             address: null,
             balances: {
                 ftm: {
-                    balance: 0,
+                    balance: "0",
                     name: "Fantom",
                     symbol: "FTM",
                     image: "https://s3.coinmarketcap.com/static/img/portraits/62d51d9af192d82df8ff3a83.png",

@@ -39,8 +39,8 @@
 
             <div class="toolbar">
                 <div class="tabs">
-                    <div :class="tab == 1? 'item item-active' :'item'" v-on:click="tab = 1">Active Loans</div>
-                    <div :class="tab == 2? 'item item-active' :'item'" v-on:click="tab = 2">Paid Loans</div>
+                    <div :class="tab == 1? 'item item-active' :'item'" v-on:click="tab = 1">All Loans</div>
+                    <div :class="tab == 2? 'item item-active' :'item'" v-on:click="tab = 2">Paid</div>
                 </div>
 
                 <div class="balance">
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="pools">
+            <div class="pools" v-if="tab == 1">
                 <div class="pool" v-for="(loan, index) in loans" :key="index">
                     <div class="top">
                         <div class="images">
@@ -103,9 +103,66 @@
                 </div>
             </div>
 
-            <div class="empty" v-if="loans.length == 0">
+            <div class="pools" v-if="tab == 2">
+                <div class="pool" v-for="(loan, index) in paid()" :key="index">
+                    <div class="top">
+                        <div class="images">
+                            <img :src="findCoin(loan.liquidity.tokenAddress).image" alt="" />
+                        </div>
+                        <p>{{ findCoin(loan.liquidity.tokenAddress).name }}</p>
+                    </div>
+
+                    <div class="apy">
+                        <h3>{{ $utils.fromWei(loan.interestRate) }} DASH</h3>
+                        <p>per 24h</p>
+                    </div>
+
+                    <div class="stats">
+                        <div>
+                            <p>Interest Token</p>
+                            <img src="/images/dash-token.png" alt="" />
+                        </div>
+
+                        <div>
+                            <p>Amount</p>
+                            <p>{{ $utils.fromWei(loan.amount) }} {{ findCoin(loan.liquidity.tokenAddress).symbol }}</p>
+                        </div>
+
+                        <div>
+                            <p>Interest / 24h</p>
+                            <p>{{ $utils.fromWei(loan.interestRate) }}</p>
+                        </div>
+
+                        <div>
+                            <p>Took on</p>
+                            <p>{{ $utils.formatToDate(loan.createdAt * 1000) }}</p>
+                        </div>
+
+                        <div>
+                            <p>Due date</p>
+                            <p>{{ $utils.formatToDate((loan.createdAt * 1000) + (loan.duration * 24 * 3600 * 1000)) }}</p>
+                        </div>
+
+                        <div>
+                            <p>Paid</p>
+                            <p>{{ $utils.formatToDate(loan.paidAt * 1000) }}</p>
+                        </div>
+                    </div>
+
+                    <div class="action">
+                        <i class="fi fi-br-dollar"></i> Payed
+                    </div>
+                </div>
+            </div>
+
+            <div class="empty" v-if="loans.length == 0 && tab == 1">
                 <img src="/images/astronaut_borrow.png" alt="">
                 <p>No Loans!</p>
+            </div>
+
+            <div class="empty" v-if="paid().length == 0 && tab == 2">
+                <img src="/images/astronaut_borrow.png" alt="">
+                <p>No Paid Loans!</p>
             </div>
         </div>
     </div>
@@ -140,6 +197,12 @@ export default {
         getLoans: async function () {
             this.loans = await this.$firestore.fetchAllLoans(
                 this.address.toUpperCase()
+            )
+        },
+
+        paid: function () {
+            return this.loans.filter(loan =>
+                loan.paidAt > 0
             )
         },
 
@@ -340,8 +403,8 @@ section {
 }
 
 .balance div:first-child {
-    background: #1900b3;
-    color: white;
+    background: #d2cbff;
+    color: #1900b3;
 }
 
 .pools {

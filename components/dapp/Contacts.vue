@@ -57,14 +57,12 @@
             </div>
 
             <div class="friends">
-                <router-link v-for="(contact, index) in contacts" :to="`/dapp/users/${contact.username}`" :key="index">
-                    <div class="friend">
-                        <div class="image">
-                            <img :src="contact.photo" alt="">
-                        </div>
-                        <div class="detail">{{ contact.name }}</div>
+                <div class="friend" v-for="(contact, index) in contacts" :key="index" v-on:click="$nuxt.$emit('profile', contact)">
+                    <div class="image">
+                        <img :src="contact.photo" alt="">
                     </div>
-                </router-link>
+                    <div class="detail">{{ contact.name }}</div>
+                </div>
             </div>
 
             <div class="empty" v-if="contacts.length == 0">
@@ -283,6 +281,8 @@ section {
     background: #fafafa;
     box-shadow: 0 6px 10px #ccc;
     border: 1px;
+    cursor: pointer;
+    user-select: none;
     border-radius: 16px;
 }
 
