@@ -5,7 +5,11 @@ import {IStableCoin} from "./stablecoins/IStableCoin.sol";
 import {DashToken} from "./DashToken.sol";
 import {Models} from "./Models.sol";
 
+import {SafeMath} from "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 contract Dash {
+    using SafeMath for uint256;
+
     address private deployer;
     uint private contractRevenue;
     uint public platformFee = 2; // 2% fee
@@ -114,10 +118,10 @@ contract Dash {
         address provider,
         uint duration
     ) public onlyUser {
-        require(amount > 0, "!can_take_zero_token");
+        require(amount > 0, "You can't borrow zero tokens");
 
         int liquidityIndex = getUserLiquidityIndex(provider, id);
-        require(liquidityIndex != -1, "!liquidity_exists");
+        require(liquidityIndex != -1, "Liquidity does not exists");
 
         Models.Liquidity memory liquidity = liquidities[provider][
             uint(liquidityIndex)
@@ -125,20 +129,35 @@ contract Dash {
         int userNetworkIndex = getUserNetworkIndex(provider, msg.sender);
 
         // verifies the user is on provider contact list
-        require(userNetworkIndex != -1, "!unathorized");
+        require(
+            userNetworkIndex != -1,
+            "You are not on provider's contact list"
+        );
 
         // verifies user is not a loan before
-        require(!users[msg.sender].activeLoan, "already_on_a_loan");
+        require(!users[msg.sender].activeLoan, "You are already on a loan");
 
-        // validate inputs with liquidity properties
-        require(liquidity.amount >= amount, "insuficcient_pool");
-        require(liquidity.maxTakeOut >= amount, "too_much");
-        require(liquidity.minTakeOut <= amount, "too_little");
-        require(liquidity.maxDays >= duration, "too_long");
-        require(liquidity.minDays <= duration, "too_short");
+        // validate loan and user inputs with liquidity properties
+        require(liquidity.amount >= amount, "Insufficient pool size");
+        require(
+            liquidity.maxTakeOut >= amount,
+            "Amount is greater than maximum take out"
+        );
+        require(
+            liquidity.minTakeOut <= amount,
+            "Amount is lesser than minimum take out"
+        );
+        require(
+            liquidity.maxDays >= duration,
+            "Duration is longer than maximum duration"
+        );
+        require(
+            liquidity.minDays <= duration,
+            "Duration is shorter than minimum duration"
+        );
         require(
             liquidity.minCreditScore <= users[msg.sender].creditScore,
-            "too_low_credit_score"
+            "Your credit score is too low"
         );
 
         // decrease the liquidity pool size
@@ -200,20 +219,16 @@ contract Dash {
 
         // pay interest
         uint secondsDiff = block.timestamp - loan.createdAt;
-        uint daysElapsed = daysCount(secondsDiff);
 
         // calculate interest
-        uint256 interest = calculateSimpleInterest(
-            loan.interestRate,
-            daysElapsed
-        );
+        uint256 interest = ((loan.interestRate * secondsDiff) / 1 days);
 
         // pay interest charges to smart contract in DASH tokens
         dashToken.approve(msg.sender, address(this), interest);
         dashToken.transferFrom(msg.sender, address(this), interest);
 
         // charge platform fee
-        uint fee = (interest * (platformFee / 100));
+        uint fee = ((interest * platformFee) / 100);
 
         // pay interest profit to liquidity provider in DASH tokens
         dashToken.transfer(loan.provider, (interest - fee));
@@ -257,15 +272,18 @@ contract Dash {
         users[msg.sender].activeLoan = false;
 
         // credit score mechanism
-        if (daysElapsed > loan.duration) {
+        uint duration = (loan.duration * 1 days);
+        if (block.timestamp > SafeMath.add(loan.createdAt, duration)) {
+            // user has default, so their credit score is deducted by 5
             if (users[msg.sender].creditScore >= 5) {
                 users[msg.sender].creditScore -= 5;
             } else {
                 users[msg.sender].creditScore = 0;
             }
         } else {
-            if (users[msg.sender].creditScore <= 95) {
-                users[msg.sender].creditScore += 5;
+            // user repays on time so their credit score is increased by 2
+            if (users[msg.sender].creditScore <= 98) {
+                users[msg.sender].creditScore += 2;
             } else {
                 users[msg.sender].creditScore = 100;
             }
@@ -292,27 +310,24 @@ contract Dash {
         int liquidityIndex = getUserLiquidityIndex(msg.sender, id);
 
         // verifies the liquidty
-        require(liquidityIndex != -1, "!you_do_own_these_liquidity");
+        require(liquidityIndex != -1, "You do not own this liquidity");
 
-        require(
-            liquidities[msg.sender][uint256(liquidityIndex)].amount > 0,
-            "insufficient_funds"
-        );
-
-        // send tokens to user wallet
-        IStableCoin token = IStableCoin(
-            liquidities[msg.sender][uint256(liquidityIndex)].tokenAddress
-        );
-        token.transfer(
-            msg.sender,
-            liquidities[msg.sender][uint256(liquidityIndex)].amount
-        );
-
-        // aware dependencies through event
-        emit ClosedLiquidity(id);
+        if (liquidities[msg.sender][uint256(liquidityIndex)].amount > 0) {
+            // send left over tokens to back to the provider's wallet
+            IStableCoin token = IStableCoin(
+                liquidities[msg.sender][uint256(liquidityIndex)].tokenAddress
+            );
+            token.transfer(
+                msg.sender,
+                liquidities[msg.sender][uint256(liquidityIndex)].amount
+            );
+        }
 
         // remove liquidity
         delete liquidities[msg.sender][uint256(liquidityIndex)];
+
+        // aware dependencies through event
+        emit ClosedLiquidity(id);
     }
 
     function provideLiquidity(
@@ -326,10 +341,20 @@ contract Dash {
         uint minCreditScore
     ) public onlyUser {
         // validates params
-        require(minTakeOut < maxTakeOut, "invalid_take_out_values");
-        require(minDays < maxDays, "invalid_days_values");
-        require(minCreditScore <= 100, "invalid_credit_score_value");
-        require(amount > 0, "invalid_amount_value");
+        require(amount > 0, "Amount cannot be zero");
+        require(
+            minTakeOut <= maxTakeOut,
+            "Minimum take oit cannot be greater than maximum take out"
+        );
+        require(
+            maxTakeOut <= amount,
+            "Maximun take out cannot be greater than amount"
+        );
+        require(
+            minDays <= maxDays,
+            "Minimum duration cannot be greater than maximum duration"
+        );
+        require(minCreditScore <= 100, "Credit scrore is too high, Max is 100");
 
         // create a new liquidity id
         liquidityID++;
@@ -425,8 +450,23 @@ contract Dash {
         return position;
     }
 
-    function daysCount(uint _seconds) private pure returns (uint) {
-        return (_seconds / (60 * 60 * 24));
+    /* deployer to cashout earnings */
+    function withdrawPlatformFee(uint256 amount) public onlyDeployer {
+        require(contractRevenue >= amount, "insuficcient tokens");
+        contractRevenue -= amount;
+        dashToken.transfer(deployer, amount);
+    }
+
+    /* deployer to change deployer */
+    function changeDeployer(address _address) public onlyDeployer {
+        require(_address != address(0), "Invalid address");
+        deployer = _address;
+    }
+
+    /* deployer to change platfrom fee */
+    function changeDeployer(uint percentage) public onlyDeployer {
+        require(percentage <= 100, "Percentage is too high");
+        platformFee = percentage;
     }
 
     // ====== interest calculator ====== //
@@ -436,20 +476,20 @@ contract Dash {
         pure
         returns (uint256)
     {
-        return (rate * duration);
+        return SafeMath.mul(rate, duration);
     }
 
     // ======= modifiers ======== //
 
     modifier onlyUser() {
         /* only registered user */
-        require(users[msg.sender].id != 0, "!authorized");
+        require(users[msg.sender].id != 0, "Create an account first");
         _;
     }
 
     modifier onlyDeployer() {
         /* only account that deployed the contract */
-        require(msg.sender == deployer, "!authorized");
+        require(msg.sender == deployer, "You are not authorized");
         _;
     }
 
