@@ -1,40 +1,57 @@
 # Dash - Peer 2 Peer Lending Decentralized Application
 ## _A Moralis X Google Cloud Hackathon Project_
 
-Dash is a closed network peer to peer lending DAPP, which means you have the full control of who can lend or borrow money(cryptocurrencies) from you.
+Dash is a closed network peer-to-peer lending DAPP, which means you have full control over who can lend or borrow money(cryptocurrencies) from you.
 
-You can build your contact/network list on your dash account just like a messaging application. Whoever is in your contact list can borrow some tokens from the liquidities you have provided in your account.
+You can build your contact/network list on your dash account just like a messaging application. Whoever is on your contact list can borrow some tokens from the liquidities you have provided in your account.
 
-Dash works with any ERC20 tokens but for testing purposes it supports 3 stable coins launch on fantom testnet network.
+Dash will support all major stablecoins on fantom but for testing purposes, it supports 3 stablecoins(Fantom USD, USDT, and USDC) we have created on the fantom testnet network.
 
-## How does it work?
+## How does it works?
+Dash allows you to create pools of liquidity with different criteria, people from your dash contact list that met this criteria can take a loan from the pool and fund back to the liquidity pool or your wallet with the exact amount of stablecoins they borrow and some DASH tokens as interest at the 
+time of repaying the loan.
+
+## Guides to use?
 - Go to https://dash-p2p.netlify.app to access the Dapp.
 - Connect your wallet to authenticate your account.
-- Go to contacts, add a new contact by search them with their username.
+- Go to contacts, and add a new contact by searching for them with their username.
 - Go to https://dash-p2p.netlify.app/faucet to mint some test tokens.
-- Lauch dapp, and go to liquidity tab, and a new liquidity with some of the test tokens from the faucet.
-- Now your contacts list can now see your liquidities, and take some of it as a loan.
-- Your contact list will repay back the exact loan tokens and interests in dash tokens, interests are calculated in dash per 24h.
-- Yaaay! You go lend to a contact and earned from it, cool now what?
+- Launch dapp, go to the liquidity tab, and a new liquidity with some of the test tokens from the faucet.
+- Now your contacts list can see your liquidities, and take some of it as a loan.
+- Your contact list will repay back the exact tokens that was borrowed and interests in DASH tokens.
+- Yaaay! You just lend to a contact and earing from it, cool now what?
 
 ## Why Dash?
 - # Automatic loan reminder
-  You don't have to manually reminder your contacts to repay their loan or when to repay their loans, its features comes with dash right out of the box.
+  You don't have to manually remind your contacts to repay their loan or when to repay their loans, this features comes with Dash right out of the box.
 
 - # Safe lending
-  Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not already on a loan to take another loan from you.
+  Assessing people for loan is not possible except your are a bank organization which 99% of people are not, Dash protects far better than natural lending by setting a minimum credit score on your liquidities, and allowing only a contact that is not already on a loan to take another loan from you.
 
   So if you want to safely lending out funds to people, dash is the right choice for you.
 
-- # Immutable 
-  On liquidities and loans transactions are recorded on the blockchain, with give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
+- # Immutable and Forever
+  All liquidities and loans transactions happens on the blockchain, which give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
 
 - # No more stress
-  Now all your have to do is added your friends, family or colleagues to your contact list and relax. Your contact get the loan they needed on time without disturbing you.
+  Now all your have to do is to add your friends, family or colleagues to your contact list and relax 🧘. Your contact get the loan they needed instantly without disturbing you.
+
+## FAQs
+- # What is Dash?
+Dash is a Peer 2 Peer lending and borrowing platform between a trusted network of people. Dash helps you manage how to lend friends, families, others.
+
+- # Why Dash?
+So many times reaching an agreement with close friends and families on a loan is difficult and may not be repaid.
+
+- # Who can takes my loans?
+Only your trusted contact list can see and take your loans.
+
+- # Can I take two loans?
+No, you can't take two loans simultaneously.
 
 ## Dash Token (DASH)
-  Dash is the native cryptocurrency of the dash platform, it's is used to pay loan interest. 
-DASH can function as any other tokens, like trading in exchanges.
+  Dash is the native cryptocurrency of the dash platform, it's is use for paying loan interests.
+DASH can function as any other ERC20 tokens, like trading in exchanges or staking.
 - Total Supply: 10,000,000,000
 - Token Name: Dash Token
 - Token Symbol: DASH
@@ -69,6 +86,10 @@ DASH can function as any other tokens, like trading in exchanges.
 
 ## Faucet
    https://dash-p2p.netlify.app/faucet 
+
+## Other services
+- Netlify 
+- Heroku
 
 ## Contribution
 
