@@ -30,6 +30,7 @@
             </div>
         </div>
     </div>
+    <Progress v-if="fetching" />
     <div class="body">
         <div class="i-app-width">
             <div class="learn">
@@ -53,7 +54,10 @@
                     <router-link to="/dapp/add-liquidity">
                         <div class="add"> <i class="fi fi-br-plus"></i> Add Liquidity</div>
                     </router-link>
-                    <div class="add remove"><i class="fi fi-sr-trash"></i> Remove Liquidity</div>
+                    <div class="add remove" v-if="liquidities.length > 0" v-on:click="$nuxt.$emit('success', {
+                      title: 'Want to close a liquidity?',
+                      message: 'Click the close button on the liquidity',
+                    })"><i class="fi fi-sr-trash"></i> Remove Liquidity</div>
                 </div>
             </div>
 
@@ -160,6 +164,42 @@
                 <img src="/images/astronaut_borrow.png" alt="">
                 <p>No Dust!</p>
             </div>
+
+            <div class="histories">
+                <h3>History</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <td>Token</td>
+                            <td>Amount</td>
+                            <td>Interest</td>
+                            <td>Due date</td>
+                            <td>Status</td>
+                            <td>Contact</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <br>
+                        <tr v-for="coin in coins" :key="coin.symbol">
+                            <td>
+                                <div class="images">
+                                    <img :src="coin.image" alt="">
+                                </div>
+                                <p>{{ coin.name }} <b>{{ coin.symbol }}</b></p>
+                            </td>
+                            <td>1,000</td>
+                            <td>200 DASH</td>
+                            <td>16 Octomber, 2000</td>
+                            <td>
+                                <p>Paid <i class="fi fi-ss-badge-check"></i></p>
+                            </td>
+                            <td>
+                                <p>Arogundade Ibrahim</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
@@ -173,16 +213,19 @@ export default {
             tab: 1,
             address: null,
             liquidities: [],
+            histories: [],
             coins: stableCoins,
             contract: null,
             closing: -1,
-            earnings: '0'
+            earnings: '0',
+            fetching: true
         };
     },
     async created() {
         this.address = await this.$auth.connectToMetaMask()
         if (this.address != null) {
             this.getLiquidities()
+            this.getLoanHistory()
         }
 
         this.$contract.init()
@@ -202,6 +245,8 @@ export default {
             this.liquidities.forEach(liquidity => {
                 this.earnings += liquidity.interestRate
             })
+
+            this.fetching = false
         },
 
         dusts: function () {
@@ -214,6 +259,10 @@ export default {
             const coins = this.coins.filter(coin => coin.address.toUpperCase() == address.toUpperCase())
             if (coins.length == 0) return
             return coins[0]
+        },
+
+        getLoanHistory: async function () {
+            this.histories = await this.$firestore.fetchAllLoansHistoryProviders(this.address)
         },
 
         closeLiquidity: async function (id) {
@@ -490,5 +539,94 @@ section {
 .action i {
     position: absolute;
     left: 20px;
+}
+
+.histories {
+    margin-top: 60px;
+}
+
+.histories h3 {
+    font-size: 30px;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    background-image: linear-gradient(to top, #0c3483 0%, #a2b6df 100%, #6b8cce 100%, #a2b6df 100%);
+    padding: 40px 0;
+    border-radius: 30px;
+    border: none;
+}
+
+tbody img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+td {
+    padding: 0 40px;
+}
+
+thead td {
+    font-size: 20px;
+    color: #1900b3;
+    font-weight: 600;
+}
+
+tbody {
+    padding-top: 30px;
+}
+
+tbody tr {
+    border-radius: 6px;
+}
+
+tbody td {
+    color: #FFFFFF;
+}
+
+td:nth-child(2) {
+    width: 150px;
+}
+
+td:nth-child(3) {
+    width: 150px;
+}
+
+td:nth-child(4) {
+    width: 250px;
+}
+
+td:nth-child(5) {
+    width: 120px;
+}
+
+td:nth-child(5) p {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+td:last-child {
+    width: 250px;
+}
+
+td:last-child p {
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+tbody td:first-child {
+    gap: 10px;
+    display: flex;
+    height: 65px;
+    align-items: center;
+    font-weight: 500;
+}
+
+td:last-child {
+    text-align: right;
 }
 </style>

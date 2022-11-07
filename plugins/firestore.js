@@ -111,6 +111,25 @@ export default ({}, inject) => {
                 return null
             }
         },
+        fetchAllLoansHistoryProviders: async function(address) {
+            const result = []
+
+            const loans = await this.fetchAllWhere(
+                'loans',
+                'provider',
+                '==',
+                address.toUpperCase()
+            )
+
+            for (let index = 0; index < loans.length; index++) {
+                const loan = loans[index]
+                const user = await this.fetch('users', loan.address)
+                loan.user = user
+                result.push(loan)
+            }
+
+            return result
+        },
         write: async function(_collection, _document, _object) {
             const reference = doc(this.db, _collection, _document)
             await setDoc(reference, _object)

@@ -15,7 +15,7 @@ module.exports = {
             case 'liquidities':
                 return ['uint256', 'uint256', 'address', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'address']
             case 'loans':
-                return ['uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'address']
+                return ['uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'uint256', 'address', 'address']
             case 'updated-liquidities':
                 return ['uint256', 'uint256']
             case 'closed-liquidities':
@@ -72,7 +72,8 @@ module.exports = {
                     interestRate: data[4],
                     createdAt: data[5],
                     paidAt: data[6],
-                    address: data[7].toUpperCase()
+                    address: data[7].toUpperCase(),
+                    provider: data[8].toUpperCase()
                 }
             case 'updated-liquidities':
                 return {

@@ -1,5 +1,6 @@
 <template>
 <section>
+    <Progress v-if="fetching" />
     <div class="i-app-width">
         <div class="container" v-if="liquidity">
             <div class="form">
@@ -76,7 +77,8 @@ export default {
             taking: false,
             coin: stableCoins[0],
             address: null,
-            user: null
+            user: null,
+            fetching: true
         };
     },
     async created() {
@@ -99,12 +101,14 @@ export default {
 
         getLiquidity: async function () {
             this.liquidity = await this.$firestore.fetch('liquidities', this.liquidityId)
+
             if (this.liquidity == null) {
                 $nuxt.$emit('failure', {
                     title: 'Liquidity does not exits',
                     message: 'This liquidity might have been closed!'
                 })
             }
+            this.fetching = false
         },
 
         takeLoan: async function () {

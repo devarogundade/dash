@@ -9,6 +9,7 @@
             <i class="fi fi-br-edit-alt"></i>
         </div>
     </div>
+    <Progress v-if="fetching" />
     <div class="body">
         <div class="i-app-width">
             <div class="container">
@@ -94,7 +95,8 @@ export default {
             contract: null,
             file: null,
             updating: false,
-            existingUser: false
+            existingUser: false,
+            fetching: true
         };
     },
     async created() {
@@ -108,6 +110,7 @@ export default {
                     this.existingUser = true
                 }
             }
+            this.fetching = false
         }
 
         this.$contract.init()

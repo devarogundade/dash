@@ -83,7 +83,7 @@ td {
 
 thead td {
     font-size: 20px;
-    color: #FFFFFF;
+    color: #1900b3;
     font-weight: 600;
 }
 

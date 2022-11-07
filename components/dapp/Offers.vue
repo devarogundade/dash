@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    <Progress v-if="fetching" />
     <div class="body">
         <div class="i-app-width">
             <div class="pools">
@@ -102,7 +103,8 @@ export default {
             address: null,
             liquidities: [],
             coins: stableCoins,
-            contract: null
+            contract: null,
+            fetching: true
         };
     },
     async created() {
@@ -121,6 +123,7 @@ export default {
             this.liquidities = await this.$firestore.fetchAllContactsWithLiquidities(
                 this.address.toUpperCase()
             )
+            this.fetching = false
         },
 
         findCoin: function (address) {

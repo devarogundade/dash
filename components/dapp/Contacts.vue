@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    <Progress v-if="fetching" />
     <div class="body">
         <div class="i-app-width">
             <div class="learn">
@@ -38,7 +39,6 @@
             </div>
 
             <div class="toolbar">
-
                 <div class="tabs">
                     <div :class="tab == 1 ? 'item item-active' : 'item'" v-on:click="tab = 1">
                         All Contacts
@@ -52,7 +52,6 @@
                     <router-link to="/dapp/add-contact">
                         <div class="add"> <i class="fi fi-br-plus"></i> Add New Contact</div>
                     </router-link>
-                    <!-- <div class="add remove"><i class="fi fi-sr-trash"></i> Remove Liquidity</div> -->
                 </div>
             </div>
 
@@ -80,7 +79,8 @@ export default {
         return {
             tab: 1,
             contacts: [],
-            address: null
+            address: null,
+            fetching: true
         };
     },
     async created() {
@@ -90,6 +90,7 @@ export default {
                 this.address.toUpperCase()
             )
         }
+        this.fetching = false
     }
 };
 </script>

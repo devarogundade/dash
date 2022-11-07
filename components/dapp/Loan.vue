@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+    <Progress v-if="fetching" />
     <div class="body">
         <div class="i-app-width">
             <div class="learn">
@@ -183,7 +184,8 @@ export default {
             address: null,
             coins: stableCoins,
             contract: null,
-            paying: -1
+            paying: -1,
+            fetching: true
         }
     },
     async created() {
@@ -202,6 +204,7 @@ export default {
             this.loans = await this.$firestore.fetchAllLoans(
                 this.address.toUpperCase()
             )
+            this.fetching = false
         },
 
         paid: function () {

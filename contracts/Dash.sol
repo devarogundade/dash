@@ -180,7 +180,8 @@ contract Dash {
             loan.interestRate,
             loan.createdAt,
             loan.paidAt,
-            msg.sender
+            msg.sender,
+            loan.provider
         );
 
         // aware dependencies through event
@@ -279,7 +280,8 @@ contract Dash {
             loan.interestRate,
             loan.createdAt,
             loan.paidAt,
-            msg.sender
+            msg.sender,
+            loan.provider
         );
 
         // aware dependencies through event
@@ -463,7 +465,8 @@ contract Dash {
         uint interestRate,
         uint createdAt,
         uint paidAt,
-        address userAddress
+        address userAddress,
+        address provider
     );
     event ProvidedLiquity(
         uint liquidityID,

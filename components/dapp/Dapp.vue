@@ -1,5 +1,6 @@
 <template>
 <section>
+    <Progress v-if="fetching" />
     <div class="i-app-width">
         <div class="nav">
             <h3>Hi, Welcome back!</h3>
@@ -73,7 +74,7 @@
                 </div>
             </div>
             <div class="apps">
-                <router-link to="">
+                <router-link to="/how-to-use">
                     <div class="app">
                         <h3>Get Started</h3>
                         <p>Learn how to use DASH to borrow and lend.</p>
@@ -89,7 +90,7 @@
                 </router-link>
                 <router-link to="/dapp/liquidity">
                     <div class="app">
-                        <h3>Give a Loan</h3>
+                        <h3>Provide Liquidity</h3>
                         <p>Earn $DASH for lending out to your contacts.</p>
                         <img src="/images/astronaut_liquidity.png" alt="" />
                     </div>
@@ -165,6 +166,7 @@ export default {
                     address: process.env.TOKEN_CONTRACT_ADDRESS,
                 },
             },
+            fetching: true
         };
     },
     async created() {
@@ -183,6 +185,8 @@ export default {
         },
         getBalances: async function () {
             const response = await this.$covalent.getTokenBalances(this.address);
+            this.fetching = false
+
             if (response == null || !response.data) return;
             response.data.items.forEach((token) => {
                 switch (token.contract_address.toUpperCase()) {
