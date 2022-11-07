@@ -18,7 +18,7 @@ time of repaying the loan.
 - Go to https://dash-p2p.netlify.app/faucet to mint some test tokens.
 - Launch dapp, go to the liquidity tab, and a new liquidity with some of the test tokens from the faucet.
 - Now your contacts list can see your liquidities, and take some of it as a loan.
-- Your contact list will repay back the exact loan tokens and interests in dash tokens, interests are calculated in dash per 24h.
+- Your contact list will repay back the exact tokens that was borrowed and interests in DASH tokens.
 - Yaaay! You just lend to a contact and earing from it, cool now what?
 
 ## Why Dash?
