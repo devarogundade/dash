@@ -202,7 +202,7 @@
                                 <p v-if="history.paidAt  == 0">No <i class="fi fi-ss-badge-check"></i></p>
                                 <p v-else>Paid on {{ $utils.formatToDate(history.paidAt * 1000)  }} <i class="fi fi-ss-badge-check"></i></p>
                             </td>
-                            <td v-on:click="$nuxt.$emit('profile', history.user)">
+                            <td v-on:click="$nuxt.$emit('contact', history.user)">
                                 <div class="images">
                                     <img :src="history.user.photo" alt="">
                                 </div>

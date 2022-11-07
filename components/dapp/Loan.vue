@@ -4,7 +4,7 @@
         <div class="i-app-width">
             <div class="text">
                 <h3>Borrow Stable Coins from your contacts</h3>
-                <h2>$0.00 Unpaid</h2>
+                <h2>${{ Number($utils.fromWei(unpaid)).toFixed(2) }} Unpaid</h2>
                 <div class="other">
                     <p>Total loans: {{ loans.length }}</p>
                     <router-link to="/">
@@ -185,6 +185,7 @@ export default {
             coins: stableCoins,
             contract: null,
             paying: -1,
+            unpaid: "0",
             fetching: true
         }
     },
@@ -204,6 +205,11 @@ export default {
             this.loans = await this.$firestore.fetchAllLoans(
                 this.address.toUpperCase()
             )
+            this.loans.forEach(loan => {
+                if (loan.paidAt == 0) {
+                    this.unpaid += loan.amount
+                }
+            })
             this.fetching = false
         },
 

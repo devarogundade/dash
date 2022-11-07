@@ -56,11 +56,14 @@
             </div>
 
             <div class="friends">
-                <div class="friend" v-for="(contact, index) in contacts" :key="index" v-on:click="$nuxt.$emit('profile', contact)">
+                <div class="friend" v-for="(contact, index) in contacts" :key="index" v-on:click="$nuxt.$emit('contact', contact)">
                     <div class="image">
                         <img :src="contact.photo" alt="">
                     </div>
-                    <div class="detail">{{ contact.name }}</div>
+                    <div class="detail">
+                        <p>{{ contact.name }}</p>
+                        <p>{{ contact.username }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -285,6 +288,14 @@ section {
     cursor: pointer;
     user-select: none;
     border-radius: 16px;
+}
+
+.detail p:first-child {
+    font-size: 20px;
+}
+
+.friend:hover {
+    transform: scale(1.1, 1.1);
 }
 
 .friend .image {

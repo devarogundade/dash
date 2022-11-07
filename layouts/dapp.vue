@@ -6,6 +6,7 @@
     <Success />
     <Failure />
     <PickCoin />
+    <Profile />
 </div>
 </template>
 
