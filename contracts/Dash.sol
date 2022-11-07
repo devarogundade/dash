@@ -72,7 +72,7 @@ contract Dash {
         string memory month,
         string memory phone,
         string memory homeAddress
-    ) public {
+    ) public onlyUser {
         // verifies account exists
         require(users[msg.sender].id != 0, "no_account");
 
@@ -92,7 +92,7 @@ contract Dash {
         );
     }
 
-    function addNetwork(address user) public {
+    function addNetwork(address user) public onlyUser {
         int userIndex = getUserNetworkIndex(msg.sender, user);
         if (userIndex == -1) {
             users[msg.sender].networks.push(user);
@@ -100,7 +100,7 @@ contract Dash {
         }
     }
 
-    function removeNetwork(address user) public {
+    function removeNetwork(address user) public onlyUser {
         int userIndex = getUserNetworkIndex(msg.sender, user);
         if (userIndex != -1) {
             delete users[msg.sender].networks[uint(userIndex)];
@@ -113,7 +113,7 @@ contract Dash {
         uint256 amount,
         address provider,
         uint duration
-    ) public {
+    ) public onlyUser {
         require(amount > 0, "!can_take_zero_token");
 
         int liquidityIndex = getUserLiquidityIndex(provider, id);
@@ -191,7 +191,7 @@ contract Dash {
         );
     }
 
-    function payLoan(uint id) public {
+    function payLoan(uint id) public onlyUser {
         int userLoanIndex = getUserLoanIndex(msg.sender, id);
         require(userLoanIndex != -1, "!loan_exists");
 
@@ -288,7 +288,7 @@ contract Dash {
         emit CreditScoreChanged(msg.sender, users[msg.sender].creditScore);
     }
 
-    function closeLiquidity(uint id) public {
+    function closeLiquidity(uint id) public onlyUser {
         int liquidityIndex = getUserLiquidityIndex(msg.sender, id);
 
         // verifies the liquidty
@@ -324,7 +324,7 @@ contract Dash {
         uint minDays,
         uint maxDays,
         uint minCreditScore
-    ) public {
+    ) public onlyUser {
         // validates params
         require(minTakeOut < maxTakeOut, "invalid_take_out_values");
         require(minDays < maxDays, "invalid_days_values");
@@ -436,8 +436,21 @@ contract Dash {
         pure
         returns (uint256)
     {
-        // amount = capital(1 + (rate * duration))
         return (rate * duration);
+    }
+
+    // ======= modifiers ======== //
+
+    modifier onlyUser() {
+        /* only registered user */
+        require(users[msg.sender].id != 0, "!authorized");
+        _;
+    }
+
+    modifier onlyDeployer() {
+        /* only account that deployed the contract */
+        require(msg.sender == deployer, "!authorized");
+        _;
     }
 
     // ======== events ========= //
