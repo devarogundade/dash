@@ -8,7 +8,7 @@ You can build your contact/network list on your dash account just like a messagi
 Dash will support all major stablecoins on fantom but for testing purposes, it supports 3 stablecoins(Fantom USD, USDT, and USDC) we have created on the fantom testnet network.
 
 ## How does it works?
-Dash allows you to create pools of liquidy with different criteria, people from your dash contact list that met this criteria can take a loan from the pool and fund back to the liquidity pool or your wallet with the exact amount of stablecoins they borrow and some DASH tokens as interest at the 
+Dash allows you to create pools of liquidity with different criteria, people from your dash contact list that met this criteria can take a loan from the pool and fund back to the liquidity pool or your wallet with the exact amount of stablecoins they borrow and some DASH tokens as interest at the 
 time of repaying the loan.
 
 ## Guides to use?
@@ -17,7 +17,7 @@ time of repaying the loan.
 - Go to contacts, and add a new contact by searching for them with their username.
 - Go to https://dash-p2p.netlify.app/faucet to mint some test tokens.
 - Launch dapp, go to the liquidity tab, and a new liquidity with some of the test tokens from the faucet.
-- Now your contacts list can now see your liquidities, and take some of it as a loan.
+- Now your contacts list can see your liquidities, and take some of it as a loan.
 - Your contact list will repay back the exact loan tokens and interests in dash tokens, interests are calculated in dash per 24h.
 - Yaaay! You just lend to a contact and earing from it, cool now what?
 
