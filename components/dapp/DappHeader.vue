@@ -39,8 +39,13 @@
         </div>
         <div class="bottom">
             <div class="tabs">
-                <div class="item">
+                <div v-on:click="showOptions = !showOptions" :class="showOptions ? 'show item' : 'item'">
                     <i class="fi fi-sr-menu-dots"></i> More
+                    <div class="options">
+                        <p>Request loan</p>
+                        <p>Add a new coin</p>
+                        <p>Account statement</p>
+                    </div>
                 </div>
                 <router-link to="/dapp/settings">
                     <div :class="$route.name == 'dapp-settings' ? 'item item-active' : 'item'">
@@ -57,7 +62,8 @@
 export default {
     data() {
         return {
-            address: null
+            address: null,
+            showOptions: false
         }
     },
     mounted() {
@@ -124,7 +130,28 @@ export default {
     align-items: center;
     gap: 16px;
     color: #1900b3;
+    cursor: pointer;
+    user-select: none;
     font-weight: 600;
+    position: relative;
+}
+
+.options {
+    position: absolute;
+    background: #e4e0ff;
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1;
+    bottom: 50px;
+    display: none;
+}
+
+.show .options {
+  display: block;
+}
+
+.options p {
+    padding: 10px 0;
 }
 
 .item-active {

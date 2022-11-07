@@ -174,8 +174,8 @@
             </div>
 
             <div class="histories">
-                <h3>History</h3>
-                <table>
+                <h3>{{ histories.length > 0 ? 'History' : 'No History' }}</h3>
+                <table v-if="histories.length > 0">
                     <thead>
                         <tr>
                             <td>Token</td>

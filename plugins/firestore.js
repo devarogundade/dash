@@ -20,123 +20,155 @@ export default ({}, inject) => {
     inject('firestore', Vue.observable({
         db: getFirestore(firebaseApp),
         fetchAll: async function(_collection) {
-            const result = []
-            const snapshot = await getDocs(collection(this.db, _collection))
+            try {
+                const result = []
+                const snapshot = await getDocs(collection(this.db, _collection))
 
-            snapshot.forEach(document => {
-                result.push(document.data())
-            });
+                snapshot.forEach(document => {
+                    result.push(document.data())
+                });
 
-            return result
+                return result
+            } catch (error) {
+                return []
+            }
         },
         fetchAllContacts: async function(address) {
-            const result = []
-            const user = await this.fetch('users', address)
-            if (user == null) return result
+            try {
+                const result = []
+                const user = await this.fetch('users', address)
+                if (user == null) return result
 
-            const networks = user.networks
+                const networks = user.networks
 
-            for (let index = 0; index < networks.length; index++) {
-                const user = await this.fetch('users', networks[index])
-                result.push(user)
+                for (let index = 0; index < networks.length; index++) {
+                    const user = await this.fetch('users', networks[index])
+                    result.push(user)
+                }
+
+                return result
+            } catch (error) {
+                return []
             }
-
-            return result
         },
         fetchAllContactsWithLiquidities: async function(address) {
-            const result = []
+            try {
+                const result = []
 
-            const contacts = await this.fetchAllWhere(
-                'users',
-                'networks',
-                'array-contains',
-                address.toUpperCase()
-            )
-
-            for (let index = 0; index < contacts.length; index++) {
-                const liquidities = await this.fetchAllWhere(
-                    'liquidities',
-                    'address',
-                    '==',
-                    contacts[index].id.toUpperCase()
+                const contacts = await this.fetchAllWhere(
+                    'users',
+                    'networks',
+                    'array-contains',
+                    address.toUpperCase()
                 )
 
-                liquidities.forEach(liquidity => {
-                    const _liquidity = liquidity
-                    _liquidity.user = contacts[index]
-                    result.push(liquidity)
-                })
-            }
+                for (let index = 0; index < contacts.length; index++) {
+                    const liquidities = await this.fetchAllWhere(
+                        'liquidities',
+                        'address',
+                        '==',
+                        contacts[index].id.toUpperCase()
+                    )
 
-            return result
+                    liquidities.forEach(liquidity => {
+                        const _liquidity = liquidity
+                        _liquidity.user = contacts[index]
+                        result.push(liquidity)
+                    })
+                }
+
+                return result
+            } catch (error) {
+                return []
+            }
         },
         fetchAllLoans: async function(address) {
-            const result = []
+            try {
+                const result = []
 
-            const loans = await this.fetchAllWhere(
-                'loans',
-                'address',
-                '==',
-                address.toUpperCase()
-            )
+                const loans = await this.fetchAllWhere(
+                    'loans',
+                    'address',
+                    '==',
+                    address.toUpperCase()
+                )
 
-            for (let index = 0; index < loans.length; index++) {
-                const loan = loans[index]
-                const liquidity = await this.fetch('liquidities', loan.liquidityId)
-                loan.liquidity = liquidity
-                result.push(loan)
+                for (let index = 0; index < loans.length; index++) {
+                    const loan = loans[index]
+                    const liquidity = await this.fetch('liquidities', loan.liquidityId)
+                    loan.liquidity = liquidity
+                    result.push(loan)
+                }
+
+                return result
+            } catch (error) {
+                return []
             }
-
-            return result
         },
         fetchAllWhere: async function(_collection, key, sign, value) {
-            const result = []
+            try {
+                const result = []
 
-            const _query = query(collection(this.db, _collection), where(key, sign, value));
-            const snapshot = await getDocs(_query)
+                const _query = query(collection(this.db, _collection), where(key, sign, value));
+                const snapshot = await getDocs(_query)
 
-            snapshot.forEach(document => {
-                result.push(document.data())
-            });
+                snapshot.forEach(document => {
+                    result.push(document.data())
+                });
 
-            return result
+                return result
+            } catch (error) {
+                return []
+            }
         },
         fetch: async function(_collection, _document) {
-            const reference = doc(this.db, _collection, _document);
-            const data = await getDoc(reference);
+            try {
+                const reference = doc(this.db, _collection, _document);
+                const data = await getDoc(reference);
 
-            if (data.exists()) {
-                return data.data()
-            } else {
+                if (data.exists()) {
+                    return data.data()
+                } else {
+                    return null
+                }
+            } catch (error) {
                 return null
             }
         },
         fetchAllLoansHistoryProviders: async function(address) {
-            const result = []
+            try {
+                const result = []
 
-            const loans = await this.fetchAllWhere(
-                'loans',
-                'provider',
-                '==',
-                address.toUpperCase()
-            )
+                const loans = await this.fetchAllWhere(
+                    'loans',
+                    'provider',
+                    '==',
+                    address.toUpperCase()
+                )
 
-            console.log(loans);
+                console.log(loans);
 
-            for (let index = 0; index < loans.length; index++) {
-                const loan = loans[index]
-                const user = await this.fetch('users', loan.address)
-                const liquidity = await this.fetch('liquidities', loan.liquidityId)
-                loan.user = user
-                loan.liquidity = liquidity
-                result.push(loan)
+                for (let index = 0; index < loans.length; index++) {
+                    const loan = loans[index]
+                    const user = await this.fetch('users', loan.address)
+                    const liquidity = await this.fetch('liquidities', loan.liquidityId)
+                    loan.user = user
+                    loan.liquidity = liquidity
+                    result.push(loan)
+                }
+
+                return result
+            } catch (error) {
+                return []
             }
-
-            return result
         },
         write: async function(_collection, _document, _object) {
-            const reference = doc(this.db, _collection, _document)
-            await setDoc(reference, _object)
+            try {
+                const reference = doc(this.db, _collection, _document)
+                await setDoc(reference, _object)
+            } catch (error) {
+
+            }
         },
         callback: function(_collection, _document) {
             const reference = doc(this.db, _collection, _document)
