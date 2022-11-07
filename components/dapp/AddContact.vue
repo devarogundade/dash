@@ -59,10 +59,21 @@ export default {
 
             if (users.length == 0) {
                 this.user = null
+                $nuxt.$emit('failure', {
+                    title: 'No user found',
+                    message: 'Try a different username'
+                })
                 return
             }
 
             this.user = users[0]
+
+            if (this.user.id.toUpperCase() == this.address.toUpperCase()) {
+                $nuxt.$emit('failure', {
+                    title: 'Error',
+                    message: 'You can\'t added yourself'
+                })
+            }
         },
 
         addToContact: async function () {
@@ -70,6 +81,14 @@ export default {
                 $nuxt.$emit('failure', {
                     title: 'No user found',
                     message: 'Search user by username'
+                })
+                return
+            }
+
+            if (this.user.id.toUpperCase() == this.address.toUpperCase()) {
+                $nuxt.$emit('failure', {
+                    title: 'Error',
+                    message: 'You can\'t added yourself'
                 })
                 return
             }
