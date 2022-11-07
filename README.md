@@ -37,6 +37,17 @@ time of repaying the loan.
   Now all your have to do is to add your friends, family or colleagues to your contact list and relax 🧘. Your contact get the loan they needed instantly without disturbing you.
 
 ## FAQs
+- # What is Dash?
+Dash is a Peer 2 Peer lending and borrowing platform between a trusted network of people. Dash helps you manage how to lend friends, families, others.
+
+- # Why Dash?
+So many times reaching an agreement with close friends and families on a loan is difficult and may not be repaid.
+
+- # Who can takes my loans?
+Only your trusted contact list can see and take your loans.
+
+- # Can I take two loans?
+No, you can't take two loans simultaneously.
 
 ## Dash Token (DASH)
   Dash is the native cryptocurrency of the dash platform, it's is use for paying loan interests.
