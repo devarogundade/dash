@@ -58,4 +58,31 @@ section .heading {
 .item:last-child {
     border-bottom: none;
 }
+
+@media screen and (max-width: 800px) {
+    section {
+        padding-top: 100px;
+        padding-bottom: 50px;
+    }
+
+    section .heading {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .item {
+        padding: 20px 0;
+    }
+
+    .item h3 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .item p {
+        font-size: 16px;
+        line-height: 22px;
+    }
+
+}
 </style>

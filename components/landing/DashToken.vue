@@ -67,4 +67,28 @@ section {
     font-weight: 600;
     color: #1900b3;
 }
+
+@media screen and (max-width: 800px) {
+    section {
+        padding-top: 100px;
+    }
+
+    .image {
+        width: 200px;
+    }
+
+    .text h3 {
+        font-size: 30px;
+        margin-bottom: 10px;
+    }
+
+    .text p {
+        line-height: 22px;
+        font-size: 16px;
+    }
+
+    .grid {
+        gap: 40px;
+    }
+}
 </style>

@@ -104,6 +104,7 @@ section {
 .images {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 30px;
 }
 
@@ -121,5 +122,41 @@ section {
 
 .image img {
     height: 100%;
+}
+
+@media screen and (max-width: 800px) {
+    .image {
+        position: unset;
+        right: unset;
+        height: 300px;
+        top: unset;
+    }
+
+    section {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+        min-height: fit-content;
+    }
+
+    .text h3 {
+        font-size: 40px;
+        line-height: 60px;
+    }
+
+    .text>p {
+        font-size: 17px;
+        margin-top: 20px;
+        line-height: 24px;
+    }
+
+    .actions {
+        gap: 10px;
+        margin-top: 30px;
+    }
+
+    .powered {
+        margin-top: 60px;
+    }
 }
 </style>

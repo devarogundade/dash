@@ -2,9 +2,12 @@
 <div class="header">
     <div class="grid">
         <div class="top">
-            <div class="logo">
-                <img src="/images/logo.png" alt="">
-            </div>
+            <router-link to="/dapp">
+                <div class="logo">
+                    <img src="/images/logo.png" alt="">
+                </div>
+            </router-link>
+
             <div class="connect-wallet" v-if="address == null" v-on:click="connectWallet()">Connect Wallet</div>
             <div class="connect-wallet" v-else>
                 {{
@@ -147,7 +150,7 @@ export default {
 }
 
 .show .options {
-  display: block;
+    display: block;
 }
 
 .options p {

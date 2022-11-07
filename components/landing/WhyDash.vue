@@ -75,4 +75,25 @@ section .heading {
     font-weight: 600;
     color: #333;
 }
+
+@media screen and (max-width: 800px) {
+    section {
+        padding-top: 60px;
+    }
+
+    section .heading {
+        font-size: 24px;
+    }
+
+    .items {
+        margin-top: 20px;
+        gap: 20px;
+    }
+
+    .item {
+        border-radius: 16px;
+        border: 4px #CCC solid;
+        padding: 20px;
+    }
+}
 </style>

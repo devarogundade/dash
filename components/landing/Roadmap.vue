@@ -130,7 +130,14 @@
     margin-top: 20px;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
+    .container-x {
+        padding-top: 20px;
+        padding-bottom: 100px;
+    }
+}
+
+@media screen and (max-width: 700px) {
 
     .timeline::after {
         left: 31px;

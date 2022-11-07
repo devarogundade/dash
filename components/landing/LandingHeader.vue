@@ -7,7 +7,7 @@
                     <img src="/images/logo.png" alt="">
                 </div>
             </router-link>
-            <ul>
+            <ul ref="menu">
                 <li><a href="/faucet">Faucet</a></li>
                 <li><a href="/#why-dash">Why DASH</a></li>
                 <li><a href="/#dash-token">Dash Token</a></li>
@@ -17,6 +17,12 @@
             <router-link to="/dapp">
                 <div class="action"> Launch App <i class="fi fi-br-arrow-right"></i></div>
             </router-link>
+            <div ref="handburger" id="handburger" v-on:click="onDrawer()">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </div>
 </section>
@@ -29,7 +35,18 @@ export default {
             const header = document.getElementById('header')
             header.classList.toggle('blur', window.pageYOffset > 5)
         })
-    }
+    },
+    methods: {
+        toggleProfile() {
+            this.showBuild = false;
+            this.showProfile = !this.showProfile;
+        },
+        onDrawer() {
+            this.$refs["handburger"].classList.toggle("open")
+            this.$refs["menu"].classList.toggle("open-menu")
+            this.showBuild = false
+        }
+    },
 }
 </script>
 
@@ -98,5 +115,118 @@ li a {
 
 .blur .action {
     display: flex !important;
+}
+
+#handburger {
+    display: none;
+}
+
+@media screen and (max-width: 800px) {
+    .header {
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+
+    .action {
+        width: 150px;
+        padding: 12px 0;
+    }
+
+    ul {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        flex-direction: column;
+        top: 0;
+        left: -100%;
+        background: #1900b3;
+        padding: 40px;
+    }
+
+    li a {
+        color: #fff;
+        font-size: 20px;
+    }
+
+    .open-menu {
+        left: 0 !important;
+    }
+
+    #handburger {
+        width: 32px;
+        height: 25px;
+        position: relative;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+    }
+
+    #handburger span {
+        display: block;
+        position: absolute;
+        height: 2px;
+        width: 100%;
+        background: #000;
+        opacity: 1;
+        left: 0;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+        transition: 0.25s ease-in-out;
+    }
+
+    #handburger span:nth-child(1) {
+        top: 0px;
+    }
+
+    #handburger span:nth-child(2),
+    #handburger span:nth-child(3) {
+        top: 10px;
+    }
+
+    #handburger span:nth-child(4) {
+        top: 20px;
+    }
+
+    #handburger.open span:nth-child(1) {
+        top: 10px;
+        width: 0%;
+        left: 50%;
+    }
+
+    #handburger.open span:nth-child(2) {
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    #handburger.open span:nth-child(3) {
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+
+    #handburger.open span:nth-child(4) {
+        top: 18px;
+        width: 0%;
+        left: 50%;
+    }
 }
 </style>

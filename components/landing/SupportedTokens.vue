@@ -55,6 +55,11 @@ export default {
 <style scoped>
 section {
     padding-top: 200px;
+    overflow: scroll;
+}
+
+section::-webkit-scrollbar {
+    display: none;
 }
 
 section h3 {
@@ -140,5 +145,31 @@ td:last-child {
     font-size: 16px;
     font-weight: 600;
     color: #1900b3;
+}
+
+@media screen and (max-width: 800px) {
+    section {
+        padding-top: 20px;
+    }
+
+    section h3 {
+        font-size: 20px;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+        padding: 20px 0;
+        border-radius: 20px;
+    }
+
+    td {
+        padding: 0 20px;
+        min-width: 220px;
+    }
+
+    .action h4 {
+        font-size: 16px;
+    }
 }
 </style>
