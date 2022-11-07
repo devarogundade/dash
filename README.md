@@ -23,24 +23,24 @@ time of repaying the loan.
 
 ## Why Dash?
 - # Automatic loan reminder
-  You don't have to manually reminder your contacts to repay their loan or when to repay their loans, this features comes with dash right out of the box.
+  You don't have to manually remind your contacts to repay their loan or when to repay their loans, this features comes with Dash right out of the box.
 
 - # Safe lending
-  Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a minimum credit score on your liquidities, and allowing only a contact that is not already on a loan to take another loan from you.
+  Assessing people for loan is not possible except your are a bank organization which 99% of people are not, Dash protects far better than natural lending by setting a minimum credit score on your liquidities, and allowing only a contact that is not already on a loan to take another loan from you.
 
   So if you want to safely lending out funds to people, dash is the right choice for you.
 
-- # Immutable 
-  On liquidities and loans transactions are recorded on the blockchain, with give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
+- # Immutable and Forever
+  All liquidities and loans transactions happens on the blockchain, which give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
 
 - # No more stress
-  Now all your have to do is added your friends, family or colleagues to your contact list and relax. Your contact get the loan they needed on time without disturbing you.
+  Now all your have to do is to add your friends, family or colleagues to your contact list and relax 🧘. Your contact get the loan they needed instantly without disturbing you.
 
 ## FAQs
 
 ## Dash Token (DASH)
-  Dash is the native cryptocurrency of the dash platform, it's is used to pay loan interest. 
-DASH can function as any other tokens, like trading in exchanges.
+  Dash is the native cryptocurrency of the dash platform, it's is use for paying loan interests.
+DASH can function as any other ERC20 tokens, like trading in exchanges or staking.
 - Total Supply: 10,000,000,000
 - Token Name: Dash Token
 - Token Symbol: DASH
