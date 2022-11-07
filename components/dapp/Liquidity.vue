@@ -180,7 +180,7 @@
                         <tr>
                             <td>Token</td>
                             <td>Amount</td>
-                            <td>Interest</td>
+                            <td>Interest / 24h</td>
                             <td>Due date</td>
                             <td>Status</td>
                             <td>Contact</td>
@@ -188,21 +188,25 @@
                     </thead>
                     <tbody>
                         <br>
-                        <tr v-for="coin in coins" :key="coin.symbol">
+                        <tr v-for="history in histories" :key="history.id">
                             <td>
                                 <div class="images">
-                                    <img :src="coin.image" alt="">
+                                    <img :src="findCoin(history.liquidity.tokenAddress).image" alt="">
                                 </div>
-                                <p>{{ coin.name }} <b>{{ coin.symbol }}</b></p>
+                                <p>{{ findCoin(history.liquidity.tokenAddress).name }} <b>{{ findCoin(history.liquidity.tokenAddress).symbol }}</b></p>
                             </td>
-                            <td>1,000</td>
-                            <td>200 DASH</td>
-                            <td>16 Octomber, 2000</td>
+                            <td>{{ $utils.fromWei(history.amount) }}</td>
+                            <td>{{ $utils.fromWei(history.interestRate) }} DASH</td>
+                            <td>{{ $utils.formatToDate(history.createdAt * 1000) }}</td>
                             <td>
-                                <p>Paid <i class="fi fi-ss-badge-check"></i></p>
+                                <p v-if="history.paidAt  == 0">No <i class="fi fi-ss-badge-check"></i></p>
+                                <p v-else>Paid on {{ $utils.formatToDate(history.paidAt * 1000)  }} <i class="fi fi-ss-badge-check"></i></p>
                             </td>
-                            <td>
-                                <p>Arogundade Ibrahim</p>
+                            <td v-on:click="$nuxt.$emit('profile', history.user)">
+                                <div class="images">
+                                    <img :src="history.user.photo" alt="">
+                                </div>
+                                <p>{{ history.user.name }}</p>
                             </td>
                         </tr>
                     </tbody>
@@ -251,7 +255,9 @@ export default {
             )
 
             this.liquidities.forEach(liquidity => {
-                this.earnings += liquidity.interestRate
+                if (!liquidity.closed) {
+                    this.earnings += liquidity.interestRate
+                }
             })
 
             this.fetching = false
@@ -583,8 +589,8 @@ td {
 
 thead td {
     font-size: 20px;
-    color: #1900b3;
-    font-weight: 600;
+    color: #1900b3 !important;
+    font-weight: 600 !important;
 }
 
 tbody {
@@ -631,7 +637,8 @@ td:last-child p {
     font-weight: 600;
 }
 
-tbody td:first-child {
+tbody td:first-child,
+td:last-child {
     gap: 10px;
     display: flex;
     height: 65px;

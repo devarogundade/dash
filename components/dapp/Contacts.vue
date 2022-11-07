@@ -7,7 +7,7 @@
                 <h2>1,074 DASH</h2>
                 <div class="other">
                     <p>Total contacts: {{ contacts.length }}</p>
-                    <router-link to="/app">
+                    <router-link to="/">
                         <p> Leave App <i class="fi fi-br-arrow-up-right-from-square"></i> </p>
                     </router-link>
                 </div>

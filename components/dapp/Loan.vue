@@ -7,7 +7,7 @@
                 <h2>$0.00 Unpaid</h2>
                 <div class="other">
                     <p>Total loans: {{ loans.length }}</p>
-                    <router-link to="/app">
+                    <router-link to="/">
                         <p>Leave App <i class="fi fi-br-arrow-up-right-from-square"></i></p>
                     </router-link>
                 </div>

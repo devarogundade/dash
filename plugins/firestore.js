@@ -121,10 +121,14 @@ export default ({}, inject) => {
                 address.toUpperCase()
             )
 
+            console.log(loans);
+
             for (let index = 0; index < loans.length; index++) {
                 const loan = loans[index]
                 const user = await this.fetch('users', loan.address)
+                const liquidity = await this.fetch('liquidities', loan.liquidityId)
                 loan.user = user
+                loan.liquidity = liquidity
                 result.push(loan)
             }
 
