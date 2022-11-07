@@ -7,7 +7,7 @@ You can build your contact/network list on your dash account just like a messagi
 
 Dash works with any ERC20 tokens but for testing purposes it supports 3 stable coins launch on fantom testnet network.
 
-## How does it work?
+## Guides to use?
 - Go to https://dash-p2p.netlify.app to access the Dapp.
 - Connect your wallet to authenticate your account.
 - Go to contacts, add a new contact by search them with their username.
@@ -19,7 +19,7 @@ Dash works with any ERC20 tokens but for testing purposes it supports 3 stable c
 
 ## Why Dash?
 - # Automatic loan reminder
-  You don't have to manually reminder your contacts to repay their loan or when to repay their loans, its features comes with dash right out of the box.
+  You don't have to manually reminder your contacts to repay their loan or when to repay their loans, this features comes with dash right out of the box.
 
 - # Safe lending
   Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not already on a loan to take another loan from you.
@@ -69,6 +69,10 @@ DASH can function as any other tokens, like trading in exchanges.
 
 ## Faucet
    https://dash-p2p.netlify.app/faucet 
+
+## Other services
+- Netlify 
+- Heroku
 
 ## Contribution
 
