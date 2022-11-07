@@ -1,21 +1,21 @@
 # Dash - Peer 2 Peer Lending Decentralized Application
 ## _A Moralis X Google Cloud Hackathon Project_
 
-Dash is a closed network peer to peer lending DAPP, which means you have the full control of who can lend or borrow money(cryptocurrencies) from you.
+Dash is a closed network peer-to-peer lending DAPP, which means you have full control over who can lend or borrow money(cryptocurrencies) from you.
 
-You can build your contact/network list on your dash account just like a messaging application. Whoever is in your contact list can borrow some tokens from the liquidities you have provided in your account.
+You can build your contact/network list on your dash account just like a messaging application. Whoever is on your contact list can borrow some tokens from the liquidities you have provided in your account.
 
-Dash works with any ERC20 tokens but for testing purposes it supports 3 stable coins launch on fantom testnet network.
+Dash works with any ERC20 tokens but for testing purposes, it supports 3 stablecoins launches on the fantom testnet network.
 
 ## Guides to use?
 - Go to https://dash-p2p.netlify.app to access the Dapp.
 - Connect your wallet to authenticate your account.
-- Go to contacts, add a new contact by search them with their username.
+- Go to contacts, and add a new contact by searching for them with their username.
 - Go to https://dash-p2p.netlify.app/faucet to mint some test tokens.
-- Lauch dapp, and go to liquidity tab, and a new liquidity with some of the test tokens from the faucet.
+- Launch dapp, go to the liquidity tab, and a new liquidity with some of the test tokens from the faucet.
 - Now your contacts list can now see your liquidities, and take some of it as a loan.
 - Your contact list will repay back the exact loan tokens and interests in dash tokens, interests are calculated in dash per 24h.
-- Yaaay! You go lend to a contact and earned from it, cool now what?
+- Yaaay! You just lend to a contact and earing from it, cool now what?
 
 ## Why Dash?
 - # Automatic loan reminder
