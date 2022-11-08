@@ -75,6 +75,7 @@ DASH can function as any other ERC20 tokens, like trading in exchanges or stakin
 ## Tech Stacks
 - Moralis stream [#](https://github.com/devarogundade/dash/blob/master/moralis-stream-api)
 - Google Cloud Firebase [#](https://github.com/devarogundade/dash/blob/master/plugins/firestore.js) [#](https://github.com/devarogundade/dash/blob/master/moralis-stream-api)
+- IPFS (File system)
 - Fantom (testnet) [#](https://github.com/devarogundade/dash/blob/master/truffle-config.js)
 - Nuxt (frontend)
 - Express (backend) 
