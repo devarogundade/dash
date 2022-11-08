@@ -12,14 +12,26 @@ contract Dash {
 
     address private deployer;
     uint private contractRevenue;
-    uint public platformFee = 2; // 2% fee
+
+    /*
+      We charge a 5% fee on every interest a liquidity provider earned from giving out a loan.
+    */
+    uint public platformFee = 5; // 5% fee
 
     uint private userID;
     uint private liquidityID;
     uint private loanID;
 
+    /*
+    Default credit score of a user is 65
+    When they do well on the platfrom by paying back loans on time
+    their credit score will increase by 2 otherwise will decrease by 5
+    */
     uint defaultCreditScore = 65;
 
+    /*
+    DASH is the native cryptocurrency of the platform, it is use for paying loan interests.
+    */
     DashToken private dashToken;
 
     mapping(address => Models.User) public users;
@@ -31,6 +43,10 @@ contract Dash {
         dashToken = DashToken(dashToken_);
     }
 
+    /*
+    We are using moralis stream to pick up user creation events and
+    sync the data to our firebase backend.
+    */
     function createUser(
         string memory name,
         string memory photo,
@@ -43,7 +59,9 @@ contract Dash {
     ) public {
         require(users[msg.sender].id == 0, "!already_created_an_account");
 
+        // create a new id
         userID++;
+
         users[msg.sender] = Models.User(
             userID,
             defaultCreditScore,
@@ -52,6 +70,7 @@ contract Dash {
             users[msg.sender].networks
         );
 
+        // aware dependencies
         emit UserCreated(
             name,
             photo,
@@ -96,6 +115,7 @@ contract Dash {
         );
     }
 
+    /* adding a new contact */
     function addNetwork(address user) public onlyUser {
         int userIndex = getUserNetworkIndex(msg.sender, user);
         if (userIndex == -1) {
@@ -104,6 +124,7 @@ contract Dash {
         }
     }
 
+    /* removing an existing contact */
     function removeNetwork(address user) public onlyUser {
         int userIndex = getUserNetworkIndex(msg.sender, user);
         if (userIndex != -1) {
@@ -330,6 +351,7 @@ contract Dash {
         emit ClosedLiquidity(id);
     }
 
+    /* provide liquidity */
     function provideLiquidity(
         uint256 amount,
         address tokenAddress,
@@ -395,6 +417,8 @@ contract Dash {
             msg.sender
         );
     }
+
+    // ========= helper functions
 
     function getUserLoanIndex(address user, uint id)
         private
