@@ -120,4 +120,11 @@
         transform: rotate(360deg);
     }
 }
+
+
+@media screen and (max-width: 1000px) {
+    .lds-roller {
+        left: 50%;
+    }
+}
 </style>

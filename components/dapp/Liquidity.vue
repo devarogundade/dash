@@ -199,7 +199,11 @@
                             <td>{{ $utils.fromWei(history.interestRate) }} DASH</td>
                             <td>{{ $utils.formatToDate(history.createdAt * 1000) }}</td>
                             <td>
-                                <p v-if="history.paidAt  == 0">No <i class="fi fi-ss-badge-check"></i></p>
+                                <p class="remind" v-if="history.paidAt == 0">
+                                    <router-link :to="`/dapp/send-reminder?loan=${history.id}&user=${history.user.id}`">
+                                        Remind
+                                    </router-link>
+                                </p>
                                 <p v-else>Paid on {{ $utils.formatToDate(history.paidAt * 1000)  }} <i class="fi fi-ss-badge-check"></i></p>
                             </td>
                             <td v-on:click="$nuxt.$emit('contact', history.user)">
@@ -254,12 +258,6 @@ export default {
                 this.address.toUpperCase()
             )
 
-            this.liquidities.forEach(liquidity => {
-                if (!liquidity.closed) {
-                    this.earnings += Number(this.$utils.fromWei(liquidity.interestRate))
-                }
-            })
-
             this.fetching = false
         },
 
@@ -277,6 +275,12 @@ export default {
 
         getLoanHistory: async function () {
             this.histories = await this.$firestore.fetchAllLoansHistoryProviders(this.address)
+
+            this.histories.forEach(loan => {
+                if (loan.paidAt == 0) {
+                    this.earnings += Number(this.$utils.fromWei(loan.interestRate))
+                }
+            })
         },
 
         closeLiquidity: async function (id) {
@@ -571,7 +575,7 @@ section {
 table {
     width: 100%;
     margin-top: 20px;
-    background-image: linear-gradient(to top, #0c3483 0%, #a2b6df 100%, #6b8cce 100%, #a2b6df 100%);
+    background-image: linear-gradient(to top, #2955ac 0%, #a2b6df 100%, #9fb5e0 100%, #a2b6df 100%);
     padding: 40px 0;
     border-radius: 30px;
     border: none;
@@ -648,6 +652,18 @@ td:last-child {
 
 td:last-child {
     text-align: right;
+}
+
+.remind {
+  background: #1900b3;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.remind a {
+    font-weight: 600;
+  color: #fff;
 }
 
 @media screen and (max-width: 800px) {

@@ -30,7 +30,7 @@
                     </div>
                     <div class="total">
                         <p> {{ Number($utils.fromWei(balances.ftm.balance)).toFixed(4) }}</p>
-                        <p> $ {{ balances.ftm.quoteRate.toFixed(4) }}</p>
+                        <p> $ {{ (balances.ftm.quoteRate * Number($utils.fromWei(balances.ftm.balance))).toFixed(4) }}</p>
                     </div>
                 </div>
                 <div class="balance">
@@ -40,7 +40,7 @@
                         <p>{{ balances.fusd.symbol }}</p>
                     </div>
                     <div class="total">
-                        {{ $utils.fromWei(balances.fusd.balance) }}
+                        {{ Number($utils.fromWei(balances.fusd.balance)).toFixed(3) }}
                     </div>
                 </div>
                 <div class="balance">
@@ -50,7 +50,7 @@
                         <p>{{ balances.usdt.symbol }}</p>
                     </div>
                     <div class="total">
-                        {{ $utils.fromWei(balances.usdt.balance) }}
+                        {{ Number($utils.fromWei(balances.usdt.balance)).toFixed(3) }}
                     </div>
                 </div>
                 <div class="balance">
@@ -60,7 +60,7 @@
                         <p>{{ balances.usdc.symbol }}</p>
                     </div>
                     <div class="total">
-                        {{ $utils.fromWei(balances.usdc.balance) }}
+                        {{ Number($utils.fromWei(balances.usdc.balance)).toFixed(3) }}
                     </div>
                 </div>
                 <div class="balance">
@@ -70,7 +70,7 @@
                         <p>{{ balances.dash.symbol }}</p>
                     </div>
                     <div class="total">
-                        {{ $utils.fromWei(balances.dash.balance) }}
+                        {{ Number($utils.fromWei(balances.dash.balance)).toFixed(3) }}
                     </div>
                 </div>
             </div>
@@ -197,6 +197,7 @@ export default {
                     case this.balances.ftm.address.toUpperCase():
                         this.balances.ftm.balance = token.balance;
                         this.balances.ftm.quoteRate = token.quote_rate;
+                        this.balances.ftm.image = token.logo_url;
                         break;
                     case this.balances.fusd.address.toUpperCase():
                         this.balances.fusd.balance = token.balance;

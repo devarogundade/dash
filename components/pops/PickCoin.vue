@@ -86,4 +86,11 @@ export default {
     padding-bottom: 20px;
     border: none;
 }
+
+
+@media screen and (max-width: 1000px) {
+    .box {
+        left: 50%;
+    }
+}
 </style>
