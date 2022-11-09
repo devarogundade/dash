@@ -10784,12 +10784,12 @@
         }
       },
       "links": {},
-      "address": "0xCBd70b3F16F0024B93043B085393e72c08B3D1f3",
-      "transactionHash": "0x56124451b892c0c63dfc150438e1e5cdbd15d032ca955ca9b90e202393b1f1ac"
+      "address": "0xcc2ca405A47b29b4C23c84aA75725bc2D55d4742",
+      "transactionHash": "0x473e5620bcf0830ac3d124358dba941689eadd6f79b3360de6bbedf3ac13c797"
     }
   },
   "schemaVersion": "3.4.10",
-  "updatedAt": "2022-11-07T19:55:02.664Z",
+  "updatedAt": "2022-11-09T03:44:34.162Z",
   "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
