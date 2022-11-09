@@ -5,26 +5,36 @@
 
         <div class="items">
             <div class="item">
-                <h3>Automatic loan reminder</h3>
-                <p>You don't have to manually reminder your contacts to repay their loan or when to repay their loans, its features comes with dash right out of the box.</p>
+                <h3>Step 1</h3>
+                <p>Go to <a href="https://dash-p2p.netlify.app">https://dash-p2p.netlify.app</a> to access the DAPP.</p>
             </div>
             <div class="item">
-                <h3>Safe lending</h3>
-                <p>
-                    Assessing people for loan is not possible except your are a bank organization, dash protects far better than natural lending by setting a min credit score on your liquidity, and allowing only a contact that is not already on a loan to take another loan from you.
-                    <br> <br>
-                    So if you want to safely lending out funds to people, dash is the right choice for you.
-                </p>
+                <h3>Step 2</h3>
+                <p> Connect your wallet to authenticate your account. </p>
             </div>
             <div class="item">
-                <h3>Immutable</h3>
-                <p>
-                    On liquidities and loans transactions are recorded on the blockchain, with give to a full tracking and back logs of old activities. This can be very useful for resolving disputes between you and contacts.
-                </p>
+                <h3>Step 3</h3>
+                <p>Go to settings tab and create your profile.</p>
             </div>
             <div class="item">
-                <h3>No more stress</h3>
-                <p>Now all your have to do is added your friends, family or colleagues to your contact list and relax. Your contact get the loan they needed on time without disturbing you.</p>
+                <h3>Step 4</h3>
+                <p>Go to contacts tab and add a new contact by searching for them with their username.</p>
+            </div>
+            <div class="item">
+                <h3>Step 5</h3>
+                <p>Go to <a href="https://dash-p2p.netlify.app/faucet">https://dash-p2p.netlify.app/faucet</a> to mint some test tokens.</p>
+            </div>
+            <div class="item">
+                <h3>Step 6</h3>
+                <p>Launch dapp, go to liquidity tab and add a new liquidity with some of the test tokens from the faucet.</p>
+            </div>
+            <div class="item">
+                <h3>Step 7</h3>
+                <p>Now your contacts list can see your liquidities, and take some of it as a loan.</p>
+            </div>
+            <div class="item">
+                <h3>Step 8</h3>
+                <p>Your contact list will repay back the exact token that was borrowed and interests in Dash tokens.</p>
             </div>
         </div>
     </div>
@@ -34,6 +44,7 @@
 <style scoped>
 section {
     padding-top: 200px;
+    padding-bottom: 100px;
 }
 
 section .heading {
@@ -74,6 +85,10 @@ section .heading {
     line-height: 24px;
     font-weight: 600;
     color: #333;
+}
+
+a {
+    color: #1900b3;
 }
 
 @media screen and (max-width: 800px) {

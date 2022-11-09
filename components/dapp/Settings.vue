@@ -309,7 +309,6 @@ section {
 .file-picker {
     width: 60px;
     height: 60px;
-    background: #1900b3;
     border-radius: 20px;
     overflow: hidden;
     cursor: pointer;
@@ -324,8 +323,19 @@ section {
 .file-picker input {
     width: 100%;
     height: 100%;
+    position: relative;
     opacity: 0;
-    z-index: 1;
+    z-index: 10;
+}
+
+.file-picker i {
+    background: #0a0047;
+    font-size: 16px;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: absolute;
 }
 
 .header .text h3 {

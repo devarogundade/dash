@@ -33,9 +33,9 @@
         <div class="i-app-width">
             <div class="learn">
                 <p>I don't understand!</p>
-                <router-link to="/how-to-use">
+                <a target="_blank" href="/how-to-use">
                     <div>Learn <i class="fi fi-br-arrow-right"></i></div>
-                </router-link>
+                </a>
             </div>
 
             <div class="toolbar">

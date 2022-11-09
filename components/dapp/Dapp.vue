@@ -3,7 +3,9 @@
     <Progress v-if="fetching" />
     <div class="i-app-width">
         <div class="nav">
-            <h3>Hi, Welcome back!</h3>
+            <h3 v-if="!user">Hi, Welcome!</h3>
+            <h3 v-else>Hi, Welcome back!</h3>
+
             <router-link to="/dapp/settings">
                 <div class="profile" v-if="!user">
                     <div class="image">
@@ -89,13 +91,13 @@
             </div>
 
             <div class="apps">
-                <router-link to="/how-to-use">
+                <a target="_blank" href="/how-to-use">
                     <div class="app">
                         <h3>Get Started</h3>
                         <p>Learn how to use DASH to borrow and lend.</p>
                         <img src="/images/astronaut_learning.png" alt="" />
                     </div>
-                </router-link>
+                </a>
                 <router-link to="/dapp/loan">
                     <div class="app">
                         <h3>Get a Loan</h3>
