@@ -238,11 +238,11 @@ contract Dash {
         Models.Loan memory loan = loans[msg.sender][uint(userLoanIndex)];
         require(loan.paidAt == 0, "loan_already_paid");
 
-        // pay interest
-        uint secondsDiff = block.timestamp - loan.createdAt;
+                          // current millis           oncreate  millis
+        uint millisDiff = (block.timestamp * 1000) - (loan.createdAt * 1000);
 
         // calculate interest
-        uint256 interest = ((loan.interestRate * secondsDiff) / 1 days);
+        uint256 interest = ((loan.interestRate * millisDiff) / 1 days);
 
         // pay interest charges to smart contract in DASH tokens
         dashToken.approve(msg.sender, address(this), interest);
