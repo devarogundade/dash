@@ -37,11 +37,7 @@ export default {
         })
     },
     methods: {
-        toggleProfile() {
-            this.showBuild = false;
-            this.showProfile = !this.showProfile;
-        },
-        onDrawer() {
+        onDrawer: function() {
             this.$refs["handburger"].classList.toggle("open")
             this.$refs["menu"].classList.toggle("open-menu")
             this.showBuild = false

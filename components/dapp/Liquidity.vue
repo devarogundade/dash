@@ -4,7 +4,7 @@
         <div class="i-app-width">
             <div class="text">
                 <h3>Provide Liquidity, EARN $DASH</h3>
-                <h2>Earnings: {{ $utils.fromWei(earnings) }} DASH per 24h</h2>
+                <h2>Earnings: {{ earnings }} DASH per 24h</h2>
                 <div class="other">
                     <p>Active Liquidities: {{ liquidities.length }}</p>
                     <router-link to="/">
@@ -229,7 +229,7 @@ export default {
             coins: stableCoins,
             contract: null,
             closing: -1,
-            earnings: '0',
+            earnings: 0,
             fetching: true
         };
     },
@@ -256,7 +256,7 @@ export default {
 
             this.liquidities.forEach(liquidity => {
                 if (!liquidity.closed) {
-                    this.earnings += liquidity.interestRate
+                    this.earnings += Number(this.$utils.fromWei(liquidity.interestRate))
                 }
             })
 
@@ -648,5 +648,18 @@ td:last-child {
 
 td:last-child {
     text-align: right;
+}
+
+@media screen and (max-width: 800px) {
+    .tabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 </style>

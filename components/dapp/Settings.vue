@@ -100,18 +100,7 @@ export default {
         };
     },
     async created() {
-        if (this.$auth.accounts.length > 0) {
-            const user = await this.$firestore.fetch('users', this.$auth.accounts[0].toUpperCase())
-            if (user != null) {
-                this.user = user
-
-                if (user.username != '') {
-                    this.$refs['username'].disabled = true
-                    this.existingUser = true
-                }
-            }
-            this.fetching = false
-        }
+        this.getUser()
 
         this.$contract.init()
         $nuxt.$on('contract', (contract) => {
@@ -119,6 +108,21 @@ export default {
         })
     },
     methods: {
+        getUser: async function () {
+            if (this.$auth.accounts.length > 0) {
+                const user = await this.$firestore.fetch('users', this.$auth.accounts[0].toUpperCase())
+                if (user != null) {
+                    this.user = user
+
+                    if (user.username != '') {
+                        this.$refs['username'].disabled = true
+                        this.existingUser = true
+                    }
+                }
+                this.fetching = false
+            }
+        },
+
         choosePhoto: function (event) {
             const file = event.target.files[0]
             const url = URL.createObjectURL(file)
@@ -234,11 +238,13 @@ export default {
                     )
                 }
 
-                $nuxt.$emit('trx', trx)
+                $nuxt.$emit('trx', trx.tx)
                 $nuxt.$emit('success', {
                     title: 'Profile Updated',
                     message: 'You have successfully updated your profile!'
                 })
+
+                this.getUser()
             } catch (error) {
                 console.log(error);
             }

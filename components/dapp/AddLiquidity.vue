@@ -212,7 +212,7 @@ export default {
                     }
                 );
 
-                $nuxt.$emit('trx', trx)
+                $nuxt.$emit('trx', trx.tx)
                 $nuxt.$emit('success', {
                     title: 'Liquidity Added',
                     message: 'You have successfully added a new liquidity!'

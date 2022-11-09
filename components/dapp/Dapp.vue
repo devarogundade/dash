@@ -29,7 +29,8 @@
                         <p>{{ balances.ftm.symbol }}</p>
                     </div>
                     <div class="total">
-                        {{ Number($utils.fromWei(balances.ftm.balance)).toFixed(4) }}
+                        <p> {{ Number($utils.fromWei(balances.ftm.balance)).toFixed(4) }}</p>
+                        <p> $ {{ balances.ftm.quoteRate.toFixed(4) }}</p>
                     </div>
                 </div>
                 <div class="balance">
@@ -73,6 +74,8 @@
                     </div>
                 </div>
             </div>
+            <div class="attributes">Price feed by <img src="/images/covalent.png" alt=""></div>
+
             <div class="apps">
                 <router-link to="/how-to-use">
                     <div class="app">
@@ -136,27 +139,28 @@ export default {
                     symbol: "FTM",
                     image: "https://s3.coinmarketcap.com/static/img/portraits/62d51d9af192d82df8ff3a83.png",
                     address: process.env.FTM_CONTRACT_ADDRESS,
+                    quoteRate: 0
                 },
                 fusd: {
                     balance: "0",
                     name: "Fantom USD",
                     symbol: "FUSD",
                     image: "https://s3.coinmarketcap.com/static/img/portraits/62d51d9af192d82df8ff3a83.png",
-                    address: "0x5CE17a1f12D3530354C7401bF24f8231CFa0af6e",
+                    address: "0xDfF71f0DCb01884a462e834AC8940c4DF0F68947",
                 },
                 usdt: {
                     balance: "0",
                     name: "USDT",
                     symbol: "tUSDT",
                     image: "https://s2.coinmarketcap.com/static/img/coins/200x200/825.png",
-                    address: "0x13e528f223e032e1dE07Ab3446e1A61Eb7d9D6aD",
+                    address: "0x19037fDa524EB14c595E37Ae6F7E87f34Fec4dCc",
                 },
                 usdc: {
                     balance: "0",
                     name: "USDC",
                     symbol: "tUSDC",
                     image: "https://s3-symbol-logo.tradingview.com/market-cap-usdc--600.png",
-                    address: "0x631e700bb92F94492aF7Cd17A46C8B231c50E20f",
+                    address: "0x1dFBC4CC39Afd045F5E8FDB11c8f57D67ce365D0",
                 },
                 dash: {
                     balance: "0",
@@ -192,6 +196,7 @@ export default {
                 switch (token.contract_address.toUpperCase()) {
                     case this.balances.ftm.address.toUpperCase():
                         this.balances.ftm.balance = token.balance;
+                        this.balances.ftm.quoteRate = token.quote_rate;
                         break;
                     case this.balances.fusd.address.toUpperCase():
                         this.balances.fusd.balance = token.balance;
@@ -230,6 +235,7 @@ section {
 
 .filter {
     width: 400px;
+    max-width: 100%;
     height: 50px;
     display: flex;
     align-items: center;
@@ -332,6 +338,13 @@ section {
     font-weight: 600;
 }
 
+.balance .total p:nth-child(2) {
+    text-align: right;
+    width: 100%;
+    font-size: 14px;
+    color: green;
+}
+
 .apps {
     display: flex;
     flex-wrap: wrap;
@@ -366,5 +379,32 @@ section {
 .app img {
     height: 60px;
     margin-top: 10px;
+}
+
+.attributes {
+    display: flex;
+    width: 100%;
+    max-width: 640px;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 10px 0;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.attributes img {
+    height: 20px;
+}
+
+@media screen and (max-width: 700px) {
+    .nav>h3 {
+        font-size: 20px;
+    }
+
+    .profile .image {
+        width: 30px;
+        height: 30px;
+    }
 }
 </style>

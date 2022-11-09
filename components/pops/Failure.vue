@@ -32,6 +32,7 @@ export default {
 <style scoped>
 .box {
     width: 500px;
+    width: 90%;
     padding: 40px;
     border-radius: 30px;
     background: rgb(255, 217, 217);

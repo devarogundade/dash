@@ -1,5 +1,5 @@
 <template>
-<div class="header">
+<div class="header" ref="menu">
     <div class="grid">
         <div class="top">
             <router-link to="/dapp">
@@ -57,6 +57,12 @@
                 </router-link>
             </div>
         </div>
+        <div ref="handburger" id="handburger" v-on:click="onDrawer()">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
 </div>
 </template>
@@ -75,6 +81,11 @@ export default {
     methods: {
         connectWallet: async function () {
             this.address = await this.$auth.connectToMetaMask()
+        },
+        onDrawer: function () {
+            this.$refs["handburger"].classList.toggle("open")
+            this.$refs["menu"].classList.toggle("open-menu")
+            this.showBuild = false
         }
     }
 }
@@ -88,6 +99,7 @@ export default {
     padding: 20px;
     position: sticky;
     top: 0;
+    z-index: 20;
 }
 
 .logo img {
@@ -159,5 +171,102 @@ export default {
 
 .item-active {
     background: #e4e0ff;
+}
+
+#handburger {
+    display: none;
+}
+
+@media screen and (max-width: 1000px) {
+    .header {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: -100%;
+        background: #fff;
+    }
+
+    .open-menu {
+        left: 0 !important;
+    }
+
+    #handburger {
+        width: 32px;
+        height: 25px;
+        right: 5%;
+        top: 24px;
+        position: fixed;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: 0.5s ease-in-out;
+        -moz-transition: 0.5s ease-in-out;
+        -o-transition: 0.5s ease-in-out;
+        transition: 0.5s ease-in-out;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+    }
+
+    #handburger span {
+        display: block;
+        position: absolute;
+        height: 4px;
+        width: 100%;
+        background: #000;
+        opacity: 1;
+        left: 0;
+        -webkit-transform: rotate(0deg);
+        -moz-transform: rotate(0deg);
+        -o-transform: rotate(0deg);
+        transform: rotate(0deg);
+        -webkit-transition: 0.25s ease-in-out;
+        -moz-transition: 0.25s ease-in-out;
+        -o-transition: 0.25s ease-in-out;
+        transition: 0.25s ease-in-out;
+    }
+
+    #handburger span:nth-child(1) {
+        top: 0px;
+    }
+
+    #handburger span:nth-child(2),
+    #handburger span:nth-child(3) {
+        top: 10px;
+    }
+
+    #handburger span:nth-child(4) {
+        top: 20px;
+    }
+
+    #handburger.open span:nth-child(1) {
+        top: 10px;
+        width: 0%;
+        left: 50%;
+    }
+
+    #handburger.open span:nth-child(2) {
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+
+    #handburger.open span:nth-child(3) {
+        -webkit-transform: rotate(-45deg);
+        -moz-transform: rotate(-45deg);
+        -o-transform: rotate(-45deg);
+        transform: rotate(-45deg);
+    }
+
+    #handburger.open span:nth-child(4) {
+        top: 18px;
+        width: 0%;
+        left: 50%;
+    }
 }
 </style>

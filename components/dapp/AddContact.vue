@@ -106,6 +106,7 @@ export default {
                     from: this.address
                 })
 
+                $nuxt.$emit('trx', trx.tx)
                 $nuxt.$emit('success', {
                     title: 'User added to list',
                     message: `${this.user.name} has been added to your contact`

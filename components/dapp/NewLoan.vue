@@ -147,7 +147,7 @@ export default {
                     }
                 );
 
-                $nuxt.$emit('trx', trx)
+                $nuxt.$emit('trx', trx.tx)
                 $nuxt.$emit('success', {
                     title: 'Loan has been taken',
                     message: 'You have successfully took a new loan!'

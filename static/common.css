@@ -112,3 +112,12 @@ a {
     align-items: center;
     user-select: none;
 }
+
+@media screen and (max-width: 800px) {
+    .learn {
+        flex-direction: column;
+        height: fit-content;
+        padding: 20px 0;
+        gap: 20px;
+    }
+}

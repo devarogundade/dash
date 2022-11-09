@@ -32,6 +32,7 @@ export default {
 <style scoped>
 .box {
     width: 500px;
+    max-width: 90%;
     padding: 40px;
     border-radius: 30px;
     background: rgb(222, 255, 222);
@@ -70,5 +71,11 @@ export default {
     font-weight: 600;
     cursor: pointer;
     user-select: none;
+}
+
+@media screen and (max-width: 1000px) {
+    .box {
+        left: 50%;
+    }
 }
 </style>
