@@ -43,6 +43,7 @@ export default {
         '@/plugins/auth.js',
         '@/plugins/ipfs.js',
         '@/plugins/utils.js',
+        '@/plugins/notifier.js',
         '@/plugins/covalent.js',
         '@/plugins/firestore.js',
         '@/plugins/contract.js',

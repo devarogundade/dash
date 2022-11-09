@@ -19,6 +19,7 @@
         "firebase-admin": "^11.2.0",
         "moralis": "^2.7.1",
         "nuxt": "^2.15.8",
+        "push.js": "^1.0.12",
         "truffle-contract": "^4.0.31",
         "truffle-contract-size": "^2.0.1",
         "vue": "^2.6.14",

@@ -29,8 +29,18 @@
                         <p>{{ balances.ftm.symbol }}</p>
                     </div>
                     <div class="total">
-                        <p> {{ Number($utils.fromWei(balances.ftm.balance)).toFixed(4) }}</p>
-                        <p> $ {{ (balances.ftm.quoteRate * Number($utils.fromWei(balances.ftm.balance))).toFixed(4) }}</p>
+                        <p>
+                            {{ Number($utils.fromWei(balances.ftm.balance)).toFixed(4) }}
+                        </p>
+                        <p>
+                            $
+                            {{
+                  (
+                    balances.ftm.quoteRate *
+                    Number($utils.fromWei(balances.ftm.balance))
+                  ).toFixed(4)
+                }}
+                        </p>
                     </div>
                 </div>
                 <div class="balance">
@@ -74,7 +84,9 @@
                     </div>
                 </div>
             </div>
-            <div class="attributes">Price feed by <img src="/images/covalent.png" alt=""></div>
+            <div class="attributes">
+                Price feed by <img src="/images/covalent.png" alt="" />
+            </div>
 
             <div class="apps">
                 <router-link to="/how-to-use">
@@ -107,7 +119,7 @@
                 </router-link>
             </div>
         </div>
-        <div class="history">
+        <div class="reminders">
             <h3>Reminders</h3>
             <div class="toolbar">
                 <div class="filter">
@@ -116,11 +128,32 @@
                 </div>
             </div>
 
-            <div class="reminders">
-                <div class="reminder">
-
-                </div>
-            </div>
+            <table v-if="reminders.length > 0">
+                <thead>
+                    <tr>
+                        <td>From</td>
+                        <td>Message</td>
+                        <td>Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <br />
+                    <tr v-for="(reminder, index) in reminders" :key="index">
+                        <td v-on:click="$nuxt.$emit('contact', reminder.user)">
+                            <div class="images">
+                                <img :src="reminder.user.photo" alt="" />
+                            </div>
+                            <p>{{ reminder.user.name }}</p>
+                        </td>
+                        <td>{{ reminder.message }}</td>
+                        <td>
+                            <p class="remind">
+                                <router-link to="/dapp/loan">Pay Loan</router-link>
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </section>
@@ -139,7 +172,7 @@ export default {
                     symbol: "FTM",
                     image: "https://s3.coinmarketcap.com/static/img/portraits/62d51d9af192d82df8ff3a83.png",
                     address: process.env.FTM_CONTRACT_ADDRESS,
-                    quoteRate: 0
+                    quoteRate: 0,
                 },
                 fusd: {
                     balance: "0",
@@ -170,7 +203,8 @@ export default {
                     address: process.env.TOKEN_CONTRACT_ADDRESS,
                 },
             },
-            fetching: true
+            reminders: [],
+            fetching: true,
         };
     },
     async created() {
@@ -178,18 +212,19 @@ export default {
         if (this.address != null) {
             this.getUser();
             this.getBalances();
+            this.getReminders();
         }
     },
     methods: {
         getUser: async function () {
             this.user = await this.$firestore.fetch(
                 "users",
-                this.$auth.accounts[0].toUpperCase()
+                this.address.toUpperCase()
             );
         },
         getBalances: async function () {
             const response = await this.$covalent.getTokenBalances(this.address);
-            this.fetching = false
+            this.fetching = false;
 
             if (response == null || !response.data) return;
             response.data.items.forEach((token) => {
@@ -217,6 +252,11 @@ export default {
                 }
             });
         },
+        getReminders: async function () {
+            this.reminders = await this.$firestore.fetchAllReminderProviders(
+                this.address.toUpperCase()
+            );
+        },
     },
 };
 </script>
@@ -226,7 +266,7 @@ section {
     padding: 60px 0;
 }
 
-.history>h3 {
+.reminder>h3 {
     font-size: 30px;
 }
 
@@ -396,6 +436,100 @@ section {
 
 .attributes img {
     height: 20px;
+}
+
+.reminders {
+    margin-top: 60px;
+}
+
+.reminders h3 {
+    font-size: 30px;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    background-image: linear-gradient(to top, #2955ac 0%, #a2b6df 100%, #9fb5e0 100%, #a2b6df 100%);
+    padding: 40px 0;
+    border-radius: 30px;
+    border: none;
+}
+
+tbody img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+td {
+    padding: 0 40px;
+}
+
+thead td {
+    font-size: 20px;
+    color: #1900b3 !important;
+    font-weight: 600 !important;
+}
+
+tbody {
+    padding-top: 30px;
+}
+
+tbody tr {
+    border-radius: 6px;
+}
+
+tbody td {
+    color: #FFFFFF;
+    cursor: pointer;
+    font-weight: 600;
+    width: 250px;
+}
+td:nth-child(2) {
+    width: 500px;
+    font-size: 17px;
+}
+
+td:last-child {
+    width: 200px;
+}
+
+tbody td:first-child,
+td:last-child {
+    gap: 10px;
+    display: flex;
+    height: 65px;
+    align-items: center;
+    font-weight: 500;
+}
+
+td:last-child {
+    text-align: right;
+}
+
+.remind {
+    background: #1900b3;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.remind a {
+    font-weight: 600;
+    color: #fff;
+}
+
+@media screen and (max-width: 800px) {
+    .tabs {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .toolbar {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
 
 @media screen and (max-width: 700px) {

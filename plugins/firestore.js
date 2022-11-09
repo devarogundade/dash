@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, getDocs, doc, setDoc, addDoc, getDoc, query, where, onSnapshot } from "firebase/firestore";
+import { getFirestore, collection, getDocs, doc, setDoc, addDoc, getDoc, query, where, onSnapshot, orderBy, limit } from "firebase/firestore";
 
 const dotenv = require("dotenv")
 dotenv.config()
@@ -149,8 +149,6 @@ export default ({}, inject) => {
                     address.toUpperCase()
                 )
 
-                console.log(loans);
-
                 for (let index = 0; index < loans.length; index++) {
                     const loan = loans[index]
                     const user = await this.fetch('users', loan.address)
@@ -158,6 +156,29 @@ export default ({}, inject) => {
                     loan.user = user
                     loan.liquidity = liquidity
                     result.push(loan)
+                }
+
+                return result
+            } catch (error) {
+                return []
+            }
+        },
+        fetchAllReminderProviders: async function(address) {
+            try {
+                const result = []
+
+                const reminders = await this.fetchAllWhere(
+                    'reminders',
+                    'address',
+                    '==',
+                    address.toUpperCase()
+                )
+
+                for (let index = 0; index < reminders.length; index++) {
+                    const reminder = reminders[index]
+                    const user = await this.fetch('users', reminder.by.toUpperCase())
+                    reminder.user = user
+                    result.push(reminder)
                 }
 
                 return result
@@ -180,12 +201,23 @@ export default ({}, inject) => {
                 return false
             }
         },
-        callback: function(_collection, _document) {
-            const reference = doc(this.db, _collection, _document)
+        callback: function(_collection, key, sign, value, _function) {
+            const reference = query(collection(this.db, _collection),
+                where(key, sign, value));
 
             onSnapshot(reference, (doc) => {
-                const source = doc.metadata.hasPendingWrites ? "Local" : "Server";
-                console.log(source, " data: ", doc.data());
+                doc.docs.forEach(ent => {
+                    const lastMessage = ent.data()
+
+                    const delay = 5 * 1000
+                    const future = new Date(lastMessage.timestamp + delay)
+                    const past = new Date(lastMessage.timestamp - delay)
+                    const now = new Date()
+
+                    if (now > past && now < future) {
+                        _function(lastMessage)
+                    }
+                })
             });
         }
     }))

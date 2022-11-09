@@ -123,7 +123,7 @@ export default {
                     message: this.message,
                     by: this.address,
                     address: this.user.id.toUpperCase(),
-                    time: new Date()
+                    timestamp: new Date().getTime()
                 })
                 if (sent) {
                     $nuxt.$emit('success', {

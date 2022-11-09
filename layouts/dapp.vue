@@ -15,6 +15,22 @@
 </div>
 </template>
 
+<script>
+export default {
+    async mounted() {
+        const address = await this.$auth.connectToMetaMask();
+        if (address) {
+            this.$firestore.callback('reminders', 'address', '==', address.toUpperCase(), (data) => {
+                this.$notifier.notify({
+                    title: 'Loan reminder',
+                    body: data.message
+                })
+            })
+        }
+    }
+}
+</script>
+
 <style scoped>
 .dapp {
     display: flex;
