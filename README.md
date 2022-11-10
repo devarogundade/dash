@@ -23,10 +23,10 @@ time of repaying the loan.
 
 ## Why Dash?
 - # Automatic loan reminder
-  You don't have to manually remind your contacts to repay their loan or when to repay their loans, this features comes with Dash right out of the box.
+  You could but you don't have to manually remind your contacts to repay their loan or when to repay their loans, this features comes with Dash right out of the box.
 
 - # Safe lending
-  Assessing people for loan is not possible except your are a bank organization which 99% of people are not, Dash protects far better than natural lending by setting a minimum credit score on your liquidities, and allowing only a contact that is not already on a loan to take another loan from you.
+  Assessing people for loans is not possible except your are a bank organization which 99% of people are not, Dash protects far better than natural lending by setting a minimum credit score on your liquidities, and allowing only a contact that is not already on a loan to take another loan from you.
 
   So if you want to safely lending out funds to people, dash is the right choice for you.
 
@@ -58,7 +58,7 @@ DASH can function as any other ERC20 tokens, like trading in exchanges or stakin
 - https://dash-p2p.netlify.app/#dash-token
 
 ## Revenue Model
-- We charge a 2% service fee from every interest earnings of liquidity providers.
+- We charge a 5% service fee from every interest earnings of liquidity providers.
 
 ## Hackathon Tracks
 - Fantom
