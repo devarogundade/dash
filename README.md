@@ -54,7 +54,7 @@ No, you can't take two loans simultaneously.
 ## Dash Token (DASH)
   Dash is the native cryptocurrency of the dash platform, it's is use for paying loan interests.
 DASH can function as any other ERC20 tokens, like trading in exchanges or staking.
-- Total Supply: 10,000,000,000
+- Total Supply: 1,000,000,000,000
 - Token Name: Dash Token
 - Token Symbol: DASH
 - https://dash-p2p.netlify.app/#dash-token
