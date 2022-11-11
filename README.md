@@ -1,3 +1,5 @@
+*This Project has been hosted on a free host. You might experience a little delay at cold laod*
+
 # Dash - Peer 2 Peer Lending Decentralized Application
 ## _A Moralis X Google Cloud Hackathon Project_
 
